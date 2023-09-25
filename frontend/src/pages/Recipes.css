@@ -1,0 +1,52 @@
+.recipes {
+  padding: 50px 0 20px;
+  margin: 0 5%;
+  font-family: "Jua", sans-serif;
+  font-style: normal;
+  font-weight: 200;
+  font-size: 2em;
+  color: #212121;
+}
+
+.filter {
+  overflow: auto;
+  margin: 0 5% 40px;
+}
+
+.filter p {
+  margin-bottom: 5px;
+  color: #c8553d;
+  font-family: "Lato", sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 1.5em;
+  line-height: 25px;
+}
+
+.filter ul {
+  margin-left: 10px;
+}
+
+.filter li {
+  display: inline-block;
+}
+
+.filter button {
+  border-radius: 12px;
+  border: solid 1px #bababa;
+  background-color: #f9f9f9;
+  padding: 0 15px;
+  margin: 5px 0 0 10px;
+  color: #212121;
+  font-family: "Lato", sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 1em;
+  line-height: 25px;
+  cursor: pointer;
+}
+
+.filter .selectedTag {
+  color: #FFF;
+  background-color: #c8553d;
+}

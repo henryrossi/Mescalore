@@ -1,0 +1,17 @@
+.footer {
+  clear: both;
+  height: 50px;
+  width: 100%;
+  background-color: #ffffff;
+  bottom: 0;
+}
+
+.footer p {
+  margin-top: 25px;
+  text-align: center;
+  font-family: Lato, Helvetica, sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 1em;
+  line-height: 25px;
+}

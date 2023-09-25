@@ -1,0 +1,103 @@
+.hgroup {
+  float: left;
+  width: 90%;
+}
+
+.title {
+  margin: 80px 15% 5px 7%;
+  font-size: 3.5em;
+  font-family: "Jua", sans-serif;
+}
+
+.desc {
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 25px;
+  font-size: 1.2em;
+  color: #c8553d;
+  margin: 0 7%;
+}
+
+.createLink {
+  margin-top: 50px;
+  font-family: "Jua", sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 1.25em;
+  line-height: 25px;
+  text-decoration: none;
+  color: #588b8b;
+  display: block;
+}
+
+.logOutButton {
+  margin-top: 20px;
+  padding: 0;
+  font-family: "Jua", sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 1.25em;
+  line-height: 25px;
+  background-color: #ffffff;
+  cursor: pointer;
+  border: none;
+  color: #588b8b;
+}
+
+.home-drawing {
+  display: block;
+}
+
+.article {
+  height: auto;
+  background-color: #588b8b;
+  padding: 200px 5%;
+  overflow: auto;
+}
+
+.article-title {
+  margin: 7% 0;
+  color: #f0e6c4;
+  font-family: Arial, Helvetica, sans-serif;
+  font-style: italic;
+  font-size: 1.5em;
+  line-height: 25px;
+}
+
+.article-text {
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 25px;
+  font-size: 1.2em;
+  color: #fff;
+  margin-bottom: 50px;
+}
+
+@media only screen and (min-width: 40em) {
+  .article-img {
+    float: left;
+    width: 48%;
+  }
+  .article-title {
+    float: right;
+    width: 50%;
+  }
+  .article-text {
+    float: right;
+    width: 45%;
+    margin-right: 5%;
+  }
+}
+
+@media only screen and (min-width: 63em) {
+  .title {
+    font-size: 5em;
+  }
+  .desc {
+    font-size: 1.5em;
+  }
+  .article-title {
+    font-size: 1.8em;
+  }
+  .article-text {
+    font-size: 1.5em;
+  }
+}

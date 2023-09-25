@@ -1,0 +1,186 @@
+.recipe h1 {
+  margin: 50px 10% 30px;
+  font-family: "Jua", sans-serif;
+  font-style: normal;
+  font-weight: 200;
+  font-size: 2em;
+  color: #212121;
+  width: 75%;
+  float: left;
+}
+
+.recipe a {
+  margin-top: 50px;
+  font-family: "Jua", sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 1.2em;
+  line-height: 25px;
+  text-decoration: none;
+  color: #588b8b;
+  display: block;
+  float: left;
+}
+
+.recipe .info {
+  margin: 0 10%;
+  font-family: "Lato", sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 1em;
+  line-height: 25px;
+}
+
+.recipe .info h2 {
+  margin-bottom: 10px;
+}
+
+.recipe .info .servingsAndTime {
+  margin-bottom: 10px;
+  color: #c8553d;
+}
+
+.recipe .info .tag {
+  float: left;
+  border-radius: 12px;
+  border: solid 1px #bababa;
+  background-color: #f9f9f9;
+  padding: 0 15px;
+  margin: 5px 10px 20px 0;
+  color: #212121;
+  font-size: 0.9em;
+}
+
+.recipe .info .photo {
+  display: block;
+  clear: left;
+  width: 100%;
+  border-radius: 20px;
+  margin-bottom: 40px;
+}
+
+.recipe .info .noPicture {
+  border-radius: 20px;
+  margin-bottom: 40px;
+  aspect-ratio : 1 / 1;
+  width: 100%;
+  background: #e5e5e5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.recipe .info .noPicture .message {
+  font-family: "Jua", sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 1em;
+  color: #588b8b;
+}
+
+.recipe ul {
+  margin-bottom: 10px;
+}
+
+.recipe .ingredients {
+  border-radius: 20px 0 0 20px;
+  background: #c8553d;
+  padding: 30px 0;
+  margin: 0 0 40px 15%;
+  font-family: "Lato", sans-serif;
+  font-style: normal;
+  font-size: 1em;
+  line-height: 25px;
+}
+
+.recipe .ingredients p {
+  position: relative;
+  color: #f0e6c4;
+  font-size: 1.35em;
+  width: 120px;
+  margin: 0 15% 10px;
+  right: 20px;
+}
+
+.recipe .ingredients li {
+  list-style-type: disc;
+  margin: 0 10% 0 15%;
+  color: #f9f9f9;
+}
+
+.recipe .instructions {
+  clear: both;
+  background: #ccdcdc;
+  padding: 30px 0 50px;
+  margin-bottom: 20px;
+  font-family: "Lato", sans-serif;
+  font-style: normal;
+  font-size: 1em;
+  line-height: 25px;
+}
+
+.recipe .instructions p {
+  position: relative;
+  color: #212121;
+  font-size: 1.35em;
+  padding-left: 15%;
+  margin: 20px 0;
+  right: 20px;
+}
+
+.recipe .instructions li {
+  list-style-type: decimal;
+  margin: 0 10% 0 15%;
+  color: #3d6161;
+}
+
+@media only screen and (min-width: 40em) {
+  .recipe h1 {
+    margin-left: 7%;
+    margin-right: 0;
+  }
+
+  .recipe .info {
+    width: 42%;
+    float: left;
+    margin-left: 7%;
+    margin-right: 6%;
+    overflow: auto;
+  }
+
+  .recipe .ingredients {
+    width: 45%;
+    margin-left: 0;
+    float: right;
+    overflow: auto;
+  }
+}
+
+@media only screen and (min-width: 63em) {
+  .recipe h1 {
+    font-size: 2.5em;
+  }
+
+  .recipe .ingredients p, .recipe .instructions p {
+    font-size: 1.7em;
+    margin-bottom: 20px;
+  }
+
+  .recipe .info {
+    font-size: 1.15em;
+  }
+  
+  .recipe .ingredients li {
+    font-size: 1.15em;
+    line-height: 27.5px;
+  }
+
+  .recipe .instructions li {
+    font-size: 1.15em;
+    margin-bottom: 10px;
+  }
+
+  .recipe .info h2 {
+    margin-bottom: 20px;
+  }
+}

@@ -1,0 +1,245 @@
+/* In future can use the ch measurement and javascript to adjust
+the width of the inputs to be the width of the text inside it 
+ - This seems most easily accomplished using spans */
+
+.editor input {
+  border: none;
+  display: block;
+  padding: 0;
+}
+
+.editor textarea {
+  border: none;
+  display: block;
+  padding: 0;
+}
+
+.editor textarea:focus, .editor input:focus{
+    outline: none;
+}
+
+.editor ul {
+  margin-bottom: 10px;
+}
+
+.editor .button {
+  border-radius: 12px;
+  border: solid 1px #bababa;
+  padding: 0 15px;
+  margin: 2px 10px 2px 0;
+  font-family: "Lato", sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 0.8em;
+  line-height: 25px;
+  cursor: pointer;
+}
+
+.editor .name {
+  margin: 50px 7% 30px;
+  font-family: "Jua", sans-serif;
+  font-style: normal;
+  font-weight: 200;
+  font-size: 2em;
+  color: #212121;
+  width: 100%
+}
+
+.editor .info {
+  width: 42%;
+  float: left;
+  margin-left: 7%;
+  margin-right: 6%;
+  overflow: auto;
+}
+
+.editor .info .servings {
+  font-family: "Lato", sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 1em;
+  line-height: 25px;
+  text-align: right;
+  margin-bottom: 10px;
+  color: #c8553d;
+  float: left;
+  width: 20px;
+}
+
+.editor .info .time {
+  font-family: "Lato", sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 1em;
+  line-height: 25px;
+  text-align: right;
+  margin-bottom: 10px;
+  color: #c8553d;
+  float: left;
+  width: 40px;
+}
+
+.editor .info .text {
+  width: auto;
+  margin-left: 10px;
+}
+
+.editor .info .description {
+  width: 100%;
+  font-family: "Lato", sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 1em;
+  line-height: 25px;
+  color: #212121;
+}
+
+.editor .info .tagList {
+  overflow: auto;
+}
+
+.editor .info .tag {
+  float: left;
+  border-radius: 12px;
+  border: solid 1px #bababa;
+  padding: 0 15px;
+  margin: 5px 10px 5px 0;
+  font-family: "Lato", sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 0.9em;
+  line-height: 25px;
+  cursor: pointer;
+}
+
+.editor .info .selected {
+  background-color: #c8553d;
+  color: #ffffff;
+}
+
+.editor .info .unselected {
+  background-color: #f9f9f9;
+  color: #212121;
+}
+
+.editor .info .upload {
+  font-family: "Lato", sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 1em;
+  line-height: 25px;
+  color: #212121;
+  margin-top: 15px;
+  clear: both;
+}
+
+.editor .ingredients {
+  border-radius: 20px 0 0 20px;
+  background: #c8553d;
+  padding: 30px 0;
+  margin: 0 0 40px;
+  width: 45%;
+  float: right;
+  overflow: auto;
+}
+
+.editor .ingredients p {
+  position: relative;
+  color: #f0e6c4;
+  font-family: "Lato", sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 25px;
+  font-size: 1.35em;
+  width: 120px;
+  margin: 0 15% 10px;
+  right: 20px;
+}
+.editor .ingredients li {
+  list-style-type: disc;
+  margin: 0 10% 0 15%;
+  color: #f9f9f9;
+}
+
+.editor .ingredients input {
+  background-color: #c8553d;
+  font-family: "Lato", sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 1em;
+  line-height: 25px;
+  color: #f9f9f9;
+  display: inline-block;
+  width: 200px;
+}
+
+.editor .ingredients .measurement {
+  width: 100px;
+}
+
+.editor .add {
+  position: relative;
+  margin: 20px 0 0 15%;
+  right: 20px;
+}
+
+.editor .instructions {
+  clear: both;
+  background: #CCDCDC;
+  padding: 30px 0 50px;
+  margin-bottom: 20px;
+}
+
+.editor .instructions p {
+  position: relative;
+  color: #212121;
+  font-family: "Lato", sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 25px;
+  font-size: 1.35em;
+  width: 120px;
+  margin: 0 15% 10px;
+  right: 20px;
+}
+
+.editor .instructions li {
+  list-style-type: decimal;
+  margin: 0 10% 0 15%;
+  color: #3D6161;
+  font-family: "Lato", sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 25px;
+  font-size: 1em;
+}
+
+.editor .instructions input {
+  background-color: #CCDCDC;
+  font-family: "Lato", sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 1em;
+  line-height: 25px;
+  color: #3D6161;
+  display: inline-block;
+  width: 80%;
+}
+
+.editor .submit {
+  margin-left: 7%;
+}
+
+.deleteRecipeButton {
+  border-radius: 12px;
+  border: solid 1px #bababa;
+  padding: 0 15px;
+  margin: 2px 10px 2px 0;
+  font-family: "Lato", sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 0.8em;
+  line-height: 25px;
+  margin-top: 20px;
+  margin-left: 7%;
+}
