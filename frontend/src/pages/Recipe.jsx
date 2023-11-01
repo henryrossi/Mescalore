@@ -38,13 +38,13 @@ function Recipe() {
             {data.getRecipeByName.category.map((tag) => (
               <span key={tag.name}>{tag.name.toLowerCase()}</span>
             ))}
-            {/* <p>{data.getRecipeByName.description}</p> */}
-            <p>
+            <p>{data.getRecipeByName.description}</p>
+            {/* <p>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
               eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
               enim ad minim veniam, quis nostrud exercitation ullamco laboris
               nisi ut aliquip ex ea commodo consequat.
-            </p>
+            </p> */}
             {data.getRecipeByName.base64picture ? (
               <img
                 src={
@@ -54,7 +54,7 @@ function Recipe() {
                 alt=""
               />
             ) : (
-              <div></div>
+              <div className="noPicture"></div>
             )}
           </div>
           <div className="recipeBackground">
