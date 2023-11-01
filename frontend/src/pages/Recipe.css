@@ -1,15 +1,109 @@
-.recipe h1 {
-  margin: 50px 10% 30px;
+.recipeInfo {
+  margin: 0 10%;
+}
+
+.recipeInfo h1 {
+  margin: 50px 0 30px;
   font-family: "Jua", sans-serif;
   font-style: normal;
   font-weight: 200;
-  font-size: 2em;
+  font-size: 2.5em;
   color: #212121;
-  width: 75%;
-  float: left;
+  text-transform: capitalize;
 }
 
-.recipe a {
+.recipeInfo span {
+  font-family: "Lato", sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 1em;
+  line-height: 25px;
+  color: #ffffff;
+  background-color: #C8553D;
+  padding: 6px 16px;
+  border-radius: 16px;
+  margin-right: 10px;
+}
+
+.recipeInfo p {
+  font-family: "Lato", sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 1.3em;
+  line-height: 25px;
+  margin: 30px 0;
+}
+
+.recipeInfo img {
+  width: 50%;
+  margin: 0 25% 20px;
+  border-radius: 30px;
+  filter: drop-shadow(0px 10px 5px #3c1811);
+}
+
+.recipeBackground {
+  background-color: #C8553D;
+  padding: 100px 10%;
+  position: relative;
+  overflow-x: clip;
+  display: flex;
+}
+
+.recipeBackground::before {
+  content: "";
+  background-color: #C8553D;
+  display: block;
+  width: 140%;
+  height: 500px;
+  border-radius: 50%;
+  position: absolute;
+  top: -300px;
+  left: -20%;
+  z-index: -1;
+}
+
+.recipeBackground .ingredients {
+  width: 30%;
+  margin-right: 10%;
+}
+
+.recipeBackground .instructions {
+  width: 60%;
+}
+
+.recipeBackground h2 {
+  font-family: "Lato", sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 2em;
+  line-height: 25px;
+  color: #F0E6C4;
+  margin-bottom: 35px;
+}
+
+.recipeBackground li {
+  font-family: "Lato", sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 1.3em;
+  line-height: 35px;
+  color: #ffffff;
+}
+
+.recipeBackground .instructions h2 {
+  position: relative;
+  right: 25px;
+}
+
+.recipeBackground .instructions li {
+  list-style-type: decimal;
+  line-height: 25px;
+  margin-bottom: 10px;
+}
+
+
+
+/* .recipe a {
   margin-top: 50px;
   font-family: "Jua", sans-serif;
   font-style: normal;
@@ -183,4 +277,4 @@
   .recipe .info h2 {
     margin-bottom: 20px;
   }
-}
+} */
