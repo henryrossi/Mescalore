@@ -12,7 +12,7 @@ function Recipe() {
 
   const handleIngredientLineThrough = (e) => {
     const li = e.target;
-    if (li.classList.length == 0) {
+    if (li.classList.length === 0) {
       li.classList.add("line-through");
       return;
     }
