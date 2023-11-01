@@ -10,6 +10,15 @@ import "./Recipe.css";
 function Recipe() {
   const { recipeName } = useParams();
 
+  const handleIngredientLineThrough = (e) => {
+    const li = e.target;
+    if (li.classList.length == 0) {
+      li.classList.add("line-through");
+      return;
+    }
+    li.classList.remove(...li.classList);
+  };
+
   const { loading, error, data } = useQuery(GET_RECIPE_QUERY, {
     variables: {
       name: recipeName,
@@ -39,12 +48,6 @@ function Recipe() {
               <span key={tag.name}>{tag.name.toLowerCase()}</span>
             ))}
             <p>{data.getRecipeByName.description}</p>
-            {/* <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
-            </p> */}
             {data.getRecipeByName.base64picture ? (
               <img
                 src={
@@ -62,7 +65,7 @@ function Recipe() {
               <h2>Ingredients</h2>
               <ul>
                 {data.getRecipeByName.ingredientList.map((obj, index) => (
-                  <li key={index}>
+                  <li key={index} onClick={handleIngredientLineThrough}>
                     {obj.measurement} {obj.ingredient.name}
                   </li>
                 ))}
@@ -81,6 +84,7 @@ function Recipe() {
           </div>
         </>
       )}
+      {/* Remove Footer? Remove Footer everywhere? */}
       <Footer />
     </div>
   );
