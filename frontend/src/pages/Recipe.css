@@ -22,7 +22,9 @@
   background-color: #C8553D;
   padding: 6px 16px;
   border-radius: 16px;
-  margin-right: 10px;
+  margin: 0 10px 10px 0;
+  white-space: nowrap;
+  float: left;
 }
 
 .recipeInfo p {
@@ -32,11 +34,12 @@
   font-size: 1.3em;
   line-height: 25px;
   margin: 30px 0;
+  clear: both;
 }
 
 .recipeInfo img {
-  width: 50%;
-  margin: 0 25% 20px;
+  width: 90%;
+  margin: 0 5% 20px;
   border-radius: 30px;
   filter: drop-shadow(0px 10px 5px #3c1811);
 }
@@ -48,10 +51,9 @@
 
 .recipeBackground {
   background-color: #C8553D;
-  padding: 100px 10%;
+  padding: 100px 20%;
   position: relative;
   overflow-x: clip;
-  display: flex;
 }
 
 .recipeBackground::before {
@@ -59,28 +61,29 @@
   background-color: #C8553D;
   display: block;
   width: 140%;
-  height: 500px;
+  height: 200px;
   border-radius: 50%;
   position: absolute;
-  top: -300px;
+  top: -130px;
   left: -20%;
   z-index: -1;
 }
 
 .recipeBackground .ingredients {
-  width: 30%;
-  margin-right: 10%;
+  width: 100%;
+  margin-bottom: 50px;
 }
 
 .recipeBackground .instructions {
-  width: 60%;
+  width: 90%;
+  margin-left: 25px;
 }
 
 .recipeBackground h2 {
   font-family: "Lato", sans-serif;
   font-style: normal;
   font-weight: 500;
-  font-size: 2em;
+  font-size: 1.8em;
   line-height: 25px;
   color: #F0E6C4;
   margin-bottom: 35px;
@@ -90,7 +93,7 @@
   font-family: "Lato", sans-serif;
   font-style: normal;
   font-weight: 500;
-  font-size: 1.3em;
+  font-size: 1.2em;
   line-height: 35px;
   color: #ffffff;
 }
@@ -113,4 +116,54 @@
   list-style-type: decimal;
   line-height: 25px;
   margin-bottom: 10px;
+}
+
+@media only screen and (min-width: 30em) {
+  .recipeBackground::before {
+    height: 300px;
+    top: -200px;
+  }
+
+  .recipeInfo img {
+    width: 70%;
+    margin: 0 15% 20px;
+  }
+}
+
+@media only screen and (min-width: 40em) {
+  .recipeBackground {
+    padding: 100px 10%;
+    display: flex;
+  }
+
+  .recipeBackground .ingredients {
+    width: 30%;
+    margin-right: 10%;
+    margin-bottom: 0;
+  }
+
+  .recipeBackground .instructions {
+    width: 60%;
+    margin-left: 0;
+  }
+}
+
+@media only screen and (min-width: 55em) {
+  .recipeBackground::before {
+    height: 500px;
+    top: -300px;
+  }
+
+  .recipeInfo img {
+    width: 50%;
+    margin: 0 25% 20px;
+  }
+
+  .recipeBackground h2 {
+    font-size: 2em;
+  }
+
+  .recipeBackground li {
+    font-size: 1.3em;
+  }
 }

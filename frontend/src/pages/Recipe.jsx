@@ -36,10 +36,10 @@ function Recipe() {
       {loading ? (
         <Loading />
       ) : (
-        //   {localStorage.getItem("token") && (
-        //     <Link to={"/edit/" + recipeName}>Edit</Link>
-        //   )}
         <>
+          {localStorage.getItem("token") && (
+            <Link to={"/edit/" + recipeName}>Edit</Link>
+          )}
           <div className="recipeInfo">
             <h1>{data.getRecipeByName.name}</h1>
             <span>{data.getRecipeByName.servings} servings</span>
