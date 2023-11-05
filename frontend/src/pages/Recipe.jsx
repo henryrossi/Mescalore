@@ -40,7 +40,7 @@ function Recipe() {
           {localStorage.getItem("token") && (
             <Link to={"/edit/" + recipeName}>Edit</Link>
           )}
-          <div className="recipeInfo">
+          <div className="recipe-info">
             <h1>{data.getRecipeByName.name}</h1>
             <span>{data.getRecipeByName.servings} servings</span>
             <span>{data.getRecipeByName.time} minutes</span>
@@ -60,7 +60,7 @@ function Recipe() {
               <div className="noPicture"></div>
             )}
           </div>
-          <div className="recipeBackground">
+          <div className="recipe-background">
             <div className="ingredients">
               <h2>Ingredients</h2>
               <ul>

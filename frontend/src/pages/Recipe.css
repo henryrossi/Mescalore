@@ -1,8 +1,8 @@
-.recipeInfo {
+.recipe-info {
   margin: 0 10%;
 }
 
-.recipeInfo h1 {
+.recipe-info h1 {
   margin: 50px 0 30px;
   font-family: "Jua", sans-serif;
   font-style: normal;
@@ -12,7 +12,7 @@
   text-transform: capitalize;
 }
 
-.recipeInfo span {
+.recipe-info span {
   font-family: "Lato", sans-serif;
   font-style: normal;
   font-weight: 500;
@@ -27,7 +27,7 @@
   float: left;
 }
 
-.recipeInfo p {
+.recipe-info p {
   font-family: "Lato", sans-serif;
   font-style: normal;
   font-weight: 500;
@@ -37,26 +37,26 @@
   clear: both;
 }
 
-.recipeInfo img {
+.recipe-info img {
   width: 90%;
   margin: 0 5% 20px;
   border-radius: 30px;
   filter: drop-shadow(0px 10px 5px #3c1811);
 }
 
-.recipeInfo .noPicture {
+.recipe-info .noPicture {
   width: 50%;
   height: 300px;
 }
 
-.recipeBackground {
+.recipe-background {
   background-color: #C8553D;
   padding: 100px 20%;
   position: relative;
   overflow-x: clip;
 }
 
-.recipeBackground::before {
+.recipe-background::before {
   content: "";
   background-color: #C8553D;
   display: block;
@@ -69,17 +69,17 @@
   z-index: -1;
 }
 
-.recipeBackground .ingredients {
+.recipe-background .ingredients {
   width: 100%;
   margin-bottom: 50px;
 }
 
-.recipeBackground .instructions {
+.recipe-background .instructions {
   width: 90%;
   margin-left: 25px;
 }
 
-.recipeBackground h2 {
+.recipe-background h2 {
   font-family: "Lato", sans-serif;
   font-style: normal;
   font-weight: 500;
@@ -89,7 +89,7 @@
   margin-bottom: 35px;
 }
 
-.recipeBackground li {
+.recipe-background li {
   font-family: "Lato", sans-serif;
   font-style: normal;
   font-weight: 500;
@@ -98,72 +98,72 @@
   color: #ffffff;
 }
 
-.recipeBackground .ingredients li{
+.recipe-background .ingredients li{
   cursor: pointer;
 }
 
-.recipeBackground .ingredients .line-through {
+.recipe-background .ingredients .line-through {
   color: lightgrey;
   text-decoration: line-through #F0E6C4;
 }
 
-.recipeBackground .instructions h2 {
+.recipe-background .instructions h2 {
   position: relative;
   right: 25px;
 }
 
-.recipeBackground .instructions li {
+.recipe-background .instructions li {
   list-style-type: decimal;
   line-height: 25px;
   margin-bottom: 10px;
 }
 
 @media only screen and (min-width: 30em) {
-  .recipeBackground::before {
+  .recipe-background::before {
     height: 300px;
     top: -200px;
   }
 
-  .recipeInfo img {
+  .recipe-info img {
     width: 70%;
     margin: 0 15% 20px;
   }
 }
 
 @media only screen and (min-width: 40em) {
-  .recipeBackground {
+  .recipe-background {
     padding: 100px 10%;
     display: flex;
   }
 
-  .recipeBackground .ingredients {
+  .recipe-background .ingredients {
     width: 30%;
     margin-right: 10%;
     margin-bottom: 0;
   }
 
-  .recipeBackground .instructions {
+  .recipe-background .instructions {
     width: 60%;
     margin-left: 0;
   }
 }
 
 @media only screen and (min-width: 55em) {
-  .recipeBackground::before {
+  .recipe-background::before {
     height: 500px;
     top: -300px;
   }
 
-  .recipeInfo img {
+  .recipe-info img {
     width: 50%;
     margin: 0 25% 20px;
   }
 
-  .recipeBackground h2 {
+  .recipe-background h2 {
     font-size: 2em;
   }
 
-  .recipeBackground li {
+  .recipe-background li {
     font-size: 1.3em;
   }
 }
