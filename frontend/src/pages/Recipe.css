@@ -1,8 +1,8 @@
-.recipeInfo {
+.recipe-info {
   margin: 0 10%;
 }
 
-.recipeInfo h1 {
+.recipe-info h1 {
   margin: 50px 0 30px;
   font-family: "Jua", sans-serif;
   font-style: normal;
@@ -12,7 +12,7 @@
   text-transform: capitalize;
 }
 
-.recipeInfo span {
+.recipe-info span {
   font-family: "Lato", sans-serif;
   font-style: normal;
   font-weight: 500;
@@ -22,259 +22,148 @@
   background-color: #C8553D;
   padding: 6px 16px;
   border-radius: 16px;
-  margin-right: 10px;
+  margin: 0 10px 10px 0;
+  white-space: nowrap;
+  float: left;
 }
 
-.recipeInfo p {
+.recipe-info p {
   font-family: "Lato", sans-serif;
   font-style: normal;
   font-weight: 500;
   font-size: 1.3em;
   line-height: 25px;
   margin: 30px 0;
+  clear: both;
 }
 
-.recipeInfo img {
-  width: 50%;
-  margin: 0 25% 20px;
+.recipe-info img {
+  width: 90%;
+  margin: 0 5% 20px;
   border-radius: 30px;
   filter: drop-shadow(0px 10px 5px #3c1811);
 }
 
-.recipeBackground {
-  background-color: #C8553D;
-  padding: 100px 10%;
-  position: relative;
-  overflow-x: clip;
-  display: flex;
+.recipe-info .noPicture {
+  width: 50%;
+  height: 300px;
 }
 
-.recipeBackground::before {
+.recipe-background {
+  background-color: #C8553D;
+  padding: 100px 20%;
+  position: relative;
+  overflow-x: clip;
+}
+
+.recipe-background::before {
   content: "";
   background-color: #C8553D;
   display: block;
   width: 140%;
-  height: 500px;
+  height: 200px;
   border-radius: 50%;
   position: absolute;
-  top: -300px;
+  top: -130px;
   left: -20%;
   z-index: -1;
 }
 
-.recipeBackground .ingredients {
-  width: 30%;
-  margin-right: 10%;
+.recipe-background .ingredients {
+  width: 100%;
+  margin-bottom: 50px;
 }
 
-.recipeBackground .instructions {
-  width: 60%;
+.recipe-background .instructions {
+  width: 90%;
+  margin-left: 25px;
 }
 
-.recipeBackground h2 {
+.recipe-background h2 {
   font-family: "Lato", sans-serif;
   font-style: normal;
   font-weight: 500;
-  font-size: 2em;
+  font-size: 1.8em;
   line-height: 25px;
   color: #F0E6C4;
   margin-bottom: 35px;
 }
 
-.recipeBackground li {
+.recipe-background li {
   font-family: "Lato", sans-serif;
   font-style: normal;
   font-weight: 500;
-  font-size: 1.3em;
+  font-size: 1.2em;
   line-height: 35px;
   color: #ffffff;
 }
 
-.recipeBackground .instructions h2 {
+.recipe-background .ingredients li{
+  cursor: pointer;
+}
+
+.recipe-background .ingredients .line-through {
+  color: lightgrey;
+  text-decoration: line-through #F0E6C4;
+}
+
+.recipe-background .instructions h2 {
   position: relative;
   right: 25px;
 }
 
-.recipeBackground .instructions li {
+.recipe-background .instructions li {
   list-style-type: decimal;
   line-height: 25px;
   margin-bottom: 10px;
 }
 
+@media only screen and (min-width: 30em) {
+  .recipe-background::before {
+    height: 300px;
+    top: -200px;
+  }
 
-
-/* .recipe a {
-  margin-top: 50px;
-  font-family: "Jua", sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 1.2em;
-  line-height: 25px;
-  text-decoration: none;
-  color: #588b8b;
-  display: block;
-  float: left;
-}
-
-.recipe .info {
-  margin: 0 10%;
-  font-family: "Lato", sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 1em;
-  line-height: 25px;
-}
-
-.recipe .info h2 {
-  margin-bottom: 10px;
-}
-
-.recipe .info .servingsAndTime {
-  margin-bottom: 10px;
-  color: #c8553d;
-}
-
-.recipe .info .tag {
-  float: left;
-  border-radius: 12px;
-  border: solid 1px #bababa;
-  background-color: #f9f9f9;
-  padding: 0 15px;
-  margin: 5px 10px 20px 0;
-  color: #212121;
-  font-size: 0.9em;
-}
-
-.recipe .info .photo {
-  display: block;
-  clear: left;
-  width: 100%;
-  border-radius: 20px;
-  margin-bottom: 40px;
-}
-
-.recipe .info .noPicture {
-  border-radius: 20px;
-  margin-bottom: 40px;
-  aspect-ratio : 1 / 1;
-  width: 100%;
-  background: #e5e5e5;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.recipe .info .noPicture .message {
-  font-family: "Jua", sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 1em;
-  color: #588b8b;
-}
-
-.recipe ul {
-  margin-bottom: 10px;
-}
-
-.recipe .ingredients {
-  border-radius: 20px 0 0 20px;
-  background: #c8553d;
-  padding: 30px 0;
-  margin: 0 0 40px 15%;
-  font-family: "Lato", sans-serif;
-  font-style: normal;
-  font-size: 1em;
-  line-height: 25px;
-}
-
-.recipe .ingredients p {
-  position: relative;
-  color: #f0e6c4;
-  font-size: 1.35em;
-  width: 120px;
-  margin: 0 15% 10px;
-  right: 20px;
-}
-
-.recipe .ingredients li {
-  list-style-type: disc;
-  margin: 0 10% 0 15%;
-  color: #f9f9f9;
-}
-
-.recipe .instructions {
-  clear: both;
-  background: #ccdcdc;
-  padding: 30px 0 50px;
-  margin-bottom: 20px;
-  font-family: "Lato", sans-serif;
-  font-style: normal;
-  font-size: 1em;
-  line-height: 25px;
-}
-
-.recipe .instructions p {
-  position: relative;
-  color: #212121;
-  font-size: 1.35em;
-  padding-left: 15%;
-  margin: 20px 0;
-  right: 20px;
-}
-
-.recipe .instructions li {
-  list-style-type: decimal;
-  margin: 0 10% 0 15%;
-  color: #3d6161;
+  .recipe-info img {
+    width: 70%;
+    margin: 0 15% 20px;
+  }
 }
 
 @media only screen and (min-width: 40em) {
-  .recipe h1 {
-    margin-left: 7%;
-    margin-right: 0;
+  .recipe-background {
+    padding: 100px 10%;
+    display: flex;
   }
 
-  .recipe .info {
-    width: 42%;
-    float: left;
-    margin-left: 7%;
-    margin-right: 6%;
-    overflow: auto;
+  .recipe-background .ingredients {
+    width: 30%;
+    margin-right: 10%;
+    margin-bottom: 0;
   }
 
-  .recipe .ingredients {
-    width: 45%;
+  .recipe-background .instructions {
+    width: 60%;
     margin-left: 0;
-    float: right;
-    overflow: auto;
   }
 }
 
-@media only screen and (min-width: 63em) {
-  .recipe h1 {
-    font-size: 2.5em;
+@media only screen and (min-width: 55em) {
+  .recipe-background::before {
+    height: 500px;
+    top: -300px;
   }
 
-  .recipe .ingredients p, .recipe .instructions p {
-    font-size: 1.7em;
-    margin-bottom: 20px;
+  .recipe-info img {
+    width: 50%;
+    margin: 0 25% 20px;
   }
 
-  .recipe .info {
-    font-size: 1.15em;
-  }
-  
-  .recipe .ingredients li {
-    font-size: 1.15em;
-    line-height: 27.5px;
+  .recipe-background h2 {
+    font-size: 2em;
   }
 
-  .recipe .instructions li {
-    font-size: 1.15em;
-    margin-bottom: 10px;
+  .recipe-background li {
+    font-size: 1.3em;
   }
-
-  .recipe .info h2 {
-    margin-bottom: 20px;
-  }
-} */
+}

@@ -10,6 +10,15 @@ import "./Recipe.css";
 function Recipe() {
   const { recipeName } = useParams();
 
+  const handleIngredientLineThrough = (e) => {
+    const li = e.target;
+    if (li.classList.length === 0) {
+      li.classList.add("line-through");
+      return;
+    }
+    li.classList.remove(...li.classList);
+  };
+
   const { loading, error, data } = useQuery(GET_RECIPE_QUERY, {
     variables: {
       name: recipeName,
@@ -27,24 +36,18 @@ function Recipe() {
       {loading ? (
         <Loading />
       ) : (
-        //   {localStorage.getItem("token") && (
-        //     <Link to={"/edit/" + recipeName}>Edit</Link>
-        //   )}
         <>
-          <div className="recipeInfo">
+          {localStorage.getItem("token") && (
+            <Link to={"/edit/" + recipeName}>Edit</Link>
+          )}
+          <div className="recipe-info">
             <h1>{data.getRecipeByName.name}</h1>
             <span>{data.getRecipeByName.servings} servings</span>
             <span>{data.getRecipeByName.time} minutes</span>
             {data.getRecipeByName.category.map((tag) => (
               <span key={tag.name}>{tag.name.toLowerCase()}</span>
             ))}
-            {/* <p>{data.getRecipeByName.description}</p> */}
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
-            </p>
+            <p>{data.getRecipeByName.description}</p>
             {data.getRecipeByName.base64picture ? (
               <img
                 src={
@@ -54,15 +57,15 @@ function Recipe() {
                 alt=""
               />
             ) : (
-              <div></div>
+              <div className="noPicture"></div>
             )}
           </div>
-          <div className="recipeBackground">
+          <div className="recipe-background">
             <div className="ingredients">
               <h2>Ingredients</h2>
               <ul>
                 {data.getRecipeByName.ingredientList.map((obj, index) => (
-                  <li key={index}>
+                  <li key={index} onClick={handleIngredientLineThrough}>
                     {obj.measurement} {obj.ingredient.name}
                   </li>
                 ))}
@@ -80,62 +83,8 @@ function Recipe() {
             </div>
           </div>
         </>
-
-        // <article className="recipe">
-        //   <h1>{data.getRecipeByName.name}</h1>
-        //   {localStorage.getItem("token") && (
-        //     <Link to={"/edit/" + recipeName}>Edit</Link>
-        //   )}
-        //   <section className="info">
-        //     <p className="servingsAndTime">
-        //       {data.getRecipeByName.servings} servings |{"  "}
-        //       {data.getRecipeByName.time} minutes
-        //     </p>
-        //     <h2>{data.getRecipeByName.description}</h2>
-        //     <ul>
-        //       {data.getRecipeByName.category.map((tag) => (
-        //         <li className="tag" key={tag.name}>
-        //           {tag.name.toLowerCase()}
-        //         </li>
-        //       ))}
-        //     </ul>
-        //     {data.getRecipeByName.base64picture ? (
-        //       <img
-        //         className="photo"
-        //         src={
-        //           "data:image/jpeg;charset=utf-8;base64," +
-        //           atob(data.getRecipeByName.base64picture)
-        //         }
-        //         alt=""
-        //       />
-        //     ) : (
-        //       <div className="noPicture">
-        //         <p className="message">image unavailable</p>
-        //       </div>
-        //     )}
-        //   </section>
-        //   <div className="ingredients">
-        //     <p>Ingredients</p>
-        //     <ul>
-        //       {data.getRecipeByName.ingredientList.map((obj, index) => (
-        //         <li className="ingredient" key={index}>
-        //           {obj.measurement} {obj.ingredient.name}
-        //         </li>
-        //       ))}
-        //     </ul>
-        //   </div>
-        //   <div className="instructions">
-        //     <p>Instructions</p>
-        //     <ul>
-        //       {data.getRecipeByName.instructions
-        //         .split("\r")
-        //         .map((instruction) => (
-        //           <li key={instruction}>{instruction}</li>
-        //         ))}
-        //     </ul>
-        //   </div>
-        // </article>
       )}
+      {/* Remove Footer? Remove Footer everywhere? */}
       <Footer />
     </div>
   );
