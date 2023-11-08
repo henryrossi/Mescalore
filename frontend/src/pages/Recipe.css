@@ -9,7 +9,6 @@
   font-weight: 200;
   font-size: 2.5em;
   color: #212121;
-  text-transform: capitalize;
 }
 
 .recipe-info span {
@@ -49,14 +48,14 @@
   height: 300px;
 }
 
-.recipe-background {
+.recipe-method {
   background-color: #C8553D;
   padding: 100px 20%;
   position: relative;
   overflow-x: clip;
 }
 
-.recipe-background::before {
+.recipe-method::before {
   content: "";
   background-color: #C8553D;
   display: block;
@@ -69,17 +68,17 @@
   z-index: -1;
 }
 
-.recipe-background .ingredients {
+.recipe-method .ingredients {
   width: 100%;
   margin-bottom: 50px;
 }
 
-.recipe-background .instructions {
+.recipe-method .instructions {
   width: 90%;
   margin-left: 25px;
 }
 
-.recipe-background h2 {
+.recipe-method h2 {
   font-family: "Lato", sans-serif;
   font-style: normal;
   font-weight: 500;
@@ -89,7 +88,7 @@
   margin-bottom: 35px;
 }
 
-.recipe-background li {
+.recipe-method li {
   font-family: "Lato", sans-serif;
   font-style: normal;
   font-weight: 500;
@@ -98,28 +97,28 @@
   color: #ffffff;
 }
 
-.recipe-background .ingredients li{
+.recipe-method .ingredients li{
   cursor: pointer;
 }
 
-.recipe-background .ingredients .line-through {
+.recipe-method .ingredients .line-through {
   color: lightgrey;
   text-decoration: line-through #F0E6C4;
 }
 
-.recipe-background .instructions h2 {
+.recipe-method .instructions h2 {
   position: relative;
   right: 25px;
 }
 
-.recipe-background .instructions li {
+.recipe-method .instructions li {
   list-style-type: decimal;
   line-height: 25px;
   margin-bottom: 10px;
 }
 
 @media only screen and (min-width: 30em) {
-  .recipe-background::before {
+  .recipe-method::before {
     height: 300px;
     top: -200px;
   }
@@ -131,25 +130,25 @@
 }
 
 @media only screen and (min-width: 40em) {
-  .recipe-background {
+  .recipe-method {
     padding: 100px 10%;
     display: flex;
   }
 
-  .recipe-background .ingredients {
+  .recipe-method .ingredients {
     width: 30%;
     margin-right: 10%;
     margin-bottom: 0;
   }
 
-  .recipe-background .instructions {
+  .recipe-method .instructions {
     width: 60%;
     margin-left: 0;
   }
 }
 
 @media only screen and (min-width: 55em) {
-  .recipe-background::before {
+  .recipe-method::before {
     height: 500px;
     top: -300px;
   }
@@ -159,11 +158,11 @@
     margin: 0 25% 20px;
   }
 
-  .recipe-background h2 {
+  .recipe-method h2 {
     font-size: 2em;
   }
 
-  .recipe-background li {
+  .recipe-method li {
     font-size: 1.3em;
   }
 }

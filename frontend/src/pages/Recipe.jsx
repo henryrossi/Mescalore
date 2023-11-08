@@ -42,11 +42,19 @@ function Recipe() {
           )}
           <div className="recipe-info">
             <h1>{data.getRecipeByName.name}</h1>
-            <span>{data.getRecipeByName.servings} servings</span>
-            <span>{data.getRecipeByName.time} minutes</span>
-            {data.getRecipeByName.category.map((tag) => (
-              <span key={tag.name}>{tag.name.toLowerCase()}</span>
-            ))}
+            <ul>
+              <li>
+                <span>{data.getRecipeByName.servings} servings</span>
+              </li>
+              <li>
+                <span>{data.getRecipeByName.time} minutes</span>
+              </li>
+              {data.getRecipeByName.category.map((tag) => (
+                <li>
+                  <span key={tag.name}>{tag.name.toLowerCase()}</span>
+                </li>
+              ))}
+            </ul>
             <p>{data.getRecipeByName.description}</p>
             {data.getRecipeByName.base64picture ? (
               <img
@@ -60,7 +68,7 @@ function Recipe() {
               <div className="noPicture"></div>
             )}
           </div>
-          <div className="recipe-background">
+          <div className="recipe-method">
             <div className="ingredients">
               <h2>Ingredients</h2>
               <ul>

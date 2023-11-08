@@ -12,234 +12,203 @@ the width of the inputs to be the width of the text inside it
   border: none;
   display: block;
   padding: 0;
+  resize: vertical;
 }
 
-.editor textarea:focus, .editor input:focus{
-    outline: none;
+.recipe-info-editor {
+  margin: 0 10%;
 }
 
-.editor ul {
-  margin-bottom: 10px;
-}
-
-.editor .button {
-  border-radius: 12px;
-  border: solid 1px #bababa;
-  padding: 0 15px;
-  margin: 2px 10px 2px 0;
-  font-family: "Lato", sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 0.8em;
-  line-height: 25px;
-  cursor: pointer;
-}
-
-.editor .name {
-  margin: 50px 7% 30px;
+.recipe-info-editor .name {
+  margin: 50px 0 30px;
   font-family: "Jua", sans-serif;
   font-style: normal;
   font-weight: 200;
-  font-size: 2em;
-  color: #212121;
-  width: 100%
-}
-
-.editor .info {
-  width: 42%;
-  float: left;
-  margin-left: 7%;
-  margin-right: 6%;
-  overflow: auto;
-}
-
-.editor .info .servings {
-  font-family: "Lato", sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 1em;
-  line-height: 25px;
-  text-align: right;
-  margin-bottom: 10px;
-  color: #c8553d;
-  float: left;
-  width: 20px;
-}
-
-.editor .info .time {
-  font-family: "Lato", sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 1em;
-  line-height: 25px;
-  text-align: right;
-  margin-bottom: 10px;
-  color: #c8553d;
-  float: left;
-  width: 40px;
-}
-
-.editor .info .text {
-  width: auto;
-  margin-left: 10px;
-}
-
-.editor .info .description {
-  width: 100%;
-  font-family: "Lato", sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 1em;
-  line-height: 25px;
+  font-size: 2.5em;
   color: #212121;
 }
 
-.editor .info .tagList {
-  overflow: auto;
-}
-
-.editor .info .tag {
-  float: left;
-  border-radius: 12px;
-  border: solid 1px #bababa;
-  padding: 0 15px;
-  margin: 5px 10px 5px 0;
-  font-family: "Lato", sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 0.9em;
+.recipe-info-editor span,
+.recipe-info-editor button {
+  font-size: 1em;
   line-height: 25px;
-  cursor: pointer;
-}
-
-.editor .info .selected {
+  color: #ffffff;
   background-color: #c8553d;
+  padding: 6px 16px;
+  border-radius: 16px;
+  margin: 0 10px 10px 0;
+  white-space: nowrap;
+  float: left;
+  transition: color 0.2s, background-color 0.2s;
+}
+
+.recipe-info-editor span input {
+  font-size: 1em;
+  line-height: 25px;
+  color: #ffffff;
+  background-color: #c8553d;
+  display: inline-block;
+  width: 1ch;
+  border-bottom: 1px solid #f0e6c4;
+}
+
+.recipe-info-editor button {
+  cursor: pointer;
+  border: none;
+}
+
+.recipe-info-editor .unselected {
+  background-color: #f9f9f9;
+  color: #212121;
+  padding: 5px 15px;
+  border: solid 1px #bababa;
+}
+
+.recipe-info-editor textarea {
+  font-family: "Lato", sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 1.3em;
+  line-height: 25px;
+  margin: 30px 0;
+  clear: both;
+  width: 100%;
+}
+
+.recipe-info-editor img {
+  width: 90%;
+  margin: 0 5% 20px;
+  border-radius: 30px;
+  filter: drop-shadow(0px 10px 5px #3c1811);
+}
+
+.recipe-info-editor .noPicture {
+  width: 50%;
+  height: 300px;
+}
+
+.recipe-method-editor {
+  background-color: #c8553d;
+  padding: 100px 20%;
+  position: relative;
+  overflow-x: clip;
+}
+
+.recipe-method-editor::before {
+  content: "";
+  background-color: #c8553d;
+  display: block;
+  width: 140%;
+  height: 200px;
+  border-radius: 50%;
+  position: absolute;
+  top: -130px;
+  left: -20%;
+  z-index: -1;
+}
+
+.recipe-method-editor .ingredients {
+  width: 100%;
+  margin-bottom: 50px;
+}
+
+.recipe-method-editor .instructions {
+  width: 90%;
+  margin-left: 25px;
+}
+
+.recipe-method-editor h2 {
+  font-size: 1.8em;
+  line-height: 25px;
+  color: #f0e6c4;
+  margin-bottom: 35px;
+}
+
+.recipe-method-editor li input {
+  font-size: 1.2em;
+  line-height: 35px;
+  color: #ffffff;
+  background-color: #c8553d;
+  display: inline-block;
+  border-bottom: 1px solid #f0e6c4;
+  width: 1ch;
+  margin-right: 10px;
+}
+
+.recipe-method-editor .instructions h2 {
+  position: relative;
+  right: 25px;
+}
+
+.recipe-method-editor .instructions li {
+  list-style-type: decimal;
+  line-height: 25px;
+  margin-bottom: 10px;
+}
+
+.recipe-method-editor .buttonIcon {
+  display: inline-block;
+  background-color: #c8553d;
+  color: #ffffff;
+  border: none;
+}
+
+.span-for-auto-expanding-input {
+  position: absolute;
+  left: -9999px;
+  display: inline-block;
+  min-width: 1ch;
+  font-size: 1.2em;
+  line-height: 35px;
   color: #ffffff;
 }
 
-.editor .info .unselected {
-  background-color: #f9f9f9;
-  color: #212121;
+@media only screen and (min-width: 30em) {
+  .recipe-method-editor::before {
+    height: 300px;
+    top: -200px;
+  }
+
+  .recipe-info-editor img {
+    width: 70%;
+    margin: 0 15% 20px;
+  }
 }
 
-.editor .info .upload {
-  font-family: "Lato", sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 1em;
-  line-height: 25px;
-  color: #212121;
-  margin-top: 15px;
-  clear: both;
+@media only screen and (min-width: 40em) {
+  .recipe-method-editor {
+    padding: 100px 10%;
+    display: flex;
+  }
+
+  .recipe-method-editor .ingredients {
+    width: 30%;
+    margin-right: 10%;
+    margin-bottom: 0;
+  }
+
+  .recipe-method-editor .instructions {
+    width: 60%;
+    margin-left: 0;
+  }
 }
 
-.editor .ingredients {
-  border-radius: 20px 0 0 20px;
-  background: #c8553d;
-  padding: 30px 0;
-  margin: 0 0 40px;
-  width: 45%;
-  float: right;
-  overflow: auto;
-}
+@media only screen and (min-width: 55em) {
+  .recipe-method-editor::before {
+    height: 500px;
+    top: -300px;
+  }
 
-.editor .ingredients p {
-  position: relative;
-  color: #f0e6c4;
-  font-family: "Lato", sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 25px;
-  font-size: 1.35em;
-  width: 120px;
-  margin: 0 15% 10px;
-  right: 20px;
-}
-.editor .ingredients li {
-  list-style-type: disc;
-  margin: 0 10% 0 15%;
-  color: #f9f9f9;
-}
+  .recipe-info-editor img {
+    width: 50%;
+    margin: 0 25% 20px;
+  }
 
-.editor .ingredients input {
-  background-color: #c8553d;
-  font-family: "Lato", sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 1em;
-  line-height: 25px;
-  color: #f9f9f9;
-  display: inline-block;
-  width: 200px;
-}
+  .recipe-method-editor h2 {
+    font-size: 2em;
+  }
 
-.editor .ingredients .measurement {
-  width: 100px;
-}
-
-.editor .add {
-  position: relative;
-  margin: 20px 0 0 15%;
-  right: 20px;
-}
-
-.editor .instructions {
-  clear: both;
-  background: #CCDCDC;
-  padding: 30px 0 50px;
-  margin-bottom: 20px;
-}
-
-.editor .instructions p {
-  position: relative;
-  color: #212121;
-  font-family: "Lato", sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 25px;
-  font-size: 1.35em;
-  width: 120px;
-  margin: 0 15% 10px;
-  right: 20px;
-}
-
-.editor .instructions li {
-  list-style-type: decimal;
-  margin: 0 10% 0 15%;
-  color: #3D6161;
-  font-family: "Lato", sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 25px;
-  font-size: 1em;
-}
-
-.editor .instructions input {
-  background-color: #CCDCDC;
-  font-family: "Lato", sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 1em;
-  line-height: 25px;
-  color: #3D6161;
-  display: inline-block;
-  width: 80%;
-}
-
-.editor .submit {
-  margin-left: 7%;
-}
-
-.deleteRecipeButton {
-  border-radius: 12px;
-  border: solid 1px #bababa;
-  padding: 0 15px;
-  margin: 2px 10px 2px 0;
-  font-family: "Lato", sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 0.8em;
-  line-height: 25px;
-  margin-top: 20px;
-  margin-left: 7%;
+  .recipe-method-editor li input {
+    font-size: 1.3em;
+  }
 }

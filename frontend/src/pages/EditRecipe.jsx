@@ -1,6 +1,7 @@
 import { React, useReducer } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/client";
+import { IconTrashX, IconPencilPlus } from "@tabler/icons-react";
 import {
   GET_RECIPE_QUERY,
   EDIT_RECIPE_MUTATION,
@@ -20,7 +21,6 @@ const categoryChocies = [
   "snack",
   "dessert",
   "beverage",
-  "other",
 ];
 
 export default function EditRecipe() {
@@ -103,6 +103,12 @@ export default function EditRecipe() {
     }
   };
 
+  const updateInputWidth = (event) => {
+    const span = document.querySelector("span.span-for-auto-expanding-input");
+    span.textContent = event.target.value;
+    event.target.style.width = span.offsetWidth + "px";
+  };
+
   /* Page rendering */
 
   if (error) {
@@ -122,65 +128,61 @@ export default function EditRecipe() {
       ) : (
         <>
           <form className="editor" onSubmit={onSubmit}>
-            <input
-              type="text"
-              className="name"
-              value={recipeData.name}
-              onChange={(e) =>
-                dispatch({
-                  type: "changeInput",
-                  value: e.target.value,
-                  variable: "name",
-                })
-              }
-            />
-            <div className="info">
+            <span className="span-for-auto-expanding-input"></span>
+            <div className="recipe-info-editor">
               <input
                 type="text"
-                className="servings"
-                value={recipeData.servings}
+                className="name"
+                value={recipeData.name}
                 onChange={(e) =>
                   dispatch({
                     type: "changeInput",
                     value: e.target.value,
-                    variable: "servings",
+                    variable: "name",
                   })
                 }
               />
-              <p className="servings text">servings</p>
-              <input
-                type="text"
-                className="time"
-                value={recipeData.time}
-                onChange={(e) =>
-                  dispatch({
-                    type: "changeInput",
-                    value: e.target.value,
-                    variable: "time",
-                  })
-                }
-              />
-              <p className="time text">minutes</p>
-              <textarea
-                type="text"
-                className="description"
-                value={recipeData.description}
-                onChange={(e) =>
-                  dispatch({
-                    type: "changeInput",
-                    value: e.target.value,
-                    variable: "description",
-                  })
-                }
-              />
-              <ul className="tagList">
+              <ul>
+                <li>
+                  <span>
+                    <input
+                      type="text"
+                      value={recipeData.servings}
+                      onChange={(e) => {
+                        updateInputWidth(e);
+                        dispatch({
+                          type: "changeInput",
+                          value: e.target.value,
+                          variable: "servings",
+                        });
+                      }}
+                    />{" "}
+                    servings
+                  </span>
+                </li>
+                <li>
+                  <span>
+                    <input
+                      type="text"
+                      value={recipeData.time}
+                      onChange={(e) =>
+                        dispatch({
+                          type: "changeInput",
+                          value: e.target.value,
+                          variable: "time",
+                        })
+                      }
+                    />{" "}
+                    minutes
+                  </span>
+                </li>
                 {categoryChocies.map((category) => (
                   <li key={category}>
                     <button
                       className={
                         recipeData.categories.includes(category)
-                          ? "tag selected"
-                          : "tag unselected"
+                          ? ""
+                          : "unselected"
                       }
                       onClick={(e) => {
                         e.preventDefault();
@@ -195,6 +197,27 @@ export default function EditRecipe() {
                   </li>
                 ))}
               </ul>
+              <textarea
+                value={recipeData.description}
+                onChange={(e) =>
+                  dispatch({
+                    type: "changeInput",
+                    value: e.target.value,
+                    variable: "description",
+                  })
+                }
+              />
+              {recipeData.base64picture ? (
+                <img
+                  src={
+                    "data:image/jpeg;charset=utf-8;base64," +
+                    atob(recipeData.base64picture)
+                  }
+                  alt=""
+                />
+              ) : (
+                <div className="noPicture"></div>
+              )}
               <input
                 type="file"
                 className="upload"
@@ -207,111 +230,117 @@ export default function EditRecipe() {
                 }
               />
             </div>
-            <ul className="ingredients">
-              <p>Ingredients</p>
-              {recipeData.ingredients.map((object, index) => (
-                <li key={index}>
-                  <input
-                    type="text"
-                    className="measurement"
-                    value={object.measurement}
-                    onChange={(e) =>
-                      dispatch({
-                        type: "changeIngredient",
-                        ingredient: {
-                          measurement: e.target.value,
-                          ingredient: object.ingredient,
-                        },
-                        index: index,
-                      })
-                    }
-                  />
-                  <input
-                    type="text"
-                    value={object.ingredient}
-                    onChange={(e) =>
-                      dispatch({
-                        type: "changeIngredient",
-                        ingredient: {
-                          measurement: object.measurement,
-                          ingredient: e.target.value,
-                        },
-                        index: index,
-                      })
-                    }
-                  />
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      dispatch({
-                        type: "removeListItem",
-                        variable: "ingredients",
-                        index: index,
-                      });
-                    }}
-                    className="button"
-                  >
-                    Delete
-                  </button>
-                </li>
-              ))}
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  dispatch({ type: "addIngredient" });
-                }}
-                className="add button"
-              >
-                Add Ingredient
+            <div className="recipe-method-editor">
+              <div className="ingredients">
+                <h2>Ingredients</h2>
+                <ul>
+                  {recipeData.ingredients.map((object, index) => (
+                    <li key={index}>
+                      <input
+                        type="text"
+                        className="measurement"
+                        value={object.measurement}
+                        onChange={(e) =>
+                          dispatch({
+                            type: "changeIngredient",
+                            ingredient: {
+                              measurement: e.target.value,
+                              ingredient: object.ingredient,
+                            },
+                            index: index,
+                          })
+                        }
+                      />
+                      <input
+                        type="text"
+                        value={object.ingredient}
+                        onChange={(e) =>
+                          dispatch({
+                            type: "changeIngredient",
+                            ingredient: {
+                              measurement: object.measurement,
+                              ingredient: e.target.value,
+                            },
+                            index: index,
+                          })
+                        }
+                      />
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          dispatch({
+                            type: "removeListItem",
+                            variable: "ingredients",
+                            index: index,
+                          });
+                        }}
+                        className="buttonIcon"
+                      >
+                        <IconTrashX />
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    dispatch({ type: "addIngredient" });
+                  }}
+                  className="buttonIcon"
+                >
+                  <IconPencilPlus />
+                </button>
+              </div>
+              <div className="instructions">
+                <h2>Instructions</h2>
+                <ol>
+                  {recipeData.instructions.map((instructions, index) => (
+                    <li key={index}>
+                      <input
+                        type="text"
+                        value={instructions}
+                        onChange={(e) =>
+                          dispatch({
+                            type: "changeInstruction",
+                            instruction: e.target.value,
+                            index: index,
+                          })
+                        }
+                      />
+                      <button
+                        className="buttonIcon"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          dispatch({
+                            type: "removeListItem",
+                            variable: "instructions",
+                            index: index,
+                          });
+                        }}
+                      >
+                        <IconTrashX />
+                      </button>
+                    </li>
+                  ))}
+                </ol>
+                <button
+                  className="buttonIcon"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    dispatch({ type: "addInstruction" });
+                  }}
+                >
+                  <IconPencilPlus />
+                </button>
+              </div>
+              <button className="submit button" type="submit">
+                Update Recipe
               </button>
-            </ul>
-            <ul className="instructions">
-              <p>Instructions</p>
-              {recipeData.instructions.map((instructions, index) => (
-                <li key={index}>
-                  <input
-                    type="text"
-                    value={instructions}
-                    onChange={(e) =>
-                      dispatch({
-                        type: "changeInstruction",
-                        instruction: e.target.value,
-                        index: index,
-                      })
-                    }
-                  />
-                  <button
-                    className="button"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      dispatch({
-                        type: "removeListItem",
-                        variable: "instructions",
-                        index: index,
-                      });
-                    }}
-                  >
-                    Delete
-                  </button>
-                </li>
-              ))}
-              <button
-                className="add button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  dispatch({ type: "addInstruction" });
-                }}
-              >
-                Add instruction
+              <button className="deleteRecipeButton" onClick={handleDelete}>
+                Delete Recipe
               </button>
-            </ul>
-            <button className="submit button" type="submit">
-              Update Recipe
-            </button>
+            </div>
           </form>
-          <button className="deleteRecipeButton" onClick={handleDelete}>
-            Delete Recipe
-          </button>
         </>
       )}
       <Footer />
