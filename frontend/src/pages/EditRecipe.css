@@ -1,245 +1,130 @@
-/* In future can use the ch measurement and javascript to adjust
-the width of the inputs to be the width of the text inside it 
- - This seems most easily accomplished using spans */
+.recipe-editor {
+  margin: 0 20%;
+}
 
-.editor input {
-  border: none;
+.recipe-editor input:focus, .recipe-editor textarea:focus {
+  outline-color: #588B8B;
+}
+
+.recipe-editor h1 {
+  font-family: "Jua";
+  font-size: 2.5em;
+  margin: 50px 0;
+}
+
+.recipe-editor h2 {
+  font-size: 1.2em;
+  margin: 20px 0;
+}
+
+.recipe-editor label {
+  font-size: 1.2em;
+}
+
+.recipe-editor label input[type="text"],
+.recipe-editor textarea {
   display: block;
-  padding: 0;
-}
-
-.editor textarea {
-  border: none;
-  display: block;
-  padding: 0;
-}
-
-.editor textarea:focus, .editor input:focus{
-    outline: none;
-}
-
-.editor ul {
-  margin-bottom: 10px;
-}
-
-.editor .button {
-  border-radius: 12px;
-  border: solid 1px #bababa;
-  padding: 0 15px;
-  margin: 2px 10px 2px 0;
-  font-family: "Lato", sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 0.8em;
-  line-height: 25px;
-  cursor: pointer;
-}
-
-.editor .name {
-  margin: 50px 7% 30px;
-  font-family: "Jua", sans-serif;
-  font-style: normal;
-  font-weight: 200;
-  font-size: 2em;
-  color: #212121;
-  width: 100%
-}
-
-.editor .info {
-  width: 42%;
-  float: left;
-  margin-left: 7%;
-  margin-right: 6%;
-  overflow: auto;
-}
-
-.editor .info .servings {
-  font-family: "Lato", sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 1em;
-  line-height: 25px;
-  text-align: right;
-  margin-bottom: 10px;
-  color: #c8553d;
-  float: left;
-  width: 20px;
-}
-
-.editor .info .time {
-  font-family: "Lato", sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 1em;
-  line-height: 25px;
-  text-align: right;
-  margin-bottom: 10px;
-  color: #c8553d;
-  float: left;
-  width: 40px;
-}
-
-.editor .info .text {
-  width: auto;
-  margin-left: 10px;
-}
-
-.editor .info .description {
-  width: 100%;
-  font-family: "Lato", sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 1em;
-  line-height: 25px;
-  color: #212121;
-}
-
-.editor .info .tagList {
-  overflow: auto;
-}
-
-.editor .info .tag {
-  float: left;
-  border-radius: 12px;
-  border: solid 1px #bababa;
-  padding: 0 15px;
-  margin: 5px 10px 5px 0;
-  font-family: "Lato", sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 0.9em;
-  line-height: 25px;
-  cursor: pointer;
-}
-
-.editor .info .selected {
-  background-color: #c8553d;
-  color: #ffffff;
-}
-
-.editor .info .unselected {
   background-color: #f9f9f9;
-  color: #212121;
+  border: 1px solid #bababa;
+  border-radius: 10px;
+  margin: 20px 0;
+  width: 100%;
 }
 
-.editor .info .upload {
-  font-family: "Lato", sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 1em;
-  line-height: 25px;
-  color: #212121;
-  margin-top: 15px;
-  clear: both;
+.recipe-editor label input[type="text"] {
+  height: 40px;
+  padding-left: 10px;
 }
 
-.editor .ingredients {
-  border-radius: 20px 0 0 20px;
-  background: #c8553d;
-  padding: 30px 0;
-  margin: 0 0 40px;
-  width: 45%;
-  float: right;
-  overflow: auto;
-}
-
-.editor .ingredients p {
-  position: relative;
-  color: #f0e6c4;
-  font-family: "Lato", sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 25px;
-  font-size: 1.35em;
-  width: 120px;
-  margin: 0 15% 10px;
-  right: 20px;
-}
-.editor .ingredients li {
-  list-style-type: disc;
-  margin: 0 10% 0 15%;
-  color: #f9f9f9;
-}
-
-.editor .ingredients input {
-  background-color: #c8553d;
-  font-family: "Lato", sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 1em;
-  line-height: 25px;
-  color: #f9f9f9;
+.recipe-editor .autosize-input-label {
   display: inline-block;
-  width: 200px;
 }
 
-.editor .ingredients .measurement {
-  width: 100px;
+.recipe-editor .tag {
+  display: inline-block;
+  margin: 20px 10px 20px 0;
+}
+.recipe-editor .tag button {
+  color: #ffffff;
+  background-color: #c8553d;
+  border: 1px solid #c8553d;
+  padding: 6px 16px;
+  border-radius: 16px;
+  cursor: pointer;
 }
 
-.editor .add {
-  position: relative;
-  margin: 20px 0 0 15%;
-  right: 20px;
+.recipe-editor .tag .unselected {
+  color: #212121;
+  background-color: #f9f9f9;
+  border: 1px solid #bababa;
 }
 
-.editor .instructions {
-  clear: both;
-  background: #CCDCDC;
-  padding: 30px 0 50px;
+.recipe-editor textarea {
+  resize: vertical;
+  height: 150px;
+  width: 100%;
+  padding: 10px;
+  font-family: "Lato", sans-serif;
+  font-style: normal;
+  font-weight: 500;
+}
+
+.recipe-editor img {
+  width: 60%;
+  margin: 0 20% 20px;
+  border-radius: 30px;
+}
+
+.recipe-editor p {
+  line-height: 22px;
   margin-bottom: 20px;
 }
 
-.editor .instructions p {
+.recipe-editor .button-icon {
+  background-color: #ffffff;
+  border: none;
+  width: 40px;
+  cursor: pointer;
+}
+
+.recipe-editor .delete-ingredient-icon {
   position: relative;
-  color: #212121;
-  font-family: "Lato", sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 25px;
-  font-size: 1.35em;
-  width: 120px;
-  margin: 0 15% 10px;
-  right: 20px;
+  top: 5px;
 }
 
-.editor .instructions li {
-  list-style-type: decimal;
-  margin: 0 10% 0 15%;
-  color: #3D6161;
-  font-family: "Lato", sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 25px;
-  font-size: 1em;
+.recipe-editor .add-icon {
+  margin: 10px 0 40px;
+  display: block;
 }
 
-.editor .instructions input {
-  background-color: #CCDCDC;
-  font-family: "Lato", sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 1em;
-  line-height: 25px;
-  color: #3D6161;
+.recipe-editor li textarea {
+  width: 90%;
+  margin: 0 1% 10px 0;
   display: inline-block;
-  width: 80%;
 }
 
-.editor .submit {
-  margin-left: 7%;
+.recipe-editor .delete-instruction-icon {
+  position: relative;
+  top: -135px;
 }
 
-.deleteRecipeButton {
-  border-radius: 12px;
-  border: solid 1px #bababa;
-  padding: 0 15px;
-  margin: 2px 10px 2px 0;
-  font-family: "Lato", sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 0.8em;
-  line-height: 25px;
-  margin-top: 20px;
-  margin-left: 7%;
+.recipe-editor .submit-recipe-button {
+  color:#212121;
+  background-color: #f9f9f9;
+  border: 1px solid #bababa;
+  border-radius: 30px;
+  width: 150px;
+  height: 50px;
+  margin-right: 20px;
+  cursor: pointer;
+}
+
+.recipe-editor .delete-recipe-button {
+  color:#ffffff;
+  background-color: #c8553d;
+  border: 1px solid #c8553d;
+  border-radius: 30px;
+  width: 150px;
+  height: 50px;
+  cursor: pointer;
 }

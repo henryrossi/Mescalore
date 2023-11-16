@@ -156,3 +156,9 @@ table {
 img {
   max-width: 100%;
 }
+
+body {
+  font-family: "Lato", sans-serif;
+  font-style: normal;
+  font-weight: 500;
+}
