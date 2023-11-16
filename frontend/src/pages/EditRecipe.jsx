@@ -35,6 +35,7 @@ export default function EditRecipe() {
     description: "",
     categories: [],
     picture: null,
+    base64picture: null,
     ingredients: [],
     instructions: [],
   });
@@ -215,7 +216,9 @@ export default function EditRecipe() {
                 }
               />
             </label>
-            {recipeData.base64picture ? (
+            {recipeData.picture ? (
+              <img src={URL.createObjectURL(recipeData.picture)} alt="" />
+            ) : recipeData.base64picture ? (
               <img
                 src={
                   "data:image/jpeg;charset=utf-8;base64," +
@@ -224,18 +227,40 @@ export default function EditRecipe() {
                 alt=""
               />
             ) : (
-              <div className="no-picture"></div>
+              <></>
             )}
-            <input
-              type="file"
-              onChange={(e) =>
-                dispatch({
-                  type: "changeInput",
-                  variable: "picture",
-                  value: e.target.files[0],
-                })
-              }
-            />
+            <div className="picture-input-controls">
+              {recipeData.picture && (
+                <button
+                  className="standard-recipe-button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    dispatch({
+                      /* Maybe create a remove Image action type */
+                      type: "changeInput",
+                      variable: "picture",
+                      value: null,
+                    });
+                  }}
+                >
+                  Discard current upload
+                </button>
+              )}
+              <label className="standard-recipe-button picture-upload-label">
+                <input
+                  className="picture-upload-input"
+                  type="file"
+                  onChange={(e) => {
+                    dispatch({
+                      type: "changeInput",
+                      variable: "picture",
+                      value: e.target.files[0],
+                    });
+                  }}
+                />
+                Upload new picture
+              </label>
+            </div>
             <h2>Ingredients</h2>
             <p>
               Ingredients are divided into a measurement section and the
@@ -338,7 +363,7 @@ export default function EditRecipe() {
             >
               <IconPencilPlus />
             </button>
-            <button type="submit" className="submit-recipe-button">
+            <button type="submit" className="standard-recipe-button">
               Update Recipe
             </button>
             <button onClick={handleDelete} className="delete-recipe-button">
