@@ -1,6 +1,6 @@
 import { React, useState } from "react";
 import { useQuery } from "@apollo/client";
-import { FILTER_RECIPES_QUERY } from "../graphQL.js"
+import { FILTER_RECIPES_QUERY } from "../graphQL.js";
 import Navbar from "../components/Navbar";
 import RecipeList from "../components/RecipeList";
 import Footer from "../components/Footer";
@@ -32,7 +32,7 @@ function Recipes() {
 
   return (
     <div id="fullpage">
-      <Navbar />
+      <Navbar currentSubsite={"recipes"} />
       <h1 className="recipes">Explore some of our favorite recipes</h1>
       <section className="filter">
         <p> filter by </p>

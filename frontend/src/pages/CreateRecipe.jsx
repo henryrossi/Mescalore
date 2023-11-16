@@ -73,7 +73,7 @@ function CreateRecipe() {
 
   return (
     <div id="fullpage">
-      <Navbar />
+      <Navbar currentSubsite={"recipes"} />
       <form onSubmit={onSubmit} className="creator">
         <input
           type="text"
