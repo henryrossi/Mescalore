@@ -17,7 +17,7 @@ function Home() {
 
   return (
     <div id="fullpage">
-      <Navbar />
+      <Navbar currentSubsite={"home"} />
       <hgroup className="hgroup">
         <h1 className="title">mescolare!</h1>
         <p className="desc">

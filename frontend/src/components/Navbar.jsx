@@ -3,10 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { IconSearch } from "@tabler/icons-react";
 import "./Navbar.css";
 
-function Navbar() {
+function Navbar({ currentSubsite }) {
   const [searchInput, setSearchInput] = useState("");
   const navigate = useNavigate();
-  const pathname = window.location.pathname;
 
   const handleNavigateEmpty = () => {
     navigate("/search", { state: { search: "" } });
@@ -26,9 +25,21 @@ function Navbar() {
     <>
       <header className="header">
         <nav className="nav">
-          <Link className={pathname === "/" ? "active" : ""} to="/">home</Link>
-          <Link className={pathname === "/recipes" ? "active" : ""} to="/recipes">recipes</Link>
-          <Link className={pathname === "/about" ? "active" : ""} to="/about">about us</Link>
+          <Link className={currentSubsite === "home" ? "active" : ""} to="/">
+            home
+          </Link>
+          <Link
+            className={currentSubsite === "recipes" ? "active" : ""}
+            to="/recipes"
+          >
+            recipes
+          </Link>
+          <Link
+            className={currentSubsite === "about" ? "active" : ""}
+            to="/about"
+          >
+            about us
+          </Link>
           <button onClick={handleNavigateEmpty} className="searchButton">
             <IconSearch size={20} />
           </button>

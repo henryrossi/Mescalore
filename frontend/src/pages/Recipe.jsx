@@ -32,7 +32,7 @@ function Recipe() {
 
   return (
     <div id="fullpage">
-      <Navbar />
+      <Navbar currentSubsite={"recipes"} />
       {loading ? (
         <Loading />
       ) : (

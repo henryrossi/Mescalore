@@ -6,7 +6,7 @@ import "./AboutUs.css";
 export default function AboutUs() {
   return (
     <div id="fullpage">
-      <Navbar />
+      <Navbar currentSubsite={"about"} />
       <section className="meet alexaHenry">
         <img
           className="photo right"

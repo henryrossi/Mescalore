@@ -16,7 +16,7 @@ export default function Search() {
   if (location.state !== null) {
     search = location.state.search;
   }
-  
+
   const navigate = useNavigate();
   const [searchText, setSearchText] = useState(search);
   const [lastSearch, setLastSearch] = useState(search);
@@ -49,7 +49,7 @@ export default function Search() {
     data: count,
   } = useQuery(GET_NUMBER_OF_RECIPES);
 
-  // Handles users clicking the fetch more button more times 
+  // Handles users clicking the fetch more button more times
   // than the query is executed
   if (data) {
     if (timesFetched !== Math.ceil(data.searchRecipes.length / limit))
@@ -92,7 +92,7 @@ export default function Search() {
 
   return (
     <div id="fullpage">
-      <Navbar />
+      <Navbar currentSubsite={"recipes"} />
       <input
         className="searchInput"
         type="text"
