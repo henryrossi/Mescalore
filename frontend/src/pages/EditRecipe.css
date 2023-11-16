@@ -75,6 +75,21 @@
   border-radius: 30px;
 }
 
+.recipe-editor .picture-input-controls {
+  display: flex;
+  justify-content: center;
+}
+
+.recipe-editor .picture-upload-input {
+  display: none;
+}
+
+.recipe-editor .picture-upload-label {
+  font-size: 0.8em;
+  text-align: center;
+  line-height: 50px;
+}
+
 .recipe-editor p {
   line-height: 22px;
   margin-bottom: 20px;
@@ -108,7 +123,7 @@
   top: -135px;
 }
 
-.recipe-editor .submit-recipe-button {
+.recipe-editor .standard-recipe-button {
   color:#212121;
   background-color: #f9f9f9;
   border: 1px solid #bababa;
