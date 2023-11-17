@@ -6,7 +6,6 @@ import recipeStateReducer from "../recipeStateRecuder.js";
 import Navbar from "../components/Navbar";
 import RecipeEditor from "../components/RecipeEditor.jsx";
 import Footer from "../components/Footer";
-import "./CreateRecipe.css";
 
 function CreateRecipe() {
   const navigate = useNavigate();
