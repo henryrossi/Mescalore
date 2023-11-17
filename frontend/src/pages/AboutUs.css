@@ -1,170 +1,88 @@
-.meet {
-  margin: 40px 5% 0;
-  border-radius: 30px;
-  overflow: auto;
+.about-us-container {
+  display: flex;
+  justify-content: center;
 }
 
-.alexaHenry {
-  margin-top: 40px;
-  background: #588b8b;
-  color: #212121;
-  font-family: Arial, Helvetica, sans-serif;
-  line-height: normal;
-}
-
-.alexaHenry h1 {
-  padding: 20px 20px 0;
-  font-size: 1.5em;
-  font-style: italic;
-  font-weight: 600;
-}
-
-.alexaHenry h2 {
-  padding: 10px 20px 0;
-  font-size: 1.1em;
-  font-style: normal;
-  font-weight: 500;
-}
-
-.alexaHenry p {
-  padding: 10px 20px 20px;
-  font-size: 1em;
-  font-style: normal;
-  font-weight: 500;
-}
-
-.meet .photo {
+.alexa-henry-card {
+  display: inline-block;
   width: 100%;
-  display: block;
+  max-width: 400px;
+  margin: 80px 50px 0 0;
+  cursor: pointer;
+  overflow: hidden;
 }
 
-.henry {
-  background: #588b8b;
-  font-family: Arial, Helvetica, sans-serif;
-  line-height: normal;
+.alexa-henry-card img {
+  width: 100%;
+  transition: filter 0.2s;
 }
 
-.meet .heading {
-  padding: 20px 20px 0;
-  font-size: 1.5em;
-  font-style: italic;
-  font-weight: 600;
-  color: #f0e6c4;
+.alexa-henry-card h1 {
+  font-family: "Jua";
+  font-size: 2.5em;
+  text-align: center;
+  color: #ffffff;
+  margin: 0 20%;
+  transform: translateY(-200px);
+  transition: transform 0.5s;
 }
 
-.meet .body {
-  padding: 10px 20px 20px;
-  font-size: 1em;
-  font-style: normal;
-  font-weight: 500;
-  color: #f9f9f9;
+.alexa-henry-card:hover img{
+  filter: brightness(80%); 
 }
 
-.alexa {
-  background: #c8553d;
-  font-family: Arial, Helvetica, sans-serif;
-  line-height: normal;
+.alexa-henry-card:hover h1 {
+  transform: translateY(-400px);
 }
 
-.tuna {
-  /* background: #84af5a; */
-  background: #c8553d;
-  font-family: Arial, Helvetica, sans-serif;
-  line-height: normal;
+.alexa-henry-card p {
+  color: #ffffff;
+  opacity: 0;
+  margin: 0 20%;
+  transform: translateY(-200px);
+  transition: opacity 0.2s ease-out, transform 0.5s ease-in-out;
 }
 
-@media only screen and (min-width: 40em) {
-  .alexaHenry h1,
-  .alexaHenry h2,
-  .alexaHenry p {
-    width: 55%;
-  }
-
-  .alexaHenry h1 {
-    padding: 40px 30px 0;
-  }
-
-  .alexaHenry h2 {
-    padding-left: 30px;
-  }
-
-  .alexaHenry p {
-    padding: 30px 30px;
-  }
-
-  .meet .heading {
-    width: 55%;
-    padding: 40px 30px 0;
-  }
-
-  .meet .body {
-    width: 55%;
-    padding: 30px 30px;
-  }
-
-  .meet .photo {
-    width: 40%;
-  }
-
-  .meet .right {
-    float: right;
-  }
-  .meet .left {
-    float: left;
-  }
+.alexa-henry-card:hover p {
+  opacity: 1;
+  transform: translateY(-375px);
 }
 
-@media only screen and (min-width: 55em) {
-  .alexaHenry h1 {
-    font-size: 1.8em;
-  }
-  .alexaHenry h2 {
-    font-size: 1.4em;
-  }
-  .alexaHenry p {
-    font-size: 1.2em;
-  }
-  .meet .heading {
-    font-size: 1.8em;
-  }
-  .meet .body {
-    font-size: 1.2em;
-  }
+.tuna-card {
+  display: inline-block;
+  width: 100%;
+  max-width: 400px;
+  margin: 80px 0 0;
+  cursor: pointer;
 }
 
-@media only screen and (min-width: 70em) {
-  .alexaHenry h1,
-  .alexaHenry h2,
-  .alexaHenry p {
-    width: 60%;
-  }
+.tuna-card img {
+  width: 100%;
+  transition: filter 0.2s;
+}
 
-  .alexaHenry h1 {
-    padding: 60px 40px 0;
-    font-size: 2.2em;
-  }
-  .alexaHenry h2 {
-    padding-left: 40px;
-    font-size: 1.7em;
-  }
-  .alexaHenry p {
-    padding: 40px 40px;
-    font-size: 1.5em;
-    line-height: 30px;
-  }
-  .meet .heading {
-    width: 60%;
-    padding: 60px 40px 0;
-    font-size: 2.2em;
-  }
-  .meet .body {
-    width: 60%;
-    padding: 40px 40px;
-    font-size: 1.5em;
-    line-height: 30px;
-  }
+.tuna-card h1 {
+  font-family: "Jua";
+  font-size: 2.5em;
+  text-align: center;
+  color: #ffffff;
+  transform: translateY(-400px);
+  margin: 0 20%;
+}
 
-  .meet .photo {
-    width: 35%;
-  }
+.tuna-card p {
+  color: #ffffff;
+  opacity: 0;
+  margin: 0 20%;
+  transform: translate(-150px, -375px);
+  transition: opacity 0.2s ease-out, transform 0.5s ease-out;
+}
+
+.tuna-card:hover img{
+  filter: brightness(80%); 
+}
+
+.tuna-card:hover p {
+  opacity: 1;
+  transform: translate(0px, -375px);
 }
