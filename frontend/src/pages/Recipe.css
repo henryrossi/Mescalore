@@ -9,6 +9,13 @@
   font-weight: 200;
   font-size: 2.5em;
   color: #212121;
+  width: 90%;
+  display: inline-block;
+}
+
+.recipe-info .edit-link {
+  display: inline-block;
+  color: #212121;
 }
 
 .recipe-info span {

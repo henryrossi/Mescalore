@@ -2,6 +2,7 @@ import { React } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { GET_RECIPE_QUERY } from "../graphQL.js";
+import { IconEdit } from "@tabler/icons-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Loading from "../components/Loading";
@@ -37,11 +38,13 @@ function Recipe() {
         <Loading />
       ) : (
         <>
-          {localStorage.getItem("token") && (
-            <Link to={"/edit/" + recipeName}>Edit</Link>
-          )}
           <div className="recipe-info">
             <h1>{data.getRecipeByName.name}</h1>
+            {localStorage.getItem("token") && (
+              <Link to={"/edit/" + recipeName} className="edit-link">
+                <IconEdit />
+              </Link>
+            )}
             <ul>
               <li>
                 <span>{data.getRecipeByName.servings} servings</span>
