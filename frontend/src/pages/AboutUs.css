@@ -27,8 +27,8 @@
   transition: transform 0.5s;
 }
 
-.alexa-henry-card:hover img{
-  filter: brightness(80%); 
+.alexa-henry-card:hover img {
+  filter: brightness(80%);
 }
 
 .alexa-henry-card:hover h1 {
@@ -78,8 +78,8 @@
   transition: opacity 0.2s ease-out, transform 0.5s ease-out;
 }
 
-.tuna-card:hover img{
-  filter: brightness(80%); 
+.tuna-card:hover img {
+  filter: brightness(80%);
 }
 
 .tuna-card:hover p {
