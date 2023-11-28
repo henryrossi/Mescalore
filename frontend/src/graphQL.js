@@ -120,15 +120,24 @@ export const DELETE_RECIPE_MUTATION = gql`
 `;
 
 export const USER_AUTHENTICATION = gql`
-    mutation userAuthentication($username: String!, $password: String!) {
-      userAuthentication(username: $username, password: $password) {
-        success
-        errors
-        token
-        refreshToken
-        user {
-          username
-        }
+  mutation userAuthentication($username: String!, $password: String!) {
+    userAuthentication(username: $username, password: $password) {
+      success
+      errors
+      token
+      refreshToken
+      user {
+        username
       }
     }
-  `;
+  }
+`;
+
+export const USER_VERIFICATION = gql`
+mutation userVerification($token: String!) {
+  userVerification(token: $token) {
+    errors
+    success
+	}
+}
+`

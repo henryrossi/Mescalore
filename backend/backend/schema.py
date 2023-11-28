@@ -269,5 +269,6 @@ class Mutation(graphene.ObjectType):
     resend_activation_email = mutations.ResendActivationEmail.Field()
     send_password_reset_email = mutations.SendPasswordResetEmail.Field()
     password_reset = mutations.PasswordReset.Field()
+    delete_account = mutations.DeleteAccount.Field()
 
 schema = graphene.Schema(query=Query, mutation=Mutation)
