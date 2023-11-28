@@ -102,7 +102,8 @@ def calculateTFIDF():
 class Query(UserQuery, MeQuery, graphene.ObjectType):
     get_recipes_by_category = graphene.List(RecipeType, category=graphene.String())
     get_recipe_by_name = graphene.Field(RecipeType, name=graphene.String())
-    search_recipes = graphene.List(RecipeType, searchText=graphene.String(), offset=graphene.Int(), limit=graphene.Int())
+    search_recipes = graphene.List(RecipeType, searchText=graphene.String(), \
+                                   offset=graphene.Int(), limit=graphene.Int())
     get_number_of_recipes = graphene.Int()
     
     def resolve_get_recipes_by_category(root, info, category):
@@ -264,5 +265,9 @@ class Mutation(graphene.ObjectType):
     user_verification = mutations.VerifyAccount.Field()
     user_authentication = mutations.ObtainJSONWebToken.Field()
     revoke_Token = mutations.RevokeToken.Field()
+    update_account = mutations.UpdateAccount.Field()
+    resend_activation_email = mutations.ResendActivationEmail.Field()
+    send_password_reset_email = mutations.SendPasswordResetEmail.Field()
+    password_reset = mutations.PasswordReset.Field()
 
 schema = graphene.Schema(query=Query, mutation=Mutation)
