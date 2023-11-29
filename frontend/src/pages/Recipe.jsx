@@ -46,15 +46,15 @@ function Recipe() {
               </Link>
             )}
             <ul>
-              <li>
+              <li key="servings">
                 <span>{data.getRecipeByName.servings} servings</span>
               </li>
-              <li>
+              <li key="time">
                 <span>{data.getRecipeByName.time} minutes</span>
               </li>
               {data.getRecipeByName.category.map((tag) => (
-                <li>
-                  <span key={tag.name}>{tag.name.toLowerCase()}</span>
+                <li key={tag.name}>
+                  <span>{tag.name.toLowerCase()}</span>
                 </li>
               ))}
             </ul>

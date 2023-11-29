@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import { USER_AUTHENTICATION } from "../graphQL.js";
 import Navbar from "../components/Navbar";
@@ -7,7 +7,7 @@ import "./Login.css";
 
 export default function Login() {
   const navigate = useNavigate();
-  const [username, setUsername] = useState("");
+  const [usernameEmail, setUsernameEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const [authenticateUser] = useMutation(USER_AUTHENTICATION, {
@@ -26,34 +26,34 @@ export default function Login() {
     },
   });
 
+  const onSubmit = (e) => {
+    e.preventDefault();
+    authenticateUser({
+      variables: {
+        username: usernameEmail,
+        password: password,
+      },
+    });
+  };
+
   return (
     <div id="fullpage">
       <Navbar />
-      <main className="login">
-        <input
-          className="input"
-          placeholder="username"
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <input
-          className="input"
-          placeholder="password"
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button
-          className="loginButton"
-          onClick={() =>
-            authenticateUser({
-              variables: {
-                username: username,
-                password: password,
-              },
-            })
-          }
-        >
-          Login
-        </button>
-      </main>
+      <form className="login-register-form" onSubmit={onSubmit}>
+        <h1>Login to Mescalore</h1>
+        <label>
+          Username or Email
+          <input onChange={(e) => setUsernameEmail(e.target.value)} />
+        </label>
+        <label>
+          Password
+          <input onChange={(e) => setPassword(e.target.value)} />
+        </label>
+        <button type="submit">Login</button>
+        <p>
+          Don't have an account? <Link to="/register">Sign up</Link>
+        </p>
+      </form>
     </div>
   );
 }
