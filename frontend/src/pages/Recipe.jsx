@@ -7,6 +7,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Loading from "../components/Loading";
 import "./Recipe.css";
+import Unavailable from "../components/Unavailable.jsx";
 
 function Recipe() {
   const { recipeName } = useParams();
@@ -27,8 +28,8 @@ function Recipe() {
   });
 
   if (error) {
-    console.log(error.message);
-    return "recipe not found";
+    // console.log(error.message);
+    return <Unavailable />;
   }
 
   return (
