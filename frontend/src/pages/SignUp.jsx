@@ -3,9 +3,9 @@ import Navbar from "../components/Navbar";
 import { Link, useNavigate } from "react-router-dom";
 import { USER_REGISTRATION } from "../graphQL";
 import { useMutation } from "@apollo/client";
-import "./Login.css";
+import "./SignInSignUp.css";
 
-export default function Register() {
+export default function SignUp() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
@@ -74,7 +74,7 @@ export default function Register() {
           Register
         </button>
         <p>
-          Already have an account? <Link to="/login">Sign in</Link>
+          Already have an account? <Link to="/sign-in">Sign in</Link>
         </p>
       </form>
     </div>
