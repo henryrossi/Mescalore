@@ -95,9 +95,11 @@
     font-size: 1.5em;
   }
   .article-title {
-    font-size: 1.8em;
+    font-size: 2.4em;
+    line-height: 35px;
   }
   .article-text {
     font-size: 1.5em;
+    line-height: 28px;
   }
 }
