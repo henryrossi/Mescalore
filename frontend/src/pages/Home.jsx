@@ -12,7 +12,7 @@ function Home() {
   const handleLogout = () => {
     // To be secure I believe I should also remove the Token from the backend database
     localStorage.removeItem("token");
-    setAuthorization(false);
+    setAuthorization(null);
   };
 
   return (
