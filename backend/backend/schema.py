@@ -7,6 +7,10 @@ from graphql_auth import mutations
 import base64
 from math import log
 
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
 from recipes.models import Category, Recipe, Ingredient, IngredientList, \
     Term, TermData, TFIDF
 from recipes.search import Tokenizer
@@ -147,6 +151,11 @@ class Query(UserQuery, MeQuery, graphene.ObjectType):
     def resolve_get_number_of_recipes(root, info):
         return Recipe.objects.count()
     
+def checkAdminPrivileges(user) -> bool:
+    if user.username == os.getenv("ADMIN_USERNAME_1"): return True
+    if user.username == os.getenv("ADMIN_USERNAME_2"): return True
+    return False
+    
 class CreateRecipe(graphene.Mutation):
     class Arguments:
         recipe_data = RecipeInput(required=True)
@@ -157,8 +166,11 @@ class CreateRecipe(graphene.Mutation):
     @classmethod
     def mutate(cls, root, info, recipe_data):
         user = info.context.user
+        print(user.username)
         if not user.is_authenticated:
             raise Exception("Authentication credentials were not provided")
+        if not checkAdminPrivileges(user):
+            raise Exception("You do not have the credential to perform this action")
         try:
             recipe = Recipe(
                 name = recipe_data.name,
@@ -200,6 +212,8 @@ class DeleteRecipe(graphene.Mutation):
     def mutate(cls, root, info, RecipeID):
         if not info.context.user.is_authenticated:
             raise Exception("Authentication credentials were not provided")
+        if not checkAdminPrivileges(info.context.user):
+            raise Exception("You do not have the credential to perform this action")
         try:
             recipe = Recipe.objects.get(pk=RecipeID)
             recipe.delete()
@@ -222,6 +236,8 @@ class EditRecipe(graphene.Mutation):
         user = info.context.user
         if not user.is_authenticated:
             raise Exception("Authentication credentials were not provided")
+        if not checkAdminPrivileges(user):
+            raise Exception("You do not have the credential to perform this action")
         try:
             recipe = Recipe.objects.get(pk=recipe_id)
             recipe.name = recipe_data.name
@@ -254,7 +270,6 @@ class EditRecipe(graphene.Mutation):
         except Exception as e: 
             print(e)
             return EditRecipe(updated=False)
-            
 
 class Mutation(graphene.ObjectType):
     create_recipe = CreateRecipe.Field()

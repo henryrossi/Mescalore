@@ -24,7 +24,7 @@ export default function ActivateEmail() {
         token: token,
       },
     });
-  }, []);
+  }, [verifyUser, token]);
 
   return <Loading />;
 }

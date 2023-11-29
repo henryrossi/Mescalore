@@ -119,6 +119,27 @@ export const DELETE_RECIPE_MUTATION = gql`
   }
 `;
 
+export const USER_REGISTRATION = gql`
+  mutation userRegistration(
+    $email: String!
+    $username: String!
+    $password1: String!
+    $password2: String!
+  ) {
+    userRegistration(
+      email: $email
+      username: $username
+      password1: $password1
+      password2: $password2
+    ) {
+      success
+      errors
+      token
+    }
+  }
+`;
+
+// Need to change to allow for login using email or username
 export const USER_AUTHENTICATION = gql`
   mutation userAuthentication($username: String!, $password: String!) {
     userAuthentication(username: $username, password: $password) {
@@ -134,10 +155,10 @@ export const USER_AUTHENTICATION = gql`
 `;
 
 export const USER_VERIFICATION = gql`
-mutation userVerification($token: String!) {
-  userVerification(token: $token) {
-    errors
-    success
-	}
-}
-`
+  mutation userVerification($token: String!) {
+    userVerification(token: $token) {
+      errors
+      success
+    }
+  }
+`;

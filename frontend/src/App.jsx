@@ -8,6 +8,7 @@ import EditRecipe from "./pages/EditRecipe";
 import Search from "./pages/Search";
 import Login from "./pages/Login";
 import ActivateEmail from "./pages/ActivateEmail";
+import Register from "./pages/Register";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route exact path="/edit/:recipeName" element={<EditRecipe />} />
         <Route exact path="/search" element={<Search />} />
         <Route exact path="/login" element={<Login />} />
+        <Route exact path="/register" element={<Register />} />
         <Route exact path="/activate/:token" element={<ActivateEmail />} />
       </Routes>
     </Router>
