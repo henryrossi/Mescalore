@@ -263,7 +263,7 @@ export default function RecipeEditor({
         <IconPencilPlus />
       </button>
       <button type="submit" className="standard-recipe-button">
-        Update Recipe
+        {handleDelete ? "Update Recipe" : "Create Recipe"}
       </button>
       {handleDelete && (
         <button onClick={handleDelete} className="delete-recipe-button">
