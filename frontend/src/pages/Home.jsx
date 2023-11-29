@@ -51,7 +51,9 @@ function Home() {
         </h2>
         <p className="article-text">
           As you journey through our kitchen we hope these recipes bring as much
-          joy to you as they do to us.
+          joy to you as they do to us. We welcome you to explore our website,
+          discover whole new tastes and cuisines, and let the cooking adventures
+          begin!
         </p>
       </article>
       <Footer />

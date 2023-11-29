@@ -6,9 +6,9 @@ import CreateRecipe from "./pages/CreateRecipe";
 import Recipe from "./pages/Recipe";
 import EditRecipe from "./pages/EditRecipe";
 import Search from "./pages/Search";
-import Login from "./pages/Login";
+import SignUp from "./pages/SignUp"
+import SignIn from "./pages/SignIn"
 import ActivateEmail from "./pages/ActivateEmail";
-import Register from "./pages/Register";
 
 function App() {
   return (
@@ -21,8 +21,8 @@ function App() {
         <Route exact path="/:recipeName" element={<Recipe />} />
         <Route exact path="/edit/:recipeName" element={<EditRecipe />} />
         <Route exact path="/search" element={<Search />} />
-        <Route exact path="/login" element={<Login />} />
-        <Route exact path="/register" element={<Register />} />
+        <Route exact path="/sign-in" element={<SignIn />} />
+        <Route exact path="/sign-up" element={<SignUp />} />
         <Route exact path="/activate/:token" element={<ActivateEmail />} />
       </Routes>
     </Router>

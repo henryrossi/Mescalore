@@ -9,7 +9,7 @@ export default function Unavailable() {
       <Navbar />
       <div className="unavailable">
         <p>Sorry, this page is unavailable</p>
-        <Link to="/">Return to the Home page</Link>
+        <Link to="/">Click here to return to the Home page</Link>
       </div>
     </div>
   );

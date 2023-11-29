@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import { USER_AUTHENTICATION } from "../graphQL.js";
-import Navbar from "../components/Navbar";
-import "./Login.css";
+import Navbar from "../components/Navbar.jsx";
+import "./SignInSignUp.css";
 
-export default function Login() {
+export default function SignIn() {
   const navigate = useNavigate();
   const [usernameEmail, setUsernameEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -51,7 +51,7 @@ export default function Login() {
         </label>
         <button type="submit">Login</button>
         <p>
-          Don't have an account? <Link to="/register">Sign up</Link>
+          Don't have an account? <Link to="/sign-up">Sign up</Link>
         </p>
       </form>
     </div>
