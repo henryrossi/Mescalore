@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import django
 from django.utils.translation import gettext, gettext_lazy
 django.utils.translation.ugettext = gettext
-django.utils.translation.ugettext_lazy = gettext
+django.utils.translation.ugettext_lazy = gettext_lazy
 
 from pathlib import Path
 from datetime import timedelta
