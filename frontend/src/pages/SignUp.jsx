@@ -25,6 +25,7 @@ export default function SignUp() {
         return;
       }
       window.alert("Failed to register");
+      console.log(data.userRegistration.errors);
     },
   });
 
