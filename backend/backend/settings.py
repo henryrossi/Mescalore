@@ -11,19 +11,21 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 import django
-from django.utils.translation import gettext
+from django.utils.translation import gettext, gettext_lazy
 django.utils.translation.ugettext = gettext
+django.utils.translation.ugettext_lazy = gettext_lazy
+
+from . import mySignal
+django.dispatch.Signal = mySignal.mySignal
 
 from pathlib import Path
 from datetime import timedelta
 import os
 import sys
 import dj_database_url
-
+from django.core.management.utils import get_random_secret_key
 from dotenv import load_dotenv
 load_dotenv()
-
-from django.core.management.utils import get_random_secret_key
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -159,9 +161,7 @@ GRAPHQL_JWT = {
 }
 
 # CORS
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-]
+CORS_ALLOWED_ORIGINS = os.getenv("DJANGO_CORS_ALLOWED_ORIGINS", "http://localhost:3000").split(",")
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

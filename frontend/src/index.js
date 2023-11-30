@@ -3,7 +3,6 @@ import ReactDOM from "react-dom/client";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import { createUploadLink } from "apollo-upload-client";
-
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
@@ -43,9 +42,7 @@ const client = new ApolloClient({
       },
     },
   }),
-  link: authLink.concat(
-    createUploadLink({ uri: "http://localhost:8000/graphql" })
-  ),
+  link: authLink.concat(createUploadLink({ uri: process.env.REACT_APP_BACKEND_URI })),
   connectToDevTools: true,
 });
 
