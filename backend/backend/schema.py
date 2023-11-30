@@ -5,6 +5,7 @@ from graphql_auth.schema import MeQuery, UserQuery
 from graphql_auth import mutations
 
 import base64
+from . import base64Scalar
 from math import log
 
 import os
@@ -40,7 +41,7 @@ class RecipeType(DjangoObjectType):
     # Size now doesn't exceed 605 pixels
     # Keeping images small is ideal
     ingredient_list = graphene.List(IngredientListType)
-    base64picture = graphene.Base64()
+    base64picture = base64Scalar.Base64()
 
     def resolve_ingredient_list(self, info):
         return IngredientList.objects.filter(recipe=self.id)
