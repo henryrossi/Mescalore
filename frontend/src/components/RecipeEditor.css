@@ -1,5 +1,5 @@
 .recipe-editor {
-  margin: 50px 10%;
+  margin: 50px 5%;
   padding: 5%;
   background-color: #f9f9f9;
   border: 1px solid #bababa;
@@ -19,30 +19,12 @@
 }
 
 .recipe-editor .sidebar {
-  float: left;
-  width: 15%;
-}
-
-.recipe-editor .sidebar button {
-  display: block;
-  width: 100%;
-  margin: 10px 0;
-  font-family: "Jua";
-  font-size: 1.3em;
-  text-align: left;
-  background-color: #f9f9f9;
-  border: none;
-  cursor: pointer;
-}
-
-.recipe-editor .sidebar .current-page {
-  color: #c8553d;
+  display: none;
 }
 
 .recipe-editor .input-container {
   display: inline-block;
-  margin-left: 5%;
-  width: 80%;
+  width: 100%;
 }
 
 .recipe-editor h2 {
@@ -72,7 +54,7 @@
 
 .recipe-editor .tag {
   display: inline-block;
-  margin: 20px 10px 20px 0;
+  margin: 0 10px 5px 0;
 }
 .recipe-editor .tag button {
   color: #ffffff;
@@ -175,9 +157,9 @@
   margin: 10px 0 40px;
   display: block;
 }
-
 .recipe-editor li textarea {
-  width: 90%;
+  /* width: 90%; */
+  width: 80%;
   height: 150px;
   margin: 0 1% 10px 0;
   display: inline-block;
@@ -196,7 +178,7 @@
   border-radius: 14px;
   cursor: pointer;
   float: right;
-  margin-left: 20px;
+  margin: 20px 0 0 20px;
 }
 
 .recipe-editor .submit-button {
@@ -216,4 +198,40 @@
   margin-top: 40px;
   padding: 6px 16px;
   border-radius: 14px;
+}
+
+@media only screen and (min-width: 65em) {
+  .recipe-editor {
+    margin: 50px 10%;
+    padding: 5%;
+  }
+}
+
+@media only screen and (min-width: 50em) {
+  .recipe-editor .input-container  {
+    width: 80%;
+    margin-left: 5%;
+  }
+
+  .recipe-editor .sidebar {
+    display: block;
+    float: left;
+    width: 15%;
+  }
+  
+  .recipe-editor .sidebar button {
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+    font-family: "Jua";
+    font-size: 1.3em;
+    text-align: left;
+    background-color: #f9f9f9;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .recipe-editor .sidebar .current-page {
+    color: #c8553d;
+  }
 }
