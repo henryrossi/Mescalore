@@ -4,8 +4,33 @@ import "./RecipeEditor.css";
 export default function RecipeEditorPicturePage({ recipeData, dispatch }) {
   return (
     <>
+      <h2 className="upload-photo">Uplaod a new photo:</h2>
+      <input
+        type="file"
+        onChange={(e) => {
+          dispatch({
+            type: "changeInput",
+            variable: "picture",
+            value: e.target.files[0],
+          });
+        }}
+      />
       {recipeData.picture ? (
-        <img src={URL.createObjectURL(recipeData.picture)} alt="" />
+        <>
+          <img src={URL.createObjectURL(recipeData.picture)} alt="" />
+          <button
+            className="discard-photo"
+            onClick={() => {
+              dispatch({
+                type: "changeInput",
+                variable: "picture",
+                value: null,
+              });
+            }}
+          >
+            Discard current upload
+          </button>
+        </>
       ) : recipeData.base64picture ? (
         <img
           src={
@@ -15,40 +40,10 @@ export default function RecipeEditorPicturePage({ recipeData, dispatch }) {
           alt=""
         />
       ) : (
-        <></>
-      )}
-      <div className="picture-input-controls">
-        {recipeData.picture && (
-          <button
-            className="standard-recipe-button"
-            onClick={(e) => {
-              e.preventDefault();
-              dispatch({
-                /* Maybe create a remove Image action type */
-                type: "changeInput",
-                variable: "picture",
-                value: null,
-              });
-            }}
-          >
-            Discard current upload
-          </button>
-        )}
-        <div>
-          <input
-            className="picture-upload-input"
-            type="file"
-            onChange={(e) => {
-              dispatch({
-                type: "changeInput",
-                variable: "picture",
-                value: e.target.files[0],
-              });
-            }}
-          />
-          Upload new picture
+        <div className="noPicture">
+          <p className="message">image unavailable</p>
         </div>
-      </div>
+      )}
     </>
   );
 }

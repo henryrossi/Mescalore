@@ -2,7 +2,11 @@ import React from "react";
 import AutosizeInput from "react-18-input-autosize";
 import "./RecipeEditor.css";
 
-export default function RecipeEditorInfoPage({ recipeData, dispatch, autosizeInputStyle }) {
+export default function RecipeEditorInfoPage({
+  recipeData,
+  dispatch,
+  autosizeInputStyle,
+}) {
   const categoryChocies = [
     "breakfast",
     "lunch",
@@ -26,32 +30,36 @@ export default function RecipeEditorInfoPage({ recipeData, dispatch, autosizeInp
           })
         }
       />
-      <h2>Servings</h2>
-      <AutosizeInput
-        value={recipeData.servings}
-        style={{ display: "block" }}
-        inputStyle={autosizeInputStyle}
-        onChange={(e) =>
-          dispatch({
-            type: "changeInput",
-            value: e.target.value,
-            variable: "servings",
-          })
-        }
-      />
-      <h2>Minutes</h2>
-      <AutosizeInput
-        value={recipeData.time}
-        style={{ display: "block" }}
-        inputStyle={autosizeInputStyle}
-        onChange={(e) =>
-          dispatch({
-            type: "changeInput",
-            value: e.target.value,
-            variable: "time",
-          })
-        }
-      />
+      <div className="servings-time-container">
+        <h2>Servings</h2>
+        <AutosizeInput
+          value={recipeData.servings}
+          style={{ display: "block" }}
+          inputStyle={autosizeInputStyle}
+          onChange={(e) =>
+            dispatch({
+              type: "changeInput",
+              value: e.target.value,
+              variable: "servings",
+            })
+          }
+        />
+      </div>
+      <div className="servings-time-container">
+        <h2>Minutes</h2>
+        <AutosizeInput
+          value={recipeData.time}
+          style={{ display: "block" }}
+          inputStyle={autosizeInputStyle}
+          onChange={(e) =>
+            dispatch({
+              type: "changeInput",
+              value: e.target.value,
+              variable: "time",
+            })
+          }
+        />
+      </div>
       <ul>
         {categoryChocies.map((category) => (
           <li key={category} className="tag">

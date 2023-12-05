@@ -13,27 +13,28 @@ export default function RecipeEditor({
   onSubmit,
   handleDelete,
 }) {
-  const [currentFormPage, setCurrentFormPage] = useState(0);
+  const [currentEditorPage, setCurrentEditorPage] = useState(0);
 
   const autosizeInputStyle = {
     minWidth: 200,
     maxWidth: 400,
-    backgroundColor: "#f9f9f9",
+    fontSize: "0.95em",
+    backgroundColor: "#ffffff",
     border: "1px solid #bababa",
     borderRadius: 10,
     height: 36,
-    marginTop: 20,
+    marginBottom: 20,
     marginRight: 20,
     paddingLeft: 10,
+  };
+
+  const getSidebarClassBasedOnPage = (page) => {
+    return currentEditorPage === page ? "current-page" : "";
   };
 
   if (!localStorage.getItem("token")) {
     return <Unavailable />;
   }
-
-  const getSidebarClassBasedOnPage = (page) => {
-    return currentFormPage === page ? "current-page" : "";
-  };
 
   return (
     <div className="recipe-editor">
@@ -41,74 +42,91 @@ export default function RecipeEditor({
       <div className="sidebar">
         <button
           className={getSidebarClassBasedOnPage(0)}
-          onClick={() => setCurrentFormPage(0)}
+          onClick={() => setCurrentEditorPage(0)}
         >
           Info
         </button>
         <button
           className={getSidebarClassBasedOnPage(1)}
-          onClick={() => setCurrentFormPage(1)}
+          onClick={() => setCurrentEditorPage(1)}
         >
           Description
         </button>
         <button
           className={getSidebarClassBasedOnPage(2)}
-          onClick={() => setCurrentFormPage(2)}
+          onClick={() => setCurrentEditorPage(2)}
         >
           Picture
         </button>
         <button
           className={getSidebarClassBasedOnPage(3)}
-          onClick={() => setCurrentFormPage(3)}
+          onClick={() => setCurrentEditorPage(3)}
         >
           Ingredients
         </button>
         <button
           className={getSidebarClassBasedOnPage(4)}
-          onClick={() => setCurrentFormPage(4)}
+          onClick={() => setCurrentEditorPage(4)}
         >
           Instructions
         </button>
       </div>
       <div className="input-container">
-        {currentFormPage === 0 && (
+        {currentEditorPage === 0 && (
           <RecipeEditorInfoPage
             recipeData={recipeData}
             dispatch={dispatch}
             autosizeInputStyle={autosizeInputStyle}
           />
         )}
-        {currentFormPage === 1 && (
+        {currentEditorPage === 1 && (
           <RecipeEditorDescriptionPage
             recipeData={recipeData}
             dispatch={dispatch}
           />
         )}
-        {currentFormPage === 2 && (
+        {currentEditorPage === 2 && (
           <RecipeEditorPicturePage
             recipeData={recipeData}
             dispatch={dispatch}
           />
         )}
-        {currentFormPage === 3 && (
+        {currentEditorPage === 3 && (
           <RecipeEditorIngredientsPage
             recipeData={recipeData}
             dispatch={dispatch}
             autosizeInputStyle={autosizeInputStyle}
           />
         )}
-        {currentFormPage === 4 && (
+        {currentEditorPage === 4 && (
           <RecipeEditorInstructionsPage
             recipeData={recipeData}
             dispatch={dispatch}
           />
         )}
-        <button className="standard-recipe-button">
-          {handleDelete ? "Update Recipe" : "Create Recipe"}
-        </button>
+        {currentEditorPage < 4 ? (
+          <button
+            className="page-control-button"
+            onClick={() => setCurrentEditorPage(currentEditorPage + 1)}
+          >
+            Next
+          </button>
+        ) : (
+          <button className="page-control-button submit-button" onClick={onSubmit}>
+            {handleDelete ? "Update Recipe" : "Create Recipe"}
+          </button>
+        )}
+        {currentEditorPage > 0 && (
+          <button
+            className="page-control-button"
+            onClick={() => setCurrentEditorPage(currentEditorPage - 1)}
+          >
+            Back
+          </button>
+        )}
         {handleDelete && (
-          <button onClick={handleDelete} className="delete-recipe-button">
-            Delete Recipe
+          <button onClick={handleDelete} className="delete-button">
+            Permanently Delete Recipe
           </button>
         )}
       </div>
