@@ -4,7 +4,7 @@ import "./RecipeList.css";
 
 export default function RecipeList({ recipes }) {
   return (
-    <main className="recipes-container">
+    <div className="recipes-container">
       <ul>
         {recipes &&
           recipes.map((recipe) => (
@@ -28,6 +28,6 @@ export default function RecipeList({ recipes }) {
             </li>
           ))}
       </ul>
-    </main>
+    </div>
   );
 }

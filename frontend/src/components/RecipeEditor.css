@@ -1,15 +1,48 @@
 .recipe-editor {
-  margin: 0 20%;
+  margin: 50px 10%;
+  padding: 0 5%;
+  background-color: #f9f9f9;
+  border: 1px solid #bababa;
+  border-radius: 30px;
+  overflow: auto;
 }
 
-.recipe-editor input:focus, .recipe-editor textarea:focus {
-  outline-color: #588B8B;
+.recipe-editor input:focus,
+.recipe-editor textarea:focus {
+  outline-color: #588b8b;
 }
 
 .recipe-editor h1 {
   font-family: "Jua";
   font-size: 2.5em;
-  margin: 50px 0;
+  margin: 40px 0;
+}
+
+.recipe-editor .sidebar {
+  float: left;
+  width: 15%;
+}
+
+.recipe-editor .sidebar button {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  font-family: "Jua";
+  font-size: 1.2em;
+  text-align: left;
+  background-color: #f9f9f9;
+  border: none;
+  cursor: pointer;
+}
+
+.recipe-editor .sidebar .current-page {
+  color: #c8553d;
+}
+
+.recipe-editor .input-container {
+  display: inline-block;
+  margin-left: 5%;
+  width: 80%;
 }
 
 .recipe-editor h2 {
@@ -124,7 +157,7 @@
 }
 
 .recipe-editor .standard-recipe-button {
-  color:#212121;
+  color: #212121;
   background-color: #f9f9f9;
   border: 1px solid #bababa;
   border-radius: 30px;
@@ -135,7 +168,7 @@
 }
 
 .recipe-editor .delete-recipe-button {
-  color:#ffffff;
+  color: #ffffff;
   background-color: #c8553d;
   border: 1px solid #c8553d;
   border-radius: 30px;
