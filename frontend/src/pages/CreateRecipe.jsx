@@ -21,6 +21,8 @@ function CreateRecipe() {
     instructions: [""],
   });
 
+  /* Can use session/local storage if I want to make form input state persist through refreshes */
+
   /* Apollo Queries and Mutations */
 
   const [createRecipe] = useMutation(CREATE_RECIPE_MUTATION, {
