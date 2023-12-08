@@ -15,10 +15,10 @@ export default function SignIn() {
       if (data.userAuthentication.success) {
         // store refresh token?
         localStorage.setItem("token", data.userAuthentication.token);
-        setTimeout(() => {
-          // To be secure I believe I should also remove the Token from the backend database
-          localStorage.removeItem("token");
-        }, 1800000);
+        // setTimeout(() => {
+        //   // To be secure I believe I should also remove the Token from the backend database
+        //   localStorage.removeItem("token");
+        // }, 1800000);
         navigate("/recipes");
         return;
       }
