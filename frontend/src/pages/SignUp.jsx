@@ -17,10 +17,10 @@ export default function SignUp() {
       if (data.userRegistration.success) {
         // store refresh token?
         localStorage.setItem("token", data.userRegistration.token);
-        setTimeout(() => {
-          // To be secure I believe I should also remove the Token from the backend database
-          localStorage.removeItem("token");
-        }, 1800000);
+        // setTimeout(() => {
+        //   // To be secure I believe I should also remove the Token from the backend database
+        //   localStorage.removeItem("token");
+        // }, 1800000);
         navigate("/recipes");
         return;
       }
