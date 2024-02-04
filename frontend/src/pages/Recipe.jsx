@@ -60,17 +60,7 @@ function Recipe() {
               ))}
             </ul>
             <p>{data.getRecipeByName.description}</p>
-            {data.getRecipeByName.base64picture ? (
-              <img
-                src={
-                  "data:image/jpeg;charset=utf-8;base64," +
-                  atob(data.getRecipeByName.base64picture)
-                }
-                alt=""
-              />
-            ) : (
-              <div className="noPicture"></div>
-            )}
+            <img src={require("../images/temp.jpg")} alt="" />
           </div>
           <div className="recipe-method">
             <div className="ingredients">

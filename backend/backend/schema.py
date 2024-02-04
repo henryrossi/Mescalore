@@ -41,16 +41,16 @@ class RecipeType(DjangoObjectType):
     # Size now doesn't exceed 605 pixels
     # Keeping images small is ideal
     ingredient_list = graphene.List(IngredientListType)
-    base64picture = base64Scalar.Base64()
+    # base64picture = base64Scalar.Base64()
 
     def resolve_ingredient_list(self, info):
         return IngredientList.objects.filter(recipe=self.id)
     
-    def resolve_base64picture(self, info):
-        if self.picture and hasattr(self.picture, 'url'):
-            encoded_string = base64.b64encode(self.picture.read())
-            return encoded_string
-        return ""
+    # def resolve_base64picture(self, info):
+    #     if self.picture and hasattr(self.picture, 'url'):
+    #         encoded_string = base64.b64encode(self.picture.read())
+    #         return encoded_string
+    #     return ""
 
 class RecipeInput(graphene.InputObjectType):
     name = graphene.String(required=True)
