@@ -10,8 +10,12 @@ export default function RecipeList({ recipes }) {
           recipes.map((recipe) => (
             <li className="card" key={recipe.name}>
               <Link to={"/" + recipe.name}>
-                  <img src={require("../images/temp.jpg")} alt="" />
-                  <p>{recipe.name}</p>
+                {recipe.imageURL ? 
+                <img src={recipe.imageURL} alt="" /> : 
+                <div className="noPicture">
+                  <p className="message">image unavailable</p>
+                </div>}
+                <p>{recipe.name}</p>
               </Link>
             </li>
           ))}

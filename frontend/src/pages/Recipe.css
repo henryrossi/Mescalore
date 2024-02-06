@@ -51,8 +51,22 @@
 }
 
 .recipe-info .noPicture {
-  width: 50%;
-  height: 300px;
+  width: 90%;
+  margin: 0 5% 20px;
+  border-radius: 30px;
+  aspect-ratio : 1 / 1;
+  background: #e5e5e5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.recipe-info .noPicture .message {
+  font-family: "Jua", sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 1.2em;
+  color: #588b8b;
 }
 
 .recipe-method {
@@ -161,6 +175,11 @@
   }
 
   .recipe-info img {
+    width: 50%;
+    margin: 0 25% 20px;
+  }
+
+  .recipe-info .noPicture {
     width: 50%;
     margin: 0 25% 20px;
   }

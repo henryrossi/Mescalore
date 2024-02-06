@@ -3,14 +3,24 @@ from graphene_django import DjangoObjectType
 from graphene_file_upload.scalars import Upload
 from graphql_auth.schema import MeQuery, UserQuery
 from graphql_auth import mutations
-
-import base64
-from . import base64Scalar
+import boto3
+from botocore.config import Config
+import secrets
 from math import log
 
 import os
 from dotenv import load_dotenv
 load_dotenv()
+
+
+# AWS S3
+AWS_ACCESS_KEY=os.getenv("AWS_ACCESS_KEY")
+AWS_SECRET_ACCESS_KEY=os.getenv("AWS_SECRET_ACCESS_KEY")
+S3_BUCKET=os.getenv("S3_BUCKET")
+REGION_NAME=os.getenv("REGION_NAME")
+my_config = Config(
+    signature_version = 'v4',
+)
 
 from recipes.models import Category, Recipe, Ingredient, IngredientList, \
     Term, TermData, TFIDF
@@ -35,7 +45,7 @@ class RecipeType(DjangoObjectType):
     class Meta:
         model = Recipe
         fields = ("id", "name", "description", "time", "servings", \
-                  "instructions", "category", "picture")
+                  "instructions", "category", "imageURL")
     
     # With the current design pictures never exceed 650 x 650 pixels
     # Size now doesn't exceed 605 pixels
@@ -54,7 +64,7 @@ class RecipeType(DjangoObjectType):
 
 class RecipeInput(graphene.InputObjectType):
     name = graphene.String(required=True)
-    picture = Upload(required=False)
+    imageURL = graphene.String(required=False)
     categories = graphene.List(graphene.String, required=True)
     description = graphene.String(required=True)
     time = graphene.Int(required=True)
@@ -110,6 +120,7 @@ class Query(UserQuery, MeQuery, graphene.ObjectType):
     search_recipes = graphene.List(RecipeType, searchText=graphene.String(), \
                                    offset=graphene.Int(), limit=graphene.Int())
     get_number_of_recipes = graphene.Int()
+    get_s3_presigned_url = graphene.String()
     
     def resolve_get_recipes_by_category(root, info, category):
         if category == "":
@@ -152,6 +163,26 @@ class Query(UserQuery, MeQuery, graphene.ObjectType):
     def resolve_get_number_of_recipes(root, info):
         return Recipe.objects.count()
     
+    def resolve_get_s3_presigned_url(root, info):
+        n = 30*3//4
+        imageName = secrets.token_urlsafe(n)
+
+        client = boto3.client('s3', aws_access_key_id=AWS_ACCESS_KEY,
+                              aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+                              region_name=REGION_NAME,
+                              config=my_config)
+        try:
+            response = client.generate_presigned_url('put_object',
+                                                Params={
+                                                    'Bucket': S3_BUCKET,
+                                                    'Key': imageName
+                                                },
+                                                ExpiresIn=3600)
+        except Exception as e:
+            print(e)
+            return None
+        return response
+    
 def checkAdminPrivileges(user) -> bool:
     if user.username == os.getenv("ADMIN_USERNAME_1"): return True
     if user.username == os.getenv("ADMIN_USERNAME_2"): return True
@@ -172,10 +203,11 @@ class CreateRecipe(graphene.Mutation):
             raise Exception("Authentication credentials were not provided")
         if not checkAdminPrivileges(user):
             raise Exception("You do not have the credential to perform this action")
+        print(recipe_data.imageURL)
         try:
             recipe = Recipe(
                 name = recipe_data.name,
-                picture = recipe_data.picture,
+                imageURL = recipe_data.imageURL,
                 description = recipe_data.description,
                 time = recipe_data.time,
                 servings = recipe_data.servings,
@@ -249,8 +281,8 @@ class EditRecipe(graphene.Mutation):
             for category in recipe_data.categories:
                 cat, created = Category.objects.get_or_create(name = category)
                 recipe.category.add(cat)
-            if recipe_data.picture is not None:
-                recipe.picture = recipe_data.picture
+            if recipe_data.imageURL is not None:
+                recipe.imageURL = recipe_data.imageURL
             recipe.measurements = recipe_data.measurements
             IngredientList.objects.filter(recipe = recipe_id).delete()
             for item in zip(recipe_data.ingredients, recipe_data.measurements):

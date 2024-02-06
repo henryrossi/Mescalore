@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/client";
 import {
   GET_RECIPE_QUERY,
+  GET_S3_PRESIGNED_URL,
   EDIT_RECIPE_MUTATION,
   DELETE_RECIPE_MUTATION,
 } from "../graphQL.js";
@@ -23,7 +24,7 @@ export default function EditRecipe() {
     description: "",
     categories: [],
     picture: null,
-    base64picture: null,
+    imageURL: null,
     ingredients: [],
     instructions: [],
   });
@@ -37,6 +38,13 @@ export default function EditRecipe() {
     onCompleted: (data) => {
       dispatch({ type: "query", recipe: data.getRecipeByName });
     },
+  });
+
+  const {
+    error: errorURL,
+    data: s3URL,
+  } = useQuery(GET_S3_PRESIGNED_URL , {
+    fetchPolicy: "no-cache" 
   });
 
   const [updateRecipe] = useMutation(EDIT_RECIPE_MUTATION, {
@@ -67,8 +75,23 @@ export default function EditRecipe() {
 
   /* Logic handling for the form */
 
-  const onSubmit = (event) => {
+  const onSubmit = async (event) => {
     event.preventDefault();
+    if (recipeData.picture && !errorURL) {
+      const response = await fetch(s3URL.getS3PresignedUrl, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "multipart/form-data"
+        },
+        body: recipeData.picture
+      })
+      if (!response.ok) return;
+      dispatch({
+        type: "addImageURL",
+        url: s3URL.getS3PresignedUrl.split('?')[0],
+      });
+    }
+    console.log(s3URL.getS3PresignedUrl.split('?')[0])
     updateRecipe({
       variables: {
         recipeId: recipeData.id,
@@ -77,7 +100,7 @@ export default function EditRecipe() {
         servings: parseInt(recipeData.servings),
         description: recipeData.description,
         categories: recipeData.categories,
-        picture: recipeData.picture,
+        imageURL: s3URL.getS3PresignedUrl.split('?')[0],
         measurements: recipeData.ingredients.map(
           (object) => object.measurement
         ),

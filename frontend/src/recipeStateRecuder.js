@@ -56,6 +56,11 @@ export default function recipeStateReducer(state, action) {
         ...state,
         [action.variable]: state[action.variable].toSpliced(action.index, 1),
       };
+    case "addImageURL":
+      return {
+        ...state,
+        imageURL: action.url,
+      };
     case "query":
       // Might want to rename recipe.category to recipe.categories in the backend
       // Also, recipe.time and recipe.servings are orginally ints when returned by the query,

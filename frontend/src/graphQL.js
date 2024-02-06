@@ -13,6 +13,7 @@ export const FILTER_RECIPES_QUERY = gql`
   query FilterRecipesQuery($category: String!) {
     getRecipesByCategory(category: $category) {
       name
+      imageURL
     }
   }
 `;
@@ -28,6 +29,7 @@ export const GET_RECIPE_QUERY = gql`
       category {
         name
       }
+      imageURL
       ingredientList {
         ingredient {
           name
@@ -43,6 +45,7 @@ export const SEARCH_RECIPES_QUERY = gql`
   query SearchRecipesQuery($searchText: String, $offset: Int, $limit: Int) {
     searchRecipes(searchText: $searchText, offset: $offset, limit: $limit) {
       name
+      imageURL
     }
   }
 `;
@@ -64,7 +67,7 @@ export const CREATE_RECIPE_MUTATION = gql`
     $name: String!
     $servings: Int!
     $time: Int!
-    $picture: Upload
+    $imageURL: String
   ) {
     createRecipe(
       recipeData: {
@@ -73,7 +76,7 @@ export const CREATE_RECIPE_MUTATION = gql`
         description: $description
         time: $time
         servings: $servings
-        picture: $picture
+        imageURL: $imageURL
         measurements: $measurements
         ingredients: $ingredients
         instructions: $instructions
@@ -94,7 +97,7 @@ export const EDIT_RECIPE_MUTATION = gql`
     $name: String!
     $servings: Int!
     $time: Int!
-    $picture: Upload
+    $imageURL: String
     $recipeId: ID!
   ) {
     editRecipe(
@@ -105,7 +108,7 @@ export const EDIT_RECIPE_MUTATION = gql`
         description: $description
         time: $time
         servings: $servings
-        picture: $picture
+        imageURL: $imageURL
         measurements: $measurements
         ingredients: $ingredients
         instructions: $instructions
@@ -165,5 +168,11 @@ export const USER_VERIFICATION = gql`
       errors
       success
     }
+  }
+`;
+
+export const GET_S3_PRESIGNED_URL = gql`
+  query S3PresignedUrl {
+    getS3PresignedUrl
   }
 `;

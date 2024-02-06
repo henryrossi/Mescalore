@@ -1,7 +1,7 @@
 import { React, useReducer } from "react";
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
-import { CREATE_RECIPE_MUTATION } from "../graphQL.js";
+import { CREATE_RECIPE_MUTATION, GET_S3_PRESIGNED_URL } from "../graphQL.js";
 import recipeStateReducer from "../recipeStateRecuder.js";
 import Navbar from "../components/Navbar";
 import RecipeEditor from "../components/RecipeEditor.jsx";
@@ -16,7 +16,7 @@ function CreateRecipe() {
     servings: "",
     categories: [],
     picture: null,
-    base64picture: null,
+    imageURL: null,
     ingredients: [{ingredient: "", measurement: ""},],
     instructions: [""],
   });
@@ -24,6 +24,13 @@ function CreateRecipe() {
   /* Can use session/local storage if I want to make form input state persist through refreshes */
 
   /* Apollo Queries and Mutations */
+
+  const {
+    error: errorURL,
+    data: s3URL,
+  } = useQuery(GET_S3_PRESIGNED_URL , {
+    fetchPolicy: "no-cache" 
+  });
 
   const [createRecipe] = useMutation(CREATE_RECIPE_MUTATION, {
     onCompleted: (data) => {
@@ -38,8 +45,22 @@ function CreateRecipe() {
     },
   });
 
-  const onSubmit = (event) => {
+  const onSubmit = async (event) => {
     event.preventDefault();
+    if (recipeData.picture && !errorURL) {
+      const response = await fetch(s3URL.getS3PresignedUrl, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "multipart/form-data"
+        },
+        body: recipeData.picture
+      })
+      if (!response.ok) return;
+      dispatch({
+        type: "addImageURL",
+        url: s3URL.getS3PresignedUrl.split('?')[0],
+      });
+    }
     createRecipe({
       variables: {
         name: recipeData.name,
@@ -47,7 +68,7 @@ function CreateRecipe() {
         servings: parseInt(recipeData.servings),
         description: recipeData.description,
         categories: recipeData.categories,
-        picture: recipeData.picture,
+        imageURL: s3URL.getS3PresignedUrl.split('?')[0],
         measurements: recipeData.ingredients.map(
           (object) => object.measurement
         ),

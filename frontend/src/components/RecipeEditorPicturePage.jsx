@@ -31,12 +31,9 @@ export default function RecipeEditorPicturePage({ recipeData, dispatch }) {
             Discard current upload
           </button>
         </>
-      ) : recipeData.base64picture ? (
+      ) : recipeData.imageURL ? (
         <img
-          src={
-            "data:image/jpeg;charset=utf-8;base64," +
-            atob(recipeData.base64picture)
-          }
+          src={recipeData.imageURL}
           alt=""
         />
       ) : (

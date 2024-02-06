@@ -32,7 +32,7 @@ class Ingredient(models.Model):
 
 class Recipe(models.Model):
     name = models.CharField(max_length=100, unique=True)
-    picture = models.ImageField(null=True, blank=True, upload_to='images/')
+    imageURL = models.CharField(max_length=250, unique=True, null=True)
     description = models.TextField()
     time = models.IntegerField()
     servings = models.IntegerField()

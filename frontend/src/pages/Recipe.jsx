@@ -60,7 +60,11 @@ function Recipe() {
               ))}
             </ul>
             <p>{data.getRecipeByName.description}</p>
-            <img src={require("../images/temp.jpg")} alt="" />
+            {data.getRecipeByName.imageURL ? 
+            <img src={data.getRecipeByName.imageURL} alt="" /> : 
+            <div className="noPicture">
+              <p className="message">image unavailable</p>
+            </div>}
           </div>
           <div className="recipe-method">
             <div className="ingredients">
