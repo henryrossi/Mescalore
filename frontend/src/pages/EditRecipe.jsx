@@ -77,6 +77,7 @@ export default function EditRecipe() {
 
   const onSubmit = async (event) => {
     event.preventDefault();
+    console.log(recipeData);
     if (recipeData.picture && !errorURL) {
       const response = await fetch(s3URL.getS3PresignedUrl, {
         method: "PUT",
@@ -91,7 +92,7 @@ export default function EditRecipe() {
         url: s3URL.getS3PresignedUrl.split('?')[0],
       });
     }
-    console.log(s3URL.getS3PresignedUrl.split('?')[0])
+    const imageURL = recipeData.picture ? s3URL.getS3PresignedUrl.split('?')[0] : null;
     updateRecipe({
       variables: {
         recipeId: recipeData.id,
@@ -100,7 +101,7 @@ export default function EditRecipe() {
         servings: parseInt(recipeData.servings),
         description: recipeData.description,
         categories: recipeData.categories,
-        imageURL: s3URL.getS3PresignedUrl.split('?')[0],
+        imageURL: imageURL,
         measurements: recipeData.ingredients.map(
           (object) => object.measurement
         ),
