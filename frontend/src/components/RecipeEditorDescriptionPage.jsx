@@ -1,5 +1,4 @@
 import React from "react";
-import "./RecipeEditor.css";
 
 export default function RecipeEditorDescriptionPage({ recipeData, dispatch}) {
   return (
