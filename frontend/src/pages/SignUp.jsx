@@ -45,7 +45,7 @@ export default function SignUp() {
 
   return (
     <div id="fullpage">
-      <Navbar />
+      <Navbar currentSubsite={"sign-up"} />
       <form className="login-register-form" onSubmit={onSubmit}>
         <h1>Create your account</h1>
         <label>

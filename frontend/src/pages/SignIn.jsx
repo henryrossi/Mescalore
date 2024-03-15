@@ -40,7 +40,7 @@ export default function SignIn() {
 
   return (
     <div id="fullpage">
-      <Navbar />
+      <Navbar currentSubsite={"sign-in"} />
       <form className="login-register-form" onSubmit={onSubmit}>
         <h1>Login to Mescalore</h1>
         <label>

@@ -40,6 +40,22 @@ function Navbar({ currentSubsite }) {
           >
             about us
           </Link>
+          {!localStorage.getItem("token") &&
+            <>
+              <Link 
+                className={currentSubsite === "sign-in" ? "active user-auth" : "user-auth"} 
+                to="/sign-in"
+              >
+                sign in
+              </Link>
+              <Link 
+                className={currentSubsite === "sign-up" ? "active user-auth" : "user-auth"} 
+                to="/sign-up"
+              >
+                sign up
+              </Link>
+            </>
+          }
           <button onClick={handleNavigateEmpty} className="searchButton">
             <IconSearch size={20} />
           </button>
