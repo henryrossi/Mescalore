@@ -11,6 +11,12 @@ import SignIn from "./pages/SignIn"
 import ActivateEmail from "./pages/ActivateEmail";
 
 function App() {
+
+  if (localStorage.getItem("tokenTime") && Date.now() - localStorage.getItem("tokenTime") > 86400000) {
+    localStorage.removeItem("token");
+    localStorage.removeItem("tokenTime");
+  }
+
   return (
     <Router>
       <Routes>
