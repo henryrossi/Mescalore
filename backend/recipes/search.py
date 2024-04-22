@@ -107,8 +107,6 @@ class PorterStemmer:
         return word
 
     def stem(self, word):
-        # word = word.lower()
-
         # Step 1a
         if word.endswith(("sses", "ies")):
            word = word[:-2]
@@ -139,15 +137,7 @@ class PorterStemmer:
                 if self.measure(stem) > 0:
                     word = stem + replacement
                 break
-                # this break is only correct if the dictionary is 
-                # checked in order
-                # the only problem is ational must be check before tional
-        
-        # if a suffux is found in step two does that mean that 
-        # there is no need to check for step 3 suffixes?
-        # I don't think so
-        # Chat gpt seems to think so
-        
+                
         # Step 3
         for suffix, replacement in self.step3Suffixes.items():
             if word.endswith(suffix):
