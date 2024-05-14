@@ -1,6 +1,5 @@
 import React from "react";
 import { IconTrashX, IconPencilPlus } from "@tabler/icons-react";
-import "./RecipeEditor.css";
 
 export default function RecipeEditorInstructionsPage({ recipeData, dispatch }) {
   return (

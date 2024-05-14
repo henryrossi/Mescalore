@@ -15,10 +15,12 @@ export default function SignIn() {
       if (data.userAuthentication.success) {
         // store refresh token?
         localStorage.setItem("token", data.userAuthentication.token);
-        // setTimeout(() => {
-        //   // To be secure I believe I should also remove the Token from the backend database
-        //   localStorage.removeItem("token");
-        // }, 1800000);
+        localStorage.setItem("tokenTime", Date.now());
+        setTimeout(() => {
+          // To be secure I believe I should also remove the Token from the backend database
+          localStorage.removeItem("token");
+          localStorage.removeItem("tokenTime");
+        }, 86400000);
         navigate("/recipes");
         return;
       }
@@ -38,7 +40,7 @@ export default function SignIn() {
 
   return (
     <div id="fullpage">
-      <Navbar />
+      <Navbar currentSubsite={"sign-in"} />
       <form className="login-register-form" onSubmit={onSubmit}>
         <h1>Login to Mescalore</h1>
         <label>
