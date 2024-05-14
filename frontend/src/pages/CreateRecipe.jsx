@@ -61,6 +61,7 @@ function CreateRecipe() {
         url: s3URL.getS3PresignedUrl.split('?')[0],
       });
     }
+    const imageURL = recipeData.picture ? s3URL.getS3PresignedUrl.split('?')[0] : null;
     createRecipe({
       variables: {
         name: recipeData.name,
@@ -68,7 +69,7 @@ function CreateRecipe() {
         servings: parseInt(recipeData.servings),
         description: recipeData.description,
         categories: recipeData.categories,
-        imageURL: s3URL.getS3PresignedUrl.split('?')[0],
+        imageURL: imageURL,
         measurements: recipeData.ingredients.map(
           (object) => object.measurement
         ),

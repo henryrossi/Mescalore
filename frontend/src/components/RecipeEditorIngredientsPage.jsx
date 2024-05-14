@@ -1,7 +1,6 @@
 import React from "react";
 import { IconTrashX, IconPencilPlus } from "@tabler/icons-react";
 import AutosizeInput from "react-18-input-autosize";
-import "./RecipeEditor.css";
 
 export default function RecipeEditorIngredientsPage({ recipeData, dispatch, autosizeInputStyle }) {
   return (

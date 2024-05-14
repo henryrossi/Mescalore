@@ -17,10 +17,12 @@ export default function SignUp() {
       if (data.userRegistration.success) {
         // store refresh token?
         localStorage.setItem("token", data.userRegistration.token);
-        // setTimeout(() => {
-        //   // To be secure I believe I should also remove the Token from the backend database
-        //   localStorage.removeItem("token");
-        // }, 1800000);
+        localStorage.setItem("tokenTime", Date.now());
+        setTimeout(() => {
+          // To be secure I believe I should also remove the Token from the backend database
+          localStorage.removeItem("token");
+          localStorage.removeItem("tokenTime");
+        }, 86400000);
         navigate("/recipes");
         return;
       }
@@ -43,7 +45,7 @@ export default function SignUp() {
 
   return (
     <div id="fullpage">
-      <Navbar />
+      <Navbar currentSubsite={"sign-up"} />
       <form className="login-register-form" onSubmit={onSubmit}>
         <h1>Create your account</h1>
         <label>

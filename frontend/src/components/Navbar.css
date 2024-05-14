@@ -42,7 +42,7 @@ a.active {
 .searchBar {
   display: none;
   float: right;
-  width: 37%;
+  width: 20%;
   height: 30px;
   font-size: 1.1em;
   border: 1px solid #bababa;
@@ -82,6 +82,13 @@ a.active {
   width: 100%;
 }
 
+.user-auth {
+  display: none;
+  float: right;
+  font-size: 0.8em;
+  margin: 30px 3% 0 0;
+}
+
 @media only screen and (min-width: 40em) {
   .searchButton {
     display: none;
@@ -92,11 +99,17 @@ a.active {
   .searchBarButton {
     display: inline-block;
   }
+  .user-auth {
+    display: inline-block;
+  }
 }
 
 @media only screen and (min-width: 63em) {
   header nav a {
     font-size: 1.2em;
+  }
+  .user-auth {
+    font-size: 1em;
   }
   .searchBar {
     width: 35%;

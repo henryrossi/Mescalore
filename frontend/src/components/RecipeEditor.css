@@ -95,12 +95,15 @@
 }
 
 .recipe-editor .upload-photo {
-  display: inline-block;
-  font-size: 1.25em;
   margin: 0 10px 20px 0;
+  background-color: #ffffff;
+  border: 1px solid #bababa;
+  padding: 10px;
+  border-radius: 15px;
+  cursor: pointer;
 }
 
-.recipe-editor img {
+.recipe-editor .image-display {
   display: block;
   width: 60%;
   margin-bottom: 20px;

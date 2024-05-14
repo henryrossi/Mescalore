@@ -1,11 +1,23 @@
-import React from "react";
-import "./RecipeEditor.css";
+import React, { useState, useRef } from "react";
+import Modal from "./Modal";
+import 'react-image-crop/dist/ReactCrop.css'
 
 export default function RecipeEditorPicturePage({ recipeData, dispatch }) {
+
+  const [modalOpen, setModalOpen] = useState(false);
+  const img = useRef();
+
+  console.log(img);
+
   return (
     <>
-      <h2 className="upload-photo">Uplaod a new photo:</h2>
-      <input
+      <button 
+        className="upload-photo" 
+        onClick={() => setModalOpen(true)}
+      >
+        Uplaod a new photo
+      </button>
+      {/* <input
         type="file"
         onChange={(e) => {
           dispatch({
@@ -14,10 +26,11 @@ export default function RecipeEditorPicturePage({ recipeData, dispatch }) {
             value: e.target.files[0],
           });
         }}
-      />
+      /> */}
       {recipeData.picture ? (
         <>
-          <img src={URL.createObjectURL(recipeData.picture)} alt="" />
+          <img ref={img} 
+          className="image-display" src={URL.createObjectURL(recipeData.picture)} alt="" />
           <button
             className="discard-photo"
             onClick={() => {
@@ -26,13 +39,14 @@ export default function RecipeEditorPicturePage({ recipeData, dispatch }) {
                 variable: "picture",
                 value: null,
               });
-            }}
+            }} 
           >
             Discard current upload
           </button>
         </>
       ) : recipeData.imageURL ? (
         <img
+          className="image-display"
           src={recipeData.imageURL}
           alt=""
         />
@@ -41,6 +55,7 @@ export default function RecipeEditorPicturePage({ recipeData, dispatch }) {
           <p className="message">image unavailable</p>
         </div>
       )}
+      {modalOpen && <Modal closeModal={() => setModalOpen(false)} dispatch={dispatch}/>}
     </>
   );
 }
