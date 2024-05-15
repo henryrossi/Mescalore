@@ -1,23 +1,9 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
+import * as React from "react";
+import * as ReactDOM from "react-dom/client";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
-import { setContext } from "@apollo/client/link/context";
-import { createUploadLink } from "apollo-upload-client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-
-const authLink = setContext((_, { headers }) => {
-  // get the authentication token from local storage if it exists
-  const token = localStorage.getItem("token");
-  // return the headers to the context so httpLink can read them
-  return {
-    headers: {
-      ...headers,
-      authorization: token ? `JWT ${token}` : "",
-    },
-  };
-});
 
 const client = new ApolloClient({
   cache: new InMemoryCache({
@@ -42,18 +28,27 @@ const client = new ApolloClient({
       },
     },
   }),
-  link: authLink.concat(createUploadLink({ uri: process.env.REACT_APP_BACKEND_URI })),
+  uri: process.env.REACT_APP_BACKEND_URI,
+  headers: {
+    authorization: localStorage.getItem("token") ? 
+                   `JWT ${localStorage.getItem("token")}` : "",
+  },
   connectToDevTools: true,
 });
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(
-  <React.StrictMode>
-    <ApolloProvider client={client}>
-      <App />
-    </ApolloProvider>
-  </React.StrictMode>
-);
+const htmlentry = document.getElementById("root")
+if (htmlentry == null) {
+  console.log("Err:  Can't find react entry point");
+} else {
+  const root = ReactDOM.createRoot(htmlentry);
+  root.render(
+    <React.StrictMode>
+      <ApolloProvider client={client}>
+        <App />
+      </ApolloProvider>
+    </React.StrictMode>
+  );
+}
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
