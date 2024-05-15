@@ -2,8 +2,12 @@ import * as React from "react";
 import * as ReactDOM from "react-dom/client";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import "./index.css";
-import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import Mescolare from "./Mescolare";
+import AboutUs from "./pages/AboutUs";
+import Home from "./pages/Home";
+import ErrorPage from "./pages/ErrorPage";
 
 const client = new ApolloClient({
   cache: new InMemoryCache({
@@ -36,15 +40,36 @@ const client = new ApolloClient({
   connectToDevTools: true,
 });
 
-const htmlentry = document.getElementById("root")
-if (htmlentry == null) {
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Mescolare />,
+    errorElement: <ErrorPage />,
+    children: [{
+      errorElement: <ErrorPage />,
+      children: [
+        {
+          index: true,
+          element: <Home />
+        },
+        {
+          path: "/about",
+          element: <AboutUs />
+        }
+      ]
+    }]
+  }
+]);
+
+const entry = document.getElementById("root");
+if (entry == null) {
   console.log("Err:  Can't find react entry point");
 } else {
-  const root = ReactDOM.createRoot(htmlentry);
+  const root = ReactDOM.createRoot(entry);
   root.render(
     <React.StrictMode>
       <ApolloProvider client={client}>
-        <App />
+        <RouterProvider router={router} />
       </ApolloProvider>
     </React.StrictMode>
   );

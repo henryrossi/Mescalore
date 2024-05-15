@@ -1,13 +1,11 @@
-import React, { useState } from "react";
+import * as React from "react";
 import { Link } from "react-router-dom";
 import { IconPencilPlus, IconLogout } from "@tabler/icons-react";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 import "./Home.css";
 import "@fontsource/jua";
 
 function Home() {
-  const [loggedIn, setAuthorization] = useState(localStorage.getItem("token"));
+  const [loggedIn, setAuthorization] = React.useState(localStorage.getItem("token"));
 
   const handleLogout = () => {
     // To be secure I believe I should also remove the Token from the backend database
@@ -16,8 +14,7 @@ function Home() {
   };
 
   return (
-    <div id="fullpage">
-      <Navbar currentSubsite={"home"} />
+    <>
       <hgroup className="hgroup">
         <h1 className="title">mescolare!</h1>
         <p className="desc">
@@ -56,8 +53,7 @@ function Home() {
           begin!
         </p>
       </article>
-      <Footer />
-    </div>
+    </>
   );
 }
 
