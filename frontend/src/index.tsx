@@ -8,6 +8,14 @@ import Mescolare from "./Mescolare";
 import AboutUs from "./pages/AboutUs";
 import Home from "./pages/Home";
 import ErrorPage from "./pages/ErrorPage";
+import Recipes from "./pages/Recipes";
+import Recipe from "./pages/Recipe";
+import CreateRecipe from "./pages/CreateRecipe";
+import EditRecipe from "./pages/EditRecipe";
+import Search from "./pages/Search";
+import SignIn from "./pages/SignIn";
+import SignUp from "./pages/SignUp";
+import ActivateEmail from "./pages/ActivateEmail";
 
 const client = new ApolloClient({
   cache: new InMemoryCache({
@@ -40,6 +48,12 @@ const client = new ApolloClient({
   connectToDevTools: true,
 });
 
+const tokenTime = localStorage.getItem("tokenTime");
+if (tokenTime != null && Date.now() - parseInt(tokenTime, 10) > 86400000) {
+  localStorage.removeItem("token");
+  localStorage.removeItem("tokenTime");
+}
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -55,6 +69,38 @@ const router = createBrowserRouter([
         {
           path: "/about",
           element: <AboutUs />
+        },
+        {
+          path: "/recipes",
+          element: <Recipes />
+        },
+        {
+          path: "/create",
+          element: <CreateRecipe />
+        },
+        {
+          path: "/:recipeName",
+          element: <Recipe />
+        },
+        {
+          path: "/edit/:recipeName",
+          element: <EditRecipe />
+        },
+        {
+          path: "/search",
+          element: <Search />
+        },
+        {
+          path: "sign-in",
+          element: <SignIn />
+        },
+        {
+          path: "sign-up",
+          element: <SignUp />
+        }, 
+        {
+          path: "/activate/:token",
+          element: <ActivateEmail />
         }
       ]
     }]

@@ -1,4 +1,4 @@
-import { React } from "react";
+import * as React from "react";
 import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { GET_RECIPE_QUERY } from "../graphQL.js";
@@ -9,16 +9,50 @@ import Loading from "../components/Loading";
 import "./Recipe.css";
 import Unavailable from "../components/Unavailable.jsx";
 
-function Recipe() {
+      // id
+      // name
+      // description
+      // servings
+      // time
+      // category {
+      //   name
+      // }
+      // imageURL
+      // ingredientList {
+      //   ingredient {
+      //     name
+      //   }
+      //   measurement
+      // }
+      // instructions
+
+interface RecipeData {
+  id: string,
+  name: string,
+  description: string,
+  servings: string,
+  time: string,
+  category: [{ name: string }],
+  imageURL: string,
+  ingredientList: IngredientList[],
+  instructions: string[],
+};
+
+interface IngredientList {
+  ingredient: { name: string },
+  measurement: string,
+};
+
+export default function Recipe() {
   const { recipeName } = useParams();
 
-  const handleIngredientLineThrough = (e) => {
-    const li = e.target;
+  const handleIngredientLineThrough = (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
+    const li = e.target as HTMLElement;
     if (li.classList.length === 0) {
       li.classList.add("line-through");
       return;
     }
-    li.classList.remove(...li.classList);
+    li.classList.remove("line-through");
   };
 
   const { loading, error, data } = useQuery(GET_RECIPE_QUERY, {
@@ -31,7 +65,7 @@ function Recipe() {
     // console.log(error.message);
     return <Unavailable />;
   }
-
+  
   return (
     <div id="fullpage">
       <Navbar currentSubsite={"recipes"} />
@@ -95,5 +129,3 @@ function Recipe() {
     </div>
   );
 }
-
-export default Recipe;

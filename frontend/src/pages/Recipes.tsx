@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import * as React from "react";
 import { useQuery } from "@apollo/client";
 import { FILTER_RECIPES_QUERY } from "../graphQL.js";
 import Navbar from "../components/Navbar";
@@ -9,7 +9,7 @@ import "./Recipes.css";
 
 function Recipes() {
   const tags = ["breakfast", "lunch", "dinner", "snack", "dessert", "beverage"];
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedCategory, setSelectedCategory] = React.useState("");
 
   const { loading, error, data, refetch } = useQuery(FILTER_RECIPES_QUERY, {
     variables: {
@@ -17,8 +17,9 @@ function Recipes() {
     },
   });
 
-  const handleClick = (event) => {
-    let category = event.target.innerText;
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    let target = e.target as HTMLButtonElement;
+    let category = target.innerText;
     if (category === selectedCategory) {
       category = "";
     }
@@ -31,8 +32,7 @@ function Recipes() {
   if (error) console.log(error.message);
 
   return (
-    <div id="fullpage">
-      <Navbar currentSubsite={"recipes"} />
+    <>
       <h1 className="recipes">Explore some of our favorite recipes</h1>
       <section className="filter">
         <p> filter by </p>
@@ -54,8 +54,7 @@ function Recipes() {
       ) : (
         <RecipeList recipes={data.getRecipesByCategory} />
       )}
-      <Footer />
-    </div>
+    </>
   );
 }
 

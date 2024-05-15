@@ -1,4 +1,4 @@
-import { React, useReducer } from "react";
+import * as React from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
 import { CREATE_RECIPE_MUTATION, GET_S3_PRESIGNED_URL } from "../graphQL.js";
@@ -9,7 +9,7 @@ import Footer from "../components/Footer";
 
 function CreateRecipe() {
   const navigate = useNavigate();
-  const [recipeData, dispatch] = useReducer(recipeStateReducer, {
+  const [recipeData, dispatch] = React.useReducer(recipeStateReducer, {
     name: "",
     description: "",
     time: "",
