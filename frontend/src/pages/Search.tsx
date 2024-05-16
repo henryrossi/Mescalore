@@ -1,12 +1,10 @@
-import { React, useEffect, useState } from "react";
+import * as React from "react";
 import { IconSearch } from "@tabler/icons-react";
 import { useQuery } from "@apollo/client";
-import { SEARCH_RECIPES_QUERY, GET_NUMBER_OF_RECIPES } from "../graphQL.js";
+import { SEARCH_RECIPES_QUERY, GET_NUMBER_OF_RECIPES } from "../graphQL";
 import { useLocation, useNavigate } from "react-router-dom";
-import Navbar from "../components/Navbar";
 import Loading from "../components/Loading";
 import RecipeList from "../components/RecipeList";
-import Footer from "../components/Footer";
 import "./Search.css";
 
 export default function Search() {
@@ -18,12 +16,12 @@ export default function Search() {
   }
 
   const navigate = useNavigate();
-  const [searchText, setSearchText] = useState(search);
-  const [lastSearch, setLastSearch] = useState(search);
-  const [timesFetched, setTimesFetched] = useState(1);
+  const [searchText, setSearchText] = React.useState(search);
+  const [lastSearch, setLastSearch] = React.useState(search);
+  const [timesFetched, setTimesFetched] = React.useState(1);
   const limit = 12;
 
-  useEffect(() => {
+  React.useEffect(() => {
     // Updates state when navbar search is used on search page
     setSearchText(search);
     setLastSearch(search);
@@ -91,8 +89,7 @@ export default function Search() {
   if (errorCount) console.log(errorCount.message);
 
   return (
-    <div id="fullpage">
-      <Navbar currentSubsite={"recipes"} />
+    <>
       <input
         className="searchInput"
         type="text"
@@ -119,7 +116,6 @@ export default function Search() {
           </button>
         )
       )}
-      <Footer />
-    </div>
+    </>
   );
 }

@@ -1,11 +1,11 @@
-import React, { useState, useRef } from "react";
+import * as React from "react";
 import Modal from "./Modal";
 import 'react-image-crop/dist/ReactCrop.css'
 
 export default function RecipeEditorPicturePage({ recipeData, dispatch }) {
 
-  const [modalOpen, setModalOpen] = useState(false);
-  const img = useRef();
+  const [modalOpen, setModalOpen] = React.useState(false);
+  const img = React.useRef<HTMLImageElement>(null);
 
   console.log(img);
 

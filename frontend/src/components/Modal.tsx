@@ -1,5 +1,5 @@
-import React, { useState, useRef } from "react";
-import ReactCrop, { centerCrop, convertToPixelCrop, makeAspectCrop } from "react-image-crop";
+import * as React from "react";
+import ReactCrop, { PercentCrop, centerCrop, convertToPixelCrop, makeAspectCrop } from "react-image-crop";
 import setCanvasPreview from "../setCanvasPreview";
 import "./Modal.css";
 
@@ -8,11 +8,11 @@ const MIN_DIMENSION = 600;
 
 export default function Modal({ closeModal, dispatch }) {
 
-    const [imageURL, setImageURL] = useState("");
-    const imageRef = useRef(null);
-    const canvasRef = useRef(null);
-    const [crop, setCrop] = useState();
-    const [error, setError] = useState("");
+    const [imageURL, setImageURL] = React.useState<string>("");
+    const imageRef = React.useRef<HTMLImageElement>(null);
+    const canvasRef = React.useRef<HTMLCanvasElement>(null);
+    const [crop, setCrop] = React.useState<PercentCrop | undefined>();
+    const [error, setError] = React.useState<string>("");
 
 
     const onSelectFile = (e) => {
@@ -78,6 +78,10 @@ export default function Modal({ closeModal, dispatch }) {
                         <button 
                             className="modal-crop-button"
                             onClick={() => {
+                                // quick fix, needs revisit
+                                if (canvasRef.current === null || imageRef.current === null || crop === undefined) {
+                                    return;
+                                }
                                 setCanvasPreview(
                                     imageRef.current,
                                     canvasRef.current,
@@ -88,6 +92,10 @@ export default function Modal({ closeModal, dispatch }) {
                                     )
                                 );
                                 canvasRef.current.toBlob((blob) => {
+                                    if (blob === null) {
+                                        setError("Unable to crop file");
+                                        return;
+                                    }
                                     let file = new File([blob], "newImage.png", { type: "image/png"});
                                     if (!file) {
                                         setError("Unable to crop file");

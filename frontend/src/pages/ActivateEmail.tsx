@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import * as React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useMutation } from "@apollo/client";
-import { USER_VERIFICATION } from "../graphQL.js";
+import { USER_VERIFICATION } from "../graphQL";
 import Loading from "../components/Loading";
 
 export default function ActivateEmail() {
@@ -18,7 +18,7 @@ export default function ActivateEmail() {
     },
   });
 
-  useEffect(() => {
+  React.useEffect(() => {
     verifyUser({
       variables: {
         token: token,

@@ -1,13 +1,13 @@
 import * as React from "react";
 import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
-import { GET_RECIPE_QUERY } from "../graphQL.js";
+import { GET_RECIPE_QUERY } from "../graphQL";
 import { IconEdit } from "@tabler/icons-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Loading from "../components/Loading";
 import "./Recipe.css";
-import Unavailable from "../components/Unavailable.jsx";
+import Unavailable from "../components/Unavailable";
 
       // id
       // name

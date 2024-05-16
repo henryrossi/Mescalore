@@ -1,13 +1,5 @@
 import { gql } from "@apollo/client";
 
-/* I removed base64picture from all queries.
-   Recipes no longer have associated pictures until I set up some
-   external image sorage service.
-   Images can still be uploaded. They will be stored on the backend server,
-   are never queried, and will eventually be removed when the backend is 
-   rehosted.
-*/
-
 // Queries
 export const FILTER_RECIPES_QUERY = gql`
   query FilterRecipesQuery($category: String!) {

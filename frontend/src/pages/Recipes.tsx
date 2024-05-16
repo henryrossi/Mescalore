@@ -1,9 +1,7 @@
 import * as React from "react";
 import { useQuery } from "@apollo/client";
-import { FILTER_RECIPES_QUERY } from "../graphQL.js";
-import Navbar from "../components/Navbar";
+import { FILTER_RECIPES_QUERY } from "../graphQL";
 import RecipeList from "../components/RecipeList";
-import Footer from "../components/Footer";
 import Loading from "../components/Loading";
 import "./Recipes.css";
 

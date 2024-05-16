@@ -1,10 +1,10 @@
 import * as React from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
-import { CREATE_RECIPE_MUTATION, GET_S3_PRESIGNED_URL } from "../graphQL.js";
-import recipeStateReducer from "../recipeStateRecuder.js";
+import { CREATE_RECIPE_MUTATION, GET_S3_PRESIGNED_URL } from "../graphQL";
+import recipeStateReducer from "../recipeStateRecuder";
 import Navbar from "../components/Navbar";
-import RecipeEditor from "../components/RecipeEditor.jsx";
+import RecipeEditor from "../components/RecipeEditor";
 import Footer from "../components/Footer";
 
 function CreateRecipe() {
@@ -84,7 +84,7 @@ function CreateRecipe() {
   return (
     <div id="fullpage">
       <Navbar currentSubsite={"recipes"} />
-      <RecipeEditor recipeData={recipeData} dispatch={dispatch} onSubmit={onSubmit} />
+      <RecipeEditor handleDelete={null} recipeData={recipeData} dispatch={dispatch} onSubmit={onSubmit} />
       <Footer />
     </div>
   );

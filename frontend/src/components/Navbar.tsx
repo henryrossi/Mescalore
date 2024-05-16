@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import * as React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { IconSearch } from "@tabler/icons-react";
 import "./Navbar.css";
 
 function Navbar({ currentSubsite }) {
-  const [searchInput, setSearchInput] = useState("");
+  const [searchInput, setSearchInput] = React.useState("");
   const navigate = useNavigate();
 
   const handleNavigateEmpty = () => {

@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import AutosizeInput from "react-18-input-autosize";
 
 export default function RecipeEditorInfoPage({

@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import * as React from "react";
 import Unavailable from "../components/Unavailable";
 import RecipeEditorInfoPage from "./RecipeEditorInfoPage";
 import RecipeEditorDescriptionPage from "./RecipeEditorDescriptionPage";
@@ -13,7 +13,7 @@ export default function RecipeEditor({
   onSubmit,
   handleDelete,
 }) {
-  const [currentEditorPage, setCurrentEditorPage] = useState(0);
+  const [currentEditorPage, setCurrentEditorPage] = React.useState(0);
 
   const autosizeInputStyle = {
     minWidth: 200,

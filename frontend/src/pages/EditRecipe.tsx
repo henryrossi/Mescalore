@@ -1,4 +1,4 @@
-import { React, useReducer } from "react";
+import * as React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/client";
 import {
@@ -6,17 +6,17 @@ import {
   GET_S3_PRESIGNED_URL,
   EDIT_RECIPE_MUTATION,
   DELETE_RECIPE_MUTATION,
-} from "../graphQL.js";
-import recipeStateReducer from "../recipeStateRecuder.js";
+} from "../graphQL";
+import recipeStateReducer from "../recipeStateRecuder";
 import Navbar from "../components/Navbar";
 import Loading from "../components/Loading";
-import RecipeEditor from "../components/RecipeEditor.jsx";
+import RecipeEditor from "../components/RecipeEditor";
 import Footer from "../components/Footer";
 
 export default function EditRecipe() {
   const { recipeName } = useParams();
   const navigate = useNavigate();
-  const [recipeData, dispatch] = useReducer(recipeStateReducer, {
+  const [recipeData, dispatch] = React.useReducer(recipeStateReducer, {
     id: 0,
     name: "",
     servings: "",
