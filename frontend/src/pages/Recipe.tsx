@@ -1,7 +1,8 @@
 import * as React from "react";
 import { Link, useParams } from "react-router-dom";
 import { ApolloError, useQuery } from "@apollo/client";
-import { GET_RECIPE_QUERY, RecipeData } from "../graphQL";
+import { GET_RECIPE_QUERY } from "../graphQL";
+import { RecipeData } from "../types";
 import { IconEdit } from "@tabler/icons-react";
 import Loading from "../components/Loading";
 import "./Recipe.css";

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
-import { RecipeData } from "../graphQL";
+import { RecipeData } from "../types";
 import "./RecipeList.css";
 
 export default function RecipeList({ recipes } : { recipes: RecipeData[] }) {

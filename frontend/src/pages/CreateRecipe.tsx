@@ -1,7 +1,8 @@
 import * as React from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
-import { CREATE_RECIPE_MUTATION, GET_S3_PRESIGNED_URL, RecipeData2 } from "../graphQL";
+import { CREATE_RECIPE_MUTATION, GET_S3_PRESIGNED_URL } from "../graphQL";
+import { RecipeData2 } from "../types";
 import RecipeEditor from "../components/RecipeEditor";
 
 function CreateRecipe() {

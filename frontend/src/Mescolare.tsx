@@ -6,7 +6,7 @@ import { Outlet } from "react-router-dom";
 export default function Mescolare() {
     return (
         <div id="fullpage">
-            <Navbar currentSubsite={"home"} />
+            <Navbar />
             <Outlet />
             <Footer />
         </div>

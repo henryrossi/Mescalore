@@ -6,7 +6,7 @@ import RecipeEditorPicturePage from "./RecipeEditorPicturePage";
 import RecipeEditorIngredientsPage from "./RecipeEditorIngredientsPage";
 import RecipeEditorInstructionsPage from "./RecipeEditorInstructionsPage";
 import "./RecipeEditor.css";
-import { RecipeData2 } from "../graphQL";
+import { RecipeData2 } from "../types";
 
 export default function RecipeEditor({
   recipeData,

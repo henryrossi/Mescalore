@@ -1,6 +1,6 @@
 import * as React from "react";
 import { IconTrashX, IconPencilPlus } from "@tabler/icons-react";
-import { RecipeData2 } from "../graphQL";
+import { RecipeData2 } from "../types";
 
 export default function RecipeEditorInstructionsPage({ 
   recipeData, 

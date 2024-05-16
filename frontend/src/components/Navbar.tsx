@@ -1,9 +1,9 @@
 import * as React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { IconSearch } from "@tabler/icons-react";
 import "./Navbar.css";
 
-function Navbar({ currentSubsite } : { currentSubsite: string }) {
+function Navbar() {
   const [searchInput, setSearchInput] = React.useState("");
   const navigate = useNavigate();
 
@@ -25,35 +25,45 @@ function Navbar({ currentSubsite } : { currentSubsite: string }) {
     <>
       <header className="header">
         <nav className="nav">
-          <Link className={currentSubsite === "home" ? "active" : ""} to="/">
+          <NavLink className={({ isActive, isPending }) => {
+              return isActive ? "active" : isPending ? "pending" : "";
+            }} to="/"
+          >
             home
-          </Link>
-          <Link
-            className={currentSubsite === "recipes" ? "active" : ""}
-            to="/recipes"
+          </NavLink>
+          <NavLink
+            className={({ isActive, isPending }) => {
+              return isActive ? "active" : isPending ? "pending" : "";
+            }} to="/recipes"
           >
             recipes
-          </Link>
-          <Link
-            className={currentSubsite === "about" ? "active" : ""}
+          </NavLink>
+          <NavLink
+            className={({ isActive, isPending }) => {
+              return isActive ? "active" : isPending ? "pending" : "";
+            }}
             to="/about"
           >
             about us
-          </Link>
+          </NavLink>
           {!localStorage.getItem("token") &&
             <>
-              <Link 
-                className={currentSubsite === "sign-in" ? "active user-auth" : "user-auth"} 
+              <NavLink 
+                className={({ isActive, isPending }) => {
+                  return isActive ? "active user-auth" : isPending ? "pending user-auth" : "user-auth";
+                }}
                 to="/sign-in"
               >
                 sign in
-              </Link>
-              <Link 
-                className={currentSubsite === "sign-up" ? "active user-auth" : "user-auth"} 
+              </NavLink>
+              <NavLink 
+                className={({ isActive, isPending }) => {
+                  return isActive ? "active user-auth" : isPending ? "pending user-auth" : "user-auth";
+                }} 
                 to="/sign-up"
               >
                 sign up
-              </Link>
+              </NavLink>
             </>
           }
           <button onClick={handleNavigateEmpty} className="searchButton">

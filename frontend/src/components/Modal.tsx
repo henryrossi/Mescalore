@@ -1,7 +1,7 @@
 import * as React from "react";
 import ReactCrop, { PercentCrop, centerCrop, convertToPixelCrop, makeAspectCrop } from "react-image-crop";
 import setCanvasPreview from "../setCanvasPreview";
-import { RecipeData2 } from "../graphQL";
+import { RecipeData2 } from "../types";
 import "./Modal.css";
 
 const ASPECT_RATIO = 1;

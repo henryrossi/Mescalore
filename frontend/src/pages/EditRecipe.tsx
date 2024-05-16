@@ -5,10 +5,9 @@ import {
   GET_RECIPE_QUERY,
   GET_S3_PRESIGNED_URL,
   EDIT_RECIPE_MUTATION,
-  DELETE_RECIPE_MUTATION,
-  RecipeData2,
-  RecipeReturnType,
+  DELETE_RECIPE_MUTATION
 } from "../graphQL";
+import { RecipeData2, RecipeReturnType } from "../types";
 import Loading from "../components/Loading";
 import RecipeEditor from "../components/RecipeEditor";
 
