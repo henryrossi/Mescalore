@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { IconSearch } from "@tabler/icons-react";
 import "./Navbar.css";
 
-function Navbar({ currentSubsite }) {
+function Navbar({ currentSubsite } : { currentSubsite: string }) {
   const [searchInput, setSearchInput] = React.useState("");
   const navigate = useNavigate();
 
@@ -11,7 +11,7 @@ function Navbar({ currentSubsite }) {
     navigate("/search", { state: { search: "" } });
   };
 
-  const handleKeyDown = (event) => {
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       handleNavigate();
     }

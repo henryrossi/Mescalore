@@ -1,10 +1,12 @@
 import * as React from "react";
-import AutosizeInput from "react-18-input-autosize";
+import { RecipeData2 } from "../graphQL";
 
 export default function RecipeEditorInfoPage({
   recipeData,
-  dispatch,
-  autosizeInputStyle,
+  setRecipeData,
+} : { 
+  recipeData: RecipeData2, 
+  setRecipeData: React.Dispatch<React.SetStateAction<RecipeData2>> 
 }) {
   const categoryChocies = [
     "breakfast",
@@ -15,6 +17,17 @@ export default function RecipeEditorInfoPage({
     "beverage",
   ];
 
+  const handleCategoryChange = (category: string) => {
+    let categories = [...recipeData.categories];
+    if (categories.includes(category)) {
+      categories.splice(recipeData.categories.indexOf(category), 1);
+      setRecipeData({...recipeData, categories: categories});
+      return;
+    }
+    categories.push(category);
+    setRecipeData({...recipeData, categories: categories});
+  }
+
   return (
     <>
       <h2>Name</h2>
@@ -22,40 +35,26 @@ export default function RecipeEditorInfoPage({
         type="text"
         value={recipeData.name}
         onChange={(e) =>
-          dispatch({
-            type: "changeInput",
-            value: e.target.value,
-            variable: "name",
-          })
+          setRecipeData({...recipeData, name: e.target.value})
         }
       />
       <div className="servings-time-container">
         <h2>Servings</h2>
-        <AutosizeInput
+        <input
           value={recipeData.servings}
           style={{ display: "block" }}
-          inputStyle={autosizeInputStyle}
           onChange={(e) =>
-            dispatch({
-              type: "changeInput",
-              value: e.target.value,
-              variable: "servings",
-            })
+            setRecipeData({...recipeData, servings: e.target.value})
           }
         />
       </div>
       <div className="servings-time-container">
         <h2>Minutes</h2>
-        <AutosizeInput
+        <input
           value={recipeData.time}
           style={{ display: "block" }}
-          inputStyle={autosizeInputStyle}
           onChange={(e) =>
-            dispatch({
-              type: "changeInput",
-              value: e.target.value,
-              variable: "time",
-            })
+            setRecipeData({...recipeData, time: e.target.value})
           }
         />
       </div>
@@ -66,12 +65,7 @@ export default function RecipeEditorInfoPage({
               className={
                 recipeData.categories.includes(category) ? "" : "unselected"
               }
-              onClick={() => {
-                dispatch({
-                  type: "changeCategories",
-                  category: category,
-                });
-              }}
+              onClick={() => handleCategoryChange(category)}
             >
               {category}
             </button>

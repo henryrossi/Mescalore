@@ -2,10 +2,7 @@ import * as React from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
 import { CREATE_RECIPE_MUTATION, GET_S3_PRESIGNED_URL, RecipeData2 } from "../graphQL";
-import recipeStateReducer from "../recipeStateRecuder";
-import Navbar from "../components/Navbar";
 import RecipeEditor from "../components/RecipeEditor";
-import Footer from "../components/Footer";
 
 function CreateRecipe() {
   const navigate = useNavigate();
@@ -56,10 +53,11 @@ function CreateRecipe() {
         body: recipeData.picture
       })
       if (!response.ok) return;
-      dispatch({
-        type: "addImageURL",
-        url: s3URL.getS3PresignedUrl.split('?')[0],
-      });
+      // dispatch({
+      //   type: "addImageURL",
+      //   url: s3URL.getS3PresignedUrl.split('?')[0],
+      // });
+      setRecipeData({...recipeData, imageURL: s3URL.getS3PresignedUrl.split('?')[0]});
     }
     const imageURL = recipeData.picture ? s3URL.getS3PresignedUrl.split('?')[0] : null;
     createRecipe({
@@ -82,11 +80,12 @@ function CreateRecipe() {
   /* Page rendering */
 
   return (
-    <div id="fullpage">
-      <Navbar currentSubsite={"recipes"} />
-      <RecipeEditor handleDelete={null} recipeData={recipeData} dispatch={dispatch} onSubmit={onSubmit} />
-      <Footer />
-    </div>
+    <RecipeEditor 
+      recipeData={recipeData} 
+      setRecipeData={setRecipeData} 
+      onSubmit={onSubmit} 
+      handleDelete={null} 
+    />
   );
 }
 

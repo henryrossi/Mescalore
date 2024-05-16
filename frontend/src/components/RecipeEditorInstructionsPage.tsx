@@ -1,7 +1,14 @@
 import * as React from "react";
 import { IconTrashX, IconPencilPlus } from "@tabler/icons-react";
+import { RecipeData2 } from "../graphQL";
 
-export default function RecipeEditorInstructionsPage({ recipeData, dispatch }) {
+export default function RecipeEditorInstructionsPage({ 
+  recipeData, 
+  setRecipeData 
+} : { 
+  recipeData: RecipeData2, 
+  setRecipeData: React.Dispatch<React.SetStateAction<RecipeData2>> 
+}) {
   return (
     <>
       <h2>Instructions</h2>
@@ -10,23 +17,19 @@ export default function RecipeEditorInstructionsPage({ recipeData, dispatch }) {
           <li key={index}>
             <textarea
               defaultValue={instructions}
-              onChange={(e) =>
-                dispatch({
-                  type: "changeInstruction",
-                  instruction: e.target.value,
-                  index: index,
-                })
-              }
+              onChange={(e) => {
+                let instructions = [...recipeData.instructions];
+                instructions[index] = e.target.value;
+                setRecipeData({...recipeData, instructions: instructions});
+              }}
             />
             <button
               className="button-icon delete-instruction-icon"
               onClick={(e) => {
                 e.preventDefault();
-                dispatch({
-                  type: "removeListItem",
-                  variable: "instructions",
-                  index: index,
-                });
+                const instructions = [...recipeData.instructions];
+                instructions.splice(index, 1);
+                setRecipeData({...recipeData, instructions: instructions});
               }}
             >
               <IconTrashX />
@@ -38,7 +41,7 @@ export default function RecipeEditorInstructionsPage({ recipeData, dispatch }) {
         className="button-icon add-icon"
         onClick={(e) => {
           e.preventDefault();
-          dispatch({ type: "addInstruction" });
+          setRecipeData({...recipeData, instructions: [...recipeData.instructions, ""]});
         }}
       >
         <IconPencilPlus />

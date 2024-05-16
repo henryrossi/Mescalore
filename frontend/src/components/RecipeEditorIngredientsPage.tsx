@@ -1,8 +1,14 @@
 import * as React from "react";
 import { IconTrashX, IconPencilPlus } from "@tabler/icons-react";
-import AutosizeInput from "react-18-input-autosize";
+import { RecipeData2 } from "../graphQL";
 
-export default function RecipeEditorIngredientsPage({ recipeData, dispatch, autosizeInputStyle }) {
+export default function RecipeEditorIngredientsPage({ 
+  recipeData, 
+  setRecipeData 
+} : { 
+  recipeData: RecipeData2, 
+  setRecipeData: React.Dispatch<React.SetStateAction<RecipeData2>> 
+}) {
   return (
     <>
       <h2>Ingredients</h2>
@@ -15,42 +21,34 @@ export default function RecipeEditorIngredientsPage({ recipeData, dispatch, auto
       <ul>
         {recipeData.ingredients.map((object, index) => (
           <li key={index}>
-            <AutosizeInput
+            <input
               value={object.measurement}
-              inputStyle={autosizeInputStyle}
-              onChange={(e) =>
-                dispatch({
-                  type: "changeIngredient",
-                  ingredient: {
-                    measurement: e.target.value,
-                    ingredient: object.ingredient,
-                  },
-                  index: index,
-                })
-              }
+              onChange={(e) => {
+                let ingredients = [...recipeData.ingredients];
+                ingredients[index] = {
+                  measurement: e.target.value,
+                  ingredient: object.ingredient,
+                };
+                setRecipeData({...recipeData, ingredients: ingredients});
+              }}
             />
-            <AutosizeInput
+            <input
               value={object.ingredient}
-              inputStyle={autosizeInputStyle}
-              onChange={(e) =>
-                dispatch({
-                  type: "changeIngredient",
-                  ingredient: {
-                    measurement: object.measurement,
-                    ingredient: e.target.value,
-                  },
-                  index: index,
-                })
-              }
+              onChange={(e) => {
+                let ingredients = [...recipeData.ingredients];
+                ingredients[index] = {
+                  measurement: object.measurement,
+                  ingredient: e.target.value,
+                };
+                setRecipeData({...recipeData, ingredients: ingredients});
+              }}
             />
             <button
               onClick={(e) => {
                 e.preventDefault();
-                dispatch({
-                  type: "removeListItem",
-                  variable: "ingredients",
-                  index: index,
-                });
+                const ingredients = [...recipeData.ingredients];
+                ingredients.splice(index, 1);
+                setRecipeData({...recipeData, ingredients: ingredients});
               }}
               className="button-icon delete-ingredient-icon"
             >
@@ -62,7 +60,9 @@ export default function RecipeEditorIngredientsPage({ recipeData, dispatch, auto
       <button
         onClick={(e) => {
           e.preventDefault();
-          dispatch({ type: "addIngredient" });
+          setRecipeData({...recipeData, ingredients: [
+            ...recipeData.ingredients, {ingredient: "", measurement: ""}
+          ]});
         }}
         className="button-icon add-icon"
       >

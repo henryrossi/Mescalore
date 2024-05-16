@@ -6,19 +6,17 @@ import {
   GET_S3_PRESIGNED_URL,
   EDIT_RECIPE_MUTATION,
   DELETE_RECIPE_MUTATION,
-  RecipeData3,
+  RecipeData2,
+  RecipeReturnType,
 } from "../graphQL";
-import recipeStateReducer from "../recipeStateRecuder";
-import Navbar from "../components/Navbar";
 import Loading from "../components/Loading";
 import RecipeEditor from "../components/RecipeEditor";
-import Footer from "../components/Footer";
 
 export default function EditRecipe() {
   const { recipeName } = useParams();
   const navigate = useNavigate();
-  const [recipeData, setRecipeData] = React.useState<RecipeData3>({
-    id: "",
+  const [recipeId, setRecipeId] = React.useState("");
+  const [recipeData, setRecipeData] = React.useState<RecipeData2>({
     name: "",
     servings: "",
     time: "",
@@ -37,7 +35,20 @@ export default function EditRecipe() {
       name: recipeName,
     },
     onCompleted: (data) => {
-      dispatch({ type: "query", recipe: data.getRecipeByName });
+      const recipe: RecipeReturnType = data.getRecipeByName;
+      setRecipeId(recipe.id);
+      setRecipeData({
+        ...recipe, 
+        categories: recipe.category.map((categories) =>
+          categories.name.toLowerCase()
+        ),
+        picture: null,
+        ingredients: recipe.ingredientList.map((object) => ({
+          measurement: object.measurement,
+          ingredient: object.ingredient.name,
+        })),
+        instructions: recipe.instructions.split("\r")
+      });
     },
   });
 
@@ -88,15 +99,16 @@ export default function EditRecipe() {
         body: recipeData.picture
       })
       if (!response.ok) return;
-      dispatch({
-        type: "addImageURL",
-        url: s3URL.getS3PresignedUrl.split('?')[0],
-      });
+      // dispatch({
+      //   type: "addImageURL",
+      //   url: s3URL.getS3PresignedUrl.split('?')[0],
+      // });
+      setRecipeData({...recipeData, imageURL: s3URL.getS3PresignedUrl.split('?')[0]});
     }
     const imageURL = recipeData.picture ? s3URL.getS3PresignedUrl.split('?')[0] : null;
     updateRecipe({
       variables: {
-        recipeId: recipeData.id,
+        recipeId: recipeId,
         name: recipeData.name,
         time: parseInt(recipeData.time),
         servings: parseInt(recipeData.servings),
@@ -114,7 +126,7 @@ export default function EditRecipe() {
 
   const handleDelete = () => {
     if (window.confirm("Are you sure you want to delete this recipe?")) {
-      deleteRecipe({ variables: { recipeId: recipeData.id } });
+      deleteRecipe({ variables: { recipeId: recipeId } });
     }
   };
 
@@ -126,19 +138,17 @@ export default function EditRecipe() {
   }
 
   return (
-    <div id="fullpage">
-      <Navbar currentSubsite={"recipes"} />
+    <>
       {loading ? (
         <Loading />
       ) : (
         <RecipeEditor
           recipeData={recipeData}
-          dispatch={dispatch}
+          setRecipeData={setRecipeData}
           onSubmit={onSubmit}
           handleDelete={handleDelete}
         />
       )}
-      <Footer />
-    </div>
+    </>
   );
 }

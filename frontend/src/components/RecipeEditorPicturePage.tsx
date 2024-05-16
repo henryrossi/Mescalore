@@ -1,8 +1,15 @@
 import * as React from "react";
 import Modal from "./Modal";
 import 'react-image-crop/dist/ReactCrop.css'
+import { RecipeData2 } from "../graphQL";
 
-export default function RecipeEditorPicturePage({ recipeData, dispatch }) {
+export default function RecipeEditorPicturePage({ 
+  recipeData, 
+  setRecipeData 
+} : { 
+  recipeData: RecipeData2, 
+  setRecipeData: React.Dispatch<React.SetStateAction<RecipeData2>> 
+}) {
 
   const [modalOpen, setModalOpen] = React.useState(false);
   const img = React.useRef<HTMLImageElement>(null);
@@ -33,13 +40,7 @@ export default function RecipeEditorPicturePage({ recipeData, dispatch }) {
           className="image-display" src={URL.createObjectURL(recipeData.picture)} alt="" />
           <button
             className="discard-photo"
-            onClick={() => {
-              dispatch({
-                type: "changeInput",
-                variable: "picture",
-                value: null,
-              });
-            }} 
+            onClick={() => setRecipeData({...recipeData, picture: null})} 
           >
             Discard current upload
           </button>
@@ -55,7 +56,7 @@ export default function RecipeEditorPicturePage({ recipeData, dispatch }) {
           <p className="message">image unavailable</p>
         </div>
       )}
-      {modalOpen && <Modal closeModal={() => setModalOpen(false)} dispatch={dispatch}/>}
+      {modalOpen && <Modal closeModal={() => setModalOpen(false)} recipeData={recipeData} setRecipeData={setRecipeData}/>}
     </>
   );
 }

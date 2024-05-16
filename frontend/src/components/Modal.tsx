@@ -1,12 +1,19 @@
 import * as React from "react";
 import ReactCrop, { PercentCrop, centerCrop, convertToPixelCrop, makeAspectCrop } from "react-image-crop";
 import setCanvasPreview from "../setCanvasPreview";
+import { RecipeData2 } from "../graphQL";
 import "./Modal.css";
 
 const ASPECT_RATIO = 1;
 const MIN_DIMENSION = 600;
 
-export default function Modal({ closeModal: () => void, dispatch: React.dispatch<> }) {
+export default function Modal({ 
+    closeModal, recipeData, setRecipeData 
+} : {
+    closeModal: () => void,
+    recipeData: RecipeData2,
+    setRecipeData: React.Dispatch<React.SetStateAction<RecipeData2>>,
+}) {
 
     const [imageURL, setImageURL] = React.useState<string>("");
     const imageRef = React.useRef<HTMLImageElement>(null);
@@ -103,11 +110,7 @@ export default function Modal({ closeModal: () => void, dispatch: React.dispatch
                                     if (!file) {
                                         setError("Unable to crop file");
                                     } else {
-                                        dispatch({
-                                            type: "changeInput",
-                                            variable: "picture",
-                                            value: file,
-                                        });
+                                        setRecipeData({...recipeData, picture: file})
                                         closeModal();
                                     }
                                 }, "image/png");

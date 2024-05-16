@@ -6,27 +6,33 @@ import RecipeEditorPicturePage from "./RecipeEditorPicturePage";
 import RecipeEditorIngredientsPage from "./RecipeEditorIngredientsPage";
 import RecipeEditorInstructionsPage from "./RecipeEditorInstructionsPage";
 import "./RecipeEditor.css";
+import { RecipeData2 } from "../graphQL";
 
 export default function RecipeEditor({
   recipeData,
-  dispatch,
+  setRecipeData,
   onSubmit,
   handleDelete,
+} : { 
+  recipeData: RecipeData2, 
+  setRecipeData: React.Dispatch<React.SetStateAction<RecipeData2>>, 
+  onSubmit: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => Promise<void>
+  handleDelete: (() => void) | null
 }) {
   const [currentEditorPage, setCurrentEditorPage] = React.useState(0);
 
-  const autosizeInputStyle = {
-    minWidth: 200,
-    maxWidth: 400,
-    fontSize: "0.95em",
-    backgroundColor: "#ffffff",
-    border: "1px solid #bababa",
-    borderRadius: 10,
-    height: 36,
-    marginBottom: 20,
-    marginRight: 20,
-    paddingLeft: 10,
-  };
+  // const autosizeInputStyle = {
+  //   minWidth: 200,
+  //   maxWidth: 400,
+  //   fontSize: "0.95em",
+  //   backgroundColor: "#ffffff",
+  //   border: "1px solid #bababa",
+  //   borderRadius: 10,
+  //   height: 36,
+  //   marginBottom: 20,
+  //   marginRight: 20,
+  //   paddingLeft: 10,
+  // };
 
   const getSidebarClassBasedOnPage = (page: number) => {
     return currentEditorPage === page ? "current-page" : "";
@@ -75,33 +81,31 @@ export default function RecipeEditor({
         {currentEditorPage === 0 && (
           <RecipeEditorInfoPage
             recipeData={recipeData}
-            dispatch={dispatch}
-            autosizeInputStyle={autosizeInputStyle}
+            setRecipeData={setRecipeData}
           />
         )}
         {currentEditorPage === 1 && (
           <RecipeEditorDescriptionPage
             recipeData={recipeData}
-            dispatch={dispatch}
+            setRecipeData={setRecipeData}
           />
         )}
         {currentEditorPage === 2 && (
           <RecipeEditorPicturePage
             recipeData={recipeData}
-            dispatch={dispatch}
+            setRecipeData={setRecipeData}
           />
         )}
         {currentEditorPage === 3 && (
           <RecipeEditorIngredientsPage
             recipeData={recipeData}
-            dispatch={dispatch}
-            autosizeInputStyle={autosizeInputStyle}
+            setRecipeData={setRecipeData}
           />
         )}
         {currentEditorPage === 4 && (
           <RecipeEditorInstructionsPage
             recipeData={recipeData}
-            dispatch={dispatch}
+            setRecipeData={setRecipeData}
           />
         )}
         {currentEditorPage < 4 ? (
