@@ -28,7 +28,7 @@ export default function RecipeEditor({
     paddingLeft: 10,
   };
 
-  const getSidebarClassBasedOnPage = (page) => {
+  const getSidebarClassBasedOnPage = (page: number) => {
     return currentEditorPage === page ? "current-page" : "";
   };
 

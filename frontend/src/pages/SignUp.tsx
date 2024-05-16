@@ -31,7 +31,7 @@ export default function SignUp() {
     },
   });
 
-  const onSubmit = (e) => {
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     registerUser({
       variables: {

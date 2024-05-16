@@ -6,7 +6,7 @@ import "./Modal.css";
 const ASPECT_RATIO = 1;
 const MIN_DIMENSION = 600;
 
-export default function Modal({ closeModal, dispatch }) {
+export default function Modal({ closeModal: () => void, dispatch: React.dispatch<> }) {
 
     const [imageURL, setImageURL] = React.useState<string>("");
     const imageRef = React.useRef<HTMLImageElement>(null);
@@ -15,12 +15,15 @@ export default function Modal({ closeModal, dispatch }) {
     const [error, setError] = React.useState<string>("");
 
 
-    const onSelectFile = (e) => {
+    const onSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files === null) {
+            return;
+        }
         const file = e.target.files[0];
         setImageURL(URL.createObjectURL(file));
     };
 
-    const onImageLoad = (e) => {
+    const onImageLoad = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
         const { width, height, naturalWidth, naturalHeight } = e.currentTarget;
         if (naturalWidth < MIN_DIMENSION || naturalHeight < MIN_DIMENSION) {
             setError("Image must be at least 600 x 600 pixels.");

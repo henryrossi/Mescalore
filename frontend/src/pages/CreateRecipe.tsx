@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
-import { CREATE_RECIPE_MUTATION, GET_S3_PRESIGNED_URL } from "../graphQL";
+import { CREATE_RECIPE_MUTATION, GET_S3_PRESIGNED_URL, RecipeData2 } from "../graphQL";
 import recipeStateReducer from "../recipeStateRecuder";
 import Navbar from "../components/Navbar";
 import RecipeEditor from "../components/RecipeEditor";
@@ -9,7 +9,7 @@ import Footer from "../components/Footer";
 
 function CreateRecipe() {
   const navigate = useNavigate();
-  const [recipeData, dispatch] = React.useReducer(recipeStateReducer, {
+  const [recipeData, setRecipeData] = React.useState<RecipeData2>( {
     name: "",
     description: "",
     time: "",
@@ -45,7 +45,7 @@ function CreateRecipe() {
     },
   });
 
-  const onSubmit = async (event) => {
+  const onSubmit = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event.preventDefault();
     if (recipeData.picture && !errorURL) {
       const response = await fetch(s3URL.getS3PresignedUrl, {

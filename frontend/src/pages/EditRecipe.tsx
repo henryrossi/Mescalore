@@ -6,6 +6,7 @@ import {
   GET_S3_PRESIGNED_URL,
   EDIT_RECIPE_MUTATION,
   DELETE_RECIPE_MUTATION,
+  RecipeData3,
 } from "../graphQL";
 import recipeStateReducer from "../recipeStateRecuder";
 import Navbar from "../components/Navbar";
@@ -16,8 +17,8 @@ import Footer from "../components/Footer";
 export default function EditRecipe() {
   const { recipeName } = useParams();
   const navigate = useNavigate();
-  const [recipeData, dispatch] = React.useReducer(recipeStateReducer, {
-    id: 0,
+  const [recipeData, setRecipeData] = React.useState<RecipeData3>({
+    id: "",
     name: "",
     servings: "",
     time: "",
@@ -75,7 +76,7 @@ export default function EditRecipe() {
 
   /* Logic handling for the form */
 
-  const onSubmit = async (event) => {
+  const onSubmit = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event.preventDefault();
     console.log(recipeData);
     if (recipeData.picture && !errorURL) {

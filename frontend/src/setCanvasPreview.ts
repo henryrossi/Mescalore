@@ -1,4 +1,6 @@
-export default function setCanvasPreview(image, canvas, crop) {
+import { PixelCrop } from "react-image-crop";
+
+export default function setCanvasPreview(image: HTMLImageElement, canvas: HTMLCanvasElement, crop: PixelCrop) {
     const ctx = canvas.getContext("2d");
     if (!ctx) {
         throw new Error("No 2d context");

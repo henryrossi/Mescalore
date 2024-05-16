@@ -1,8 +1,9 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
+import { RecipeData } from "../graphQL";
 import "./RecipeList.css";
 
-export default function RecipeList({ recipes }) {
+export default function RecipeList({ recipes } : { recipes: RecipeData[] }) {
   return (
     <div className="recipes-container">
       <ul>

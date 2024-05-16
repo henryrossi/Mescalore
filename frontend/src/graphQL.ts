@@ -1,5 +1,43 @@
 import { gql } from "@apollo/client";
 
+export interface RecipeData {
+  id: string,
+  name: string,
+  description: string,
+  servings: string,
+  time: string,
+  category: [{ name: string }],
+  imageURL: string | null,
+  ingredientList: IngredientList[],
+  instructions: string,
+};
+
+export interface RecipeData2 {
+  name: string,
+  description: string,
+  servings: string,
+  time: string,
+  categories: { name: string }[],
+  picture: string | null,
+  imageURL: string | null,
+  ingredients: { ingredient: string, measurement: string }[],
+  instructions: string[],
+};
+
+export interface RecipeData3 extends RecipeData2 {
+  id: string,
+};
+
+export interface IngredientList {
+  ingredient: { name: string },
+  measurement: string,
+};
+
+export interface RecipePreview {
+  name: string,
+  imageURL: string,
+}
+
 // Queries
 export const FILTER_RECIPES_QUERY = gql`
   query FilterRecipesQuery($category: String!) {

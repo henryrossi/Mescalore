@@ -1,47 +1,11 @@
 import * as React from "react";
 import { Link, useParams } from "react-router-dom";
-import { useQuery } from "@apollo/client";
-import { GET_RECIPE_QUERY } from "../graphQL";
+import { ApolloError, useQuery } from "@apollo/client";
+import { GET_RECIPE_QUERY, RecipeData } from "../graphQL";
 import { IconEdit } from "@tabler/icons-react";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 import Loading from "../components/Loading";
 import "./Recipe.css";
 import Unavailable from "../components/Unavailable";
-
-      // id
-      // name
-      // description
-      // servings
-      // time
-      // category {
-      //   name
-      // }
-      // imageURL
-      // ingredientList {
-      //   ingredient {
-      //     name
-      //   }
-      //   measurement
-      // }
-      // instructions
-
-interface RecipeData {
-  id: string,
-  name: string,
-  description: string,
-  servings: string,
-  time: string,
-  category: [{ name: string }],
-  imageURL: string,
-  ingredientList: IngredientList[],
-  instructions: string[],
-};
-
-interface IngredientList {
-  ingredient: { name: string },
-  measurement: string,
-};
 
 export default function Recipe() {
   const { recipeName } = useParams();
@@ -55,7 +19,12 @@ export default function Recipe() {
     li.classList.remove("line-through");
   };
 
-  const { loading, error, data } = useQuery(GET_RECIPE_QUERY, {
+  const { loading, error, data } : 
+        { loading: boolean, 
+          error?: ApolloError | undefined, 
+          data: { getRecipeByName : RecipeData } | undefined 
+        } = 
+  useQuery(GET_RECIPE_QUERY, {
     variables: {
       name: recipeName,
     },
@@ -67,9 +36,8 @@ export default function Recipe() {
   }
   
   return (
-    <div id="fullpage">
-      <Navbar currentSubsite={"recipes"} />
-      {loading ? (
+    <>
+      {loading || data === undefined ? (
         <Loading />
       ) : (
         <>
@@ -124,8 +92,6 @@ export default function Recipe() {
           </div>
         </>
       )}
-      {/* Remove Footer? Remove Footer everywhere? */}
-      <Footer />
-    </div>
+    </>
   );
 }

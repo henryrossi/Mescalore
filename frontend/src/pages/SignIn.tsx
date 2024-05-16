@@ -27,7 +27,7 @@ export default function SignIn() {
     },
   });
 
-  const onSubmit = (e) => {
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     authenticateUser({
       variables: {
