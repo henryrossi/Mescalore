@@ -39,7 +39,7 @@ const client = new ApolloClient({
       },
     },
   }),
-  uri: process.env.REACT_APP_BACKEND_URI,
+  uri: process.env.BACKEND_URI,
   headers: {
     authorization: localStorage.getItem("token") ? 
                    `JWT ${localStorage.getItem("token")}` : "",
@@ -106,10 +106,14 @@ const router = createBrowserRouter([
   }
 ]);
 
-const entry = document.getElementById("root");
+const entry = document.createElement('div');
+entry.id = 'root';
+document.body.appendChild(entry);
+
 if (entry == null) {
   console.log("Err:  Can't find react entry point");
-} else {
+} else if (process.env.MODE !== 'production') {
+  console.log('You are in development mode!');
   const root = ReactDOM.createRoot(entry);
   root.render(
     <React.StrictMode>
@@ -117,5 +121,12 @@ if (entry == null) {
         <RouterProvider router={router} />
       </ApolloProvider>
     </React.StrictMode>
+  );
+} else {
+  const root = ReactDOM.createRoot(entry);
+  root.render(
+    <ApolloProvider client={client}>
+      <RouterProvider router={router} />
+    </ApolloProvider>
   );
 }
