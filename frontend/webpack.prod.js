@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const webpack = require('webpack');
 require('dotenv').config();
 
@@ -15,6 +16,7 @@ module.exports = {
         'process.env.MODE': JSON.stringify(process.env.PRODUCTION),
         'process.env.BACKEND_URI': JSON.stringify(process.env.BACKEND_URI),
     }),
+    new MiniCssExtractPlugin(),
   ],
   output: {
     filename: 'bundle.js',
@@ -33,7 +35,10 @@ module.exports = {
       },
       {
         test: /\.css$/i,
-        use: ['style-loader', 'css-loader'],
+        use: [MiniCssExtractPlugin.loader, 'css-loader'],
+        options: {
+          modules: true,
+        },
       },
       {
         test: /\.(png|svg|jpg|jpeg|gif|pdf)$/i,
