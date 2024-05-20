@@ -100,7 +100,7 @@ const router = createBrowserRouter([
         {
           path: "/activate/:token",
           element: <ActivateEmail />
-        }
+        },
       ]
     }]
   }

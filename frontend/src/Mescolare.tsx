@@ -5,10 +5,10 @@ import { Outlet } from "react-router-dom";
 
 export default function Mescolare() {
     return (
-        <div id="fullpage">
+        <>
             <Navbar />
             <Outlet />
             <Footer />
-        </div>
+        </>
     );
 }

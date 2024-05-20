@@ -22,68 +22,63 @@ function Navbar() {
   };
 
   return (
-    <>
-      <header className="header">
-        <nav className="nav">
+    <header className="bg-white header">
+      <div className="header-container">
+        <nav className="navbar">
           <NavLink className={({ isActive, isPending }) => {
-              return isActive ? "active" : isPending ? "pending" : "";
+              return isActive ? "blue" : "black";
             }} to="/"
           >
             home
           </NavLink>
           <NavLink
             className={({ isActive, isPending }) => {
-              return isActive ? "active" : isPending ? "pending" : "";
+              return isActive ? "blue" : "black";
             }} to="/recipes"
           >
             recipes
           </NavLink>
           <NavLink
             className={({ isActive, isPending }) => {
-              return isActive ? "active" : isPending ? "pending" : "";
+              return isActive ? "blue" : "black";
             }}
             to="/about"
           >
             about us
           </NavLink>
-          {!localStorage.getItem("token") &&
-            <>
-              <NavLink 
-                className={({ isActive, isPending }) => {
-                  return isActive ? "active user-auth" : isPending ? "pending user-auth" : "user-auth";
-                }}
-                to="/sign-in"
-              >
-                sign in
-              </NavLink>
-              <NavLink 
-                className={({ isActive, isPending }) => {
-                  return isActive ? "active user-auth" : isPending ? "pending user-auth" : "user-auth";
-                }} 
-                to="/sign-up"
-              >
-                sign up
-              </NavLink>
-            </>
-          }
-          <button onClick={handleNavigateEmpty} className="searchButton">
-            <IconSearch size={20} />
-          </button>
-          <button onClick={handleNavigate} className="searchBarButton">
-            <IconSearch size={20} />
-          </button>
-          <input
-            className="searchBar"
-            type="text"
-            placeholder="Search"
-            onChange={(event) => setSearchInput(event.target.value)}
-            onKeyDown={handleKeyDown}
-          />
         </nav>
-        <hr className="hr" />
-      </header>
-      <div className="padding" />
-    </>
+
+        <input
+          className="searchBar"
+          type="text"
+          placeholder="Search"
+          onChange={(event) => setSearchInput(event.target.value)}
+          onKeyDown={handleKeyDown}
+        />
+        <button onClick={handleNavigate} className="header-search-bar-button">
+          <IconSearch size={'1rem'}/>
+        </button>
+
+        {!localStorage.getItem("token") &&
+          <div className="user-auth">
+            <NavLink 
+              className={({ isActive, isPending }) => {
+                return isActive ? "blue" : "black";
+              }}
+              to="/sign-in"
+            >
+              sign in
+            </NavLink>
+            <NavLink 
+              className="bg-blue white"
+              to="/sign-up"
+            >
+              sign up
+            </NavLink>
+          </div>
+        }
+      </div>
+    </header>
   );
 }
 

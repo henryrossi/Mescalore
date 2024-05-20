@@ -1,117 +1,62 @@
 .header {
-  max-width: 90em;
+  position: sticky;
   top: 0;
-  overflow: auto;
-  position: fixed;
-  z-index: 100;
-  width: 100%;
-  background-color: #ffffff;
 }
 
-.nav {
-  float: left;
-  width: 100%;
-  height: 80px;
+.header-container {
+  height: 4rem;
+  width: 95%;
+  margin: auto;
+  border-bottom: 1px solid #BABABA;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
-header nav a {
-  display: inline-block;
+.navbar {
+  flex: auto;
+}
+
+.header input {
+  display: none;
+  height: 2rem;
+  flex: 1;
+  padding-left: 0.5rem;
+  border: 1px solid #BABABA;
+  border-radius: 0.25rem;
+}
+
+.header a {
   text-decoration: none;
-  color: black;
-  font-family: Lato, Helvetica, sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 1em;
-  line-height: 25px;
-  text-align: center;
-  margin: 30px 0 0 7%;
-}
-
-a.active {
-  color: #588b8b;
-}
-
-.searchButton {
-  border: none;
-  cursor: pointer;
-  background-color: #ffffff;
-  float: right;
-  padding: 30px 7% 0 0;
-}
-
-.searchBar {
-  display: none;
-  float: right;
-  width: 20%;
-  height: 30px;
-  font-size: 1.1em;
-  border: 1px solid #bababa;
-  border-right: none;
-  border-radius: 10px 0 0 10px;
-  background: #f9f9f9;
-  margin: 28px 0 0;
-  padding-left: 1%;
-}
-
-.searchBarButton {
-  display: none;
-  cursor: pointer;
-  padding: 2px 5px 0 0;
-  float: right;
-  height: 30px;
-  margin: 28px 3% 0 0;
-  border: 1px solid #bababa;
-  border-left: none;
-  border-radius: 0 10px 10px 0;
-  background: #f9f9f9;
-}
-
-.searchBar:focus {
-  outline: none;
-}
-
-.hr {
-  border: 0;
-  border-top: 1px solid #bababa;
-  clear: both;
-  margin: 79px 3% 0;
-}
-
-.padding {
-  height: 80px;
-  width: 100%;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
 }
 
 .user-auth {
   display: none;
-  float: right;
-  font-size: 0.8em;
-  margin: 30px 3% 0 0;
 }
 
-@media only screen and (min-width: 40em) {
-  .searchButton {
-    display: none;
+.header-search-bar-button { 
+  background-color: transparent;
+  height: 2rem;
+  padding: 0 0.5rem;
+  border: none;
+  cursor: pointer;
+}
+
+@media only screen and (min-width: 35rem) {
+  .header input {
+    display: flex;
   }
-  .searchBar {
-    display: inline-block;
-  }
-  .searchBarButton {
-    display: inline-block;
-  }
-  .user-auth {
-    display: inline-block;
+
+  .header-search-bar-button {
+    position: relative;
+    right: 2rem;
   }
 }
 
-@media only screen and (min-width: 63em) {
-  header nav a {
-    font-size: 1.2em;
-  }
-  .user-auth {
-    font-size: 1em;
-  }
-  .searchBar {
-    width: 35%;
+@media only screen and (min-width: 50rem) {
+  .header .user-auth {
+    display: flex;
   }
 }
