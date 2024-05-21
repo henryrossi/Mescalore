@@ -1,105 +1,52 @@
-.hgroup {
-  float: left;
-  width: 90%;
+.main-container-home {
+  max-width: min(95%, 90rem);
+  margin: auto;
 }
 
-.title {
-  margin: 80px 15% 5px 7%;
-  font-size: 3.5em;
-  font-family: "Jua", sans-serif;
+.relative-positioned-home {
+  position: relative;
 }
 
-.desc {
-  font-family: Arial, Helvetica, sans-serif;
-  line-height: 25px;
-  font-size: 1.2em;
-  color: #c8553d;
-  margin: 0 7%;
+.main-container-home h1 {
+  margin: 1em 0 0.2em 0;
 }
 
-.createLink {
-  margin-top: 50px;
-  font-family: "Jua", sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 1.25em;
-  line-height: 25px;
-  text-decoration: none;
-  color: #588b8b;
-  display: block;
+.main-container-home h2 {
+  margin: 1em 0;
 }
 
-.logOutButton {
-  margin-top: 20px;
-  padding: 0;
-  font-family: "Jua", sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 1.25em;
-  line-height: 25px;
-  background-color: #ffffff;
-  cursor: pointer;
-  border: none;
-  color: #588b8b;
+.couple-img-home {
+  width: 100%;
+  max-width: none;
 }
 
-.home-drawing {
-  display: block;
+.background-home::before {
+  content: "";
+  top: calc(-0.1 * min(95vw, 90rem));
+  height: calc(0.1 * min(95vw, 90rem));
+  width: 100%;
+  position: absolute;
+  background-color: #588B8B;
+  z-index: -100;
 }
 
-.article {
-  height: auto;
-  background-color: #588b8b;
-  padding: 200px 5%;
-  overflow: auto;
+.grid-home {
+  display: grid;
 }
 
-.article-title {
-  margin: 7% 0;
-  color: #f0e6c4;
-  font-family: Arial, Helvetica, sans-serif;
-  font-style: italic;
-  font-size: 1.5em;
-  line-height: 25px;
-}
-
-.article-text {
-  font-family: Arial, Helvetica, sans-serif;
-  line-height: 25px;
-  font-size: 1.2em;
-  color: #fff;
-  margin-bottom: 50px;
-}
-
-@media only screen and (min-width: 40em) {
-  .article-img {
-    float: left;
-    width: 48%;
+@media only screen and (min-width: 55rem) {
+  .grid-home {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
   }
-  .article-title {
-    float: right;
-    width: 50%;
-  }
-  .article-text {
-    float: right;
-    width: 45%;
-    margin-right: 5%;
-  }
-}
 
-@media only screen and (min-width: 63em) {
-  .title {
-    font-size: 5em;
+  .grid-image-home {
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
   }
-  .desc {
-    font-size: 1.5em;
-  }
-  .article-title {
-    font-size: 2.4em;
-    line-height: 35px;
-  }
-  .article-text {
-    font-size: 1.5em;
-    line-height: 28px;
+
+  .grid-text-home {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
   }
 }

@@ -258,6 +258,13 @@ body {
 }
 
 
+/* Fonts */
+.jua {
+  font-family: "Jua", sans-serif;
+  font-style: normal;
+  font-weight: 500;
+}
+
 /*
   font sizes
   colors
