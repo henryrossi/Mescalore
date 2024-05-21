@@ -8,12 +8,10 @@ export default function Mescolare() {
     const [authenticated, setAuthenticated] = React.useState(localStorage.getItem("token") ? true : false);
 
     return (
-        <>
-            <authContext.Provider value={{ authenticated, setAuthenticated }}>
-                <Navbar />
-            </authContext.Provider>
+        <authContext.Provider value={{ authenticated, setAuthenticated }}>
+            <Navbar />
             <Outlet />
             <Footer />
-        </>
-    );
+        </authContext.Provider>
+);
 }

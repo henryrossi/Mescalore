@@ -14,8 +14,6 @@ export default function RecipeEditorPicturePage({
   const [modalOpen, setModalOpen] = React.useState(false);
   const img = React.useRef<HTMLImageElement>(null);
 
-  console.log(img);
-
   return (
     <>
       <button 
@@ -24,16 +22,6 @@ export default function RecipeEditorPicturePage({
       >
         Uplaod a new photo
       </button>
-      {/* <input
-        type="file"
-        onChange={(e) => {
-          dispatch({
-            type: "changeInput",
-            variable: "picture",
-            value: e.target.files[0],
-          });
-        }}
-      /> */}
       {recipeData.picture ? (
         <>
           <img ref={img} 

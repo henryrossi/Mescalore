@@ -1,12 +1,9 @@
 import * as React from "react";
 import Unavailable from "../components/Unavailable";
-import RecipeEditorInfoPage from "./RecipeEditorInfoPage";
-import RecipeEditorDescriptionPage from "./RecipeEditorDescriptionPage";
-import RecipeEditorPicturePage from "./RecipeEditorPicturePage";
-import RecipeEditorIngredientsPage from "./RecipeEditorIngredientsPage";
-import RecipeEditorInstructionsPage from "./RecipeEditorInstructionsPage";
 import "./RecipeEditor.css";
 import { RecipeData2 } from "../types";
+import authContext from "../authContext";
+import RecipeEditorPicturePage from "./RecipeEditorPicturePage";
 
 export default function RecipeEditor({
   recipeData,
@@ -19,121 +16,106 @@ export default function RecipeEditor({
   onSubmit: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => Promise<void>
   handleDelete: (() => void) | null
 }) {
-  const [currentEditorPage, setCurrentEditorPage] = React.useState(0);
+  const { authenticated } = React.useContext(authContext);
 
-  // const autosizeInputStyle = {
-  //   minWidth: 200,
-  //   maxWidth: 400,
-  //   fontSize: "0.95em",
-  //   backgroundColor: "#ffffff",
-  //   border: "1px solid #bababa",
-  //   borderRadius: 10,
-  //   height: 36,
-  //   marginBottom: 20,
-  //   marginRight: 20,
-  //   paddingLeft: 10,
-  // };
-
-  const getSidebarClassBasedOnPage = (page: number) => {
-    return currentEditorPage === page ? "current-page" : "";
-  };
-
-  if (!localStorage.getItem("token")) {
+  if (!authenticated) {
     return <Unavailable />;
   }
 
+  const categoryChocies = [
+    "breakfast",
+    "lunch",
+    "dinner",
+    "snack",
+    "dessert",
+    "beverage",
+  ];
+  const handleCategoryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let categories = [...recipeData.categories];
+    const category = e.target.value;
+    if (e.target.checked) {
+      categories.push(category);
+      setRecipeData({...recipeData, categories: categories});
+      return;
+    }
+    const index = categories.indexOf(category);
+    if (index !== -1) {
+      categories.splice(index, 1);
+      setRecipeData({...recipeData, categories: categories});
+    }
+  }
+
+  console.log(recipeData);
+
   return (
-    <div className="recipe-editor">
-      <h1>Recipe Editor</h1>
-      <div className="sidebar">
-        <button
-          className={getSidebarClassBasedOnPage(0)}
-          onClick={() => setCurrentEditorPage(0)}
-        >
-          Info
-        </button>
-        <button
-          className={getSidebarClassBasedOnPage(1)}
-          onClick={() => setCurrentEditorPage(1)}
-        >
-          Description
-        </button>
-        <button
-          className={getSidebarClassBasedOnPage(2)}
-          onClick={() => setCurrentEditorPage(2)}
-        >
-          Picture
-        </button>
-        <button
-          className={getSidebarClassBasedOnPage(3)}
-          onClick={() => setCurrentEditorPage(3)}
-        >
-          Ingredients
-        </button>
-        <button
-          className={getSidebarClassBasedOnPage(4)}
-          onClick={() => setCurrentEditorPage(4)}
-        >
-          Instructions
-        </button>
-      </div>
-      <div className="input-container">
-        {currentEditorPage === 0 && (
-          <RecipeEditorInfoPage
-            recipeData={recipeData}
-            setRecipeData={setRecipeData}
-          />
-        )}
-        {currentEditorPage === 1 && (
-          <RecipeEditorDescriptionPage
-            recipeData={recipeData}
-            setRecipeData={setRecipeData}
-          />
-        )}
-        {currentEditorPage === 2 && (
-          <RecipeEditorPicturePage
-            recipeData={recipeData}
-            setRecipeData={setRecipeData}
-          />
-        )}
-        {currentEditorPage === 3 && (
-          <RecipeEditorIngredientsPage
-            recipeData={recipeData}
-            setRecipeData={setRecipeData}
-          />
-        )}
-        {currentEditorPage === 4 && (
-          <RecipeEditorInstructionsPage
-            recipeData={recipeData}
-            setRecipeData={setRecipeData}
-          />
-        )}
-        {currentEditorPage < 4 ? (
-          <button
-            className="page-control-button"
-            onClick={() => setCurrentEditorPage(currentEditorPage + 1)}
-          >
-            Next
-          </button>
-        ) : (
-          <button className="page-control-button submit-button" onClick={onSubmit}>
+    <div className="recipe-editor-container">
+        <form>
+          <div>
+            <label htmlFor="name_input">Enter the recipe name.</label>
+            <input
+              type="text"
+              id="name_input"
+              value={recipeData.name}
+              onChange={(e) =>
+                setRecipeData({...recipeData, name: e.target.value})
+              }
+            />
+          </div>
+          <div>
+            <label htmlFor="servings_input">How many servings?</label>
+            <input
+              type="text"
+              id="servings_input"
+              value={recipeData.servings}
+              onChange={(e) =>
+                setRecipeData({...recipeData, servings: e.target.value})
+              }
+            />
+          </div>
+          <div>
+            <label htmlFor="time_input">Enter the number of minutes needed to prepare.</label>
+            <input
+              type="text"
+              id="time_input"
+              value={recipeData.time}
+              onChange={(e) =>
+                setRecipeData({...recipeData, time: e.target.value})
+              }
+            />
+          </div>
+          <fieldset className="categories-editor">
+            <legend>Choose what categories this recipe falls into.</legend>
+            {categoryChocies.map(category => 
+              <label key={category}>
+                <input 
+                  type="checkbox" 
+                  value={category}
+                  onChange={handleCategoryChange}
+                />
+                {category}
+              </label>
+            )}
+          </fieldset>
+          <div>
+            <label htmlFor="desc_input">Recipe Description</label>
+            <textarea
+              id="desc_input"
+              defaultValue={recipeData.description}
+              onChange={(e) =>
+                setRecipeData({...recipeData, description: e.target.value})
+              }
+            />
+          </div>
+          <button className="" onClick={onSubmit}>
             {handleDelete ? "Update Recipe" : "Create Recipe"}
           </button>
-        )}
-        {currentEditorPage > 0 && (
-          <button
-            className="page-control-button"
-            onClick={() => setCurrentEditorPage(currentEditorPage - 1)}
-          >
-            Back
-          </button>
-        )}
+        </form>
+
         {handleDelete && (
           <button onClick={handleDelete} className="delete-button">
             Permanently Delete Recipe
           </button>
         )}
-      </div>
     </div>
   );
 }
