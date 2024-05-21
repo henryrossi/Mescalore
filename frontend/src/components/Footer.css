@@ -1,17 +1,12 @@
-.footer {
-  clear: both;
-  height: 50px;
+footer {
+  display: flex;
+  align-items: center;
+  height: 4rem;
   width: 100%;
   background-color: #ffffff;
-  bottom: 0;
 }
 
-.footer p {
-  margin-top: 25px;
+footer p {
+  width: 100%;
   text-align: center;
-  font-family: Lato, Helvetica, sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 1em;
-  line-height: 25px;
 }

@@ -265,6 +265,12 @@ body {
   font-weight: 500;
 }
 
+.lato {
+  font-family: "Lato", Helvetica, sans-serif;
+  font-style: normal;
+  font-weight: 500;
+}
+
 /*
   font sizes
   colors
