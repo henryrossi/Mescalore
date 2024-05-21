@@ -1,5 +1,6 @@
 import * as React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+import authContext from "../authContext";
 import { IconSearch } from "@tabler/icons-react";
 import "./Navbar.css";
 
@@ -7,9 +8,7 @@ function Navbar() {
   const [searchInput, setSearchInput] = React.useState("");
   const navigate = useNavigate();
 
-  const handleNavigateEmpty = () => {
-    navigate("/search", { state: { search: "" } });
-  };
+  const { authenticated, setAuthenticated } = React.useContext(authContext);
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
@@ -22,9 +21,9 @@ function Navbar() {
   };
 
   return (
-    <header className="bg-white header">
-      <div className="header-container">
-        <nav className="navbar">
+    <header className="bg-white header-navbar">
+      <div className="header-container-navbar">
+        <nav className="links-navbar">
           <NavLink className={({ isActive, isPending }) => {
               return isActive ? "blue" : "black";
             }} to="/"
@@ -46,37 +45,56 @@ function Navbar() {
           >
             about us
           </NavLink>
-        </nav>
-
-        <input
-          className="searchBar"
-          type="text"
-          placeholder="Search"
-          onChange={(event) => setSearchInput(event.target.value)}
-          onKeyDown={handleKeyDown}
-        />
-        <button onClick={handleNavigate} className="header-search-bar-button">
-          <IconSearch size={'1rem'}/>
-        </button>
-
-        {!localStorage.getItem("token") &&
-          <div className="user-auth">
+          {authenticated && 
             <NavLink 
               className={({ isActive, isPending }) => {
                 return isActive ? "blue" : "black";
               }}
-              to="/sign-in"
+              to="/create"
             >
-              sign in
+              create
             </NavLink>
-            <NavLink 
-              className="bg-blue white"
-              to="/sign-up"
+          }
+        </nav>
+        <div className="search-container-navbar">
+          <input
+            type="text"
+            placeholder="Search"
+            onChange={(event) => setSearchInput(event.target.value)}
+            onKeyDown={handleKeyDown}
+          />
+          <button onClick={handleNavigate}>
+            <IconSearch size={'1rem'}/>
+          </button>
+        </div>
+
+        <div className="user-auth-navbar">
+          {authenticated ?
+            <button 
+            className="bg-blue white"
+              onClick={() => setAuthenticated(false)}
             >
-              sign up
-            </NavLink>
-          </div>
-        }
+              sign out
+            </button> 
+            :
+            <>
+              <NavLink 
+                className={({ isActive, isPending }) => {
+                  return isActive ? "blue" : "black";
+                }}
+                to="/sign-in"
+              >
+                sign in
+              </NavLink>
+              <NavLink 
+                className="bg-blue white"
+                to="/sign-up"
+              >
+                sign up
+              </NavLink>
+            </>
+          }
+        </div>
       </div>
     </header>
   );

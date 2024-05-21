@@ -1,19 +1,10 @@
 import * as React from "react";
-import { Link } from "react-router-dom";
-import { IconPencilPlus, IconLogout } from "@tabler/icons-react";
 import "./Home.css";
-import "@fontsource/jua";
+import "@fontsource/jua"; // ???
 import Couple from "../images/hotcouple.png";
 import Kitchen from "../images/kitchen.png";
 
 function Home() {
-  const [loggedIn, setAuthorization] = React.useState(localStorage.getItem("token"));
-
-  const handleLogout = () => {
-    // To be secure I believe I should also remove the Token from the backend database
-    localStorage.removeItem("token");
-    setAuthorization(null);
-  };
 
   return (
     <>
