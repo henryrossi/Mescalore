@@ -57,15 +57,23 @@ export default function Modal({
 
     return (
         <div className="modal">
-            <div className="modal-content">
-                <button type="button" className="close-modal" onClick={closeModal}>Close</button>
-                <input
-                    className="modal-upload"
-                    type="file"
-                    onChange={onSelectFile}
-                />
+            <div className="modal-content border-grey bg-white">
+                <div className="control-container-modal">
+                    <input
+                        type="file"
+                        onChange={onSelectFile}
+                    />
+                    <button 
+                        type="button" 
+                        className="btn btn-red white text-btn" 
+                        onClick={closeModal}
+                    >
+                        Close
+                    </button>
+                </div>
                 {error && <p className="modal-error">{error}</p>}
                 {imageURL &&
+                <>
                     <div className="modal-image-container">
                         <ReactCrop
                             crop={crop}
@@ -79,47 +87,48 @@ export default function Modal({
                         >
                             <img 
                                 ref={imageRef}
-                                style={{ maxHeight: "90vh" }}
+                                className="crop-image-preview-modal"
                                 src={imageURL} 
                                 alt="uploaded recipe"
                                 onLoad={onImageLoad}
                             />
                         </ReactCrop>
-                        <button 
-                            type="button"
-                            className="modal-crop-button"
-                            onClick={() => {
-                                // quick fix, needs revisit
-                                if (canvasRef.current === null || imageRef.current === null || crop === undefined) {
+                    </div>
+                    <button 
+                        type="button"
+                        className="btn btn-red white text-btn crop-button-modal"
+                        onClick={() => {
+                            // quick fix, needs revisit
+                            if (canvasRef.current === null || imageRef.current === null || crop === undefined) {
+                                return;
+                            }
+                            setCanvasPreview(
+                                imageRef.current,
+                                canvasRef.current,
+                                convertToPixelCrop(
+                                    crop, 
+                                    imageRef.current.width, 
+                                    imageRef.current.height
+                                )
+                            );
+                            canvasRef.current.toBlob((blob) => {
+                                if (blob === null) {
+                                    setError("Unable to crop file");
                                     return;
                                 }
-                                setCanvasPreview(
-                                    imageRef.current,
-                                    canvasRef.current,
-                                    convertToPixelCrop(
-                                        crop, 
-                                        imageRef.current.width, 
-                                        imageRef.current.height
-                                    )
-                                );
-                                canvasRef.current.toBlob((blob) => {
-                                    if (blob === null) {
-                                        setError("Unable to crop file");
-                                        return;
-                                    }
-                                    let file = new File([blob], "newImage.png", { type: "image/png"});
-                                    if (!file) {
-                                        setError("Unable to crop file");
-                                    } else {
-                                        setRecipeData({...recipeData, picture: file})
-                                        closeModal();
-                                    }
-                                }, "image/png");
-                            }}
-                        >
-                            Crop Image
-                        </button>
-                    </div>
+                                let file = new File([blob], "newImage.png", { type: "image/png"});
+                                if (!file) {
+                                    setError("Unable to crop file");
+                                } else {
+                                    setRecipeData({...recipeData, picture: file})
+                                    closeModal();
+                                }
+                            }, "image/png");
+                        }}
+                    >
+                        Crop Image
+                    </button>
+                </>
                 }
                 {crop && 
                         <canvas style={{

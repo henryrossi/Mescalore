@@ -1,7 +1,7 @@
 .modal {
     position: fixed;
     z-index: 1;
-    padding-top: 120px;
+    padding-top: 6rem;
     left: 0;
     top: 0;
     width: 100%;
@@ -13,44 +13,35 @@
 
 .modal-content {
     overflow-y: auto;
-    background-color: #f9f9f9;
-    border: 1px solid #bababa;
-    border-radius: 30px;
-    min-height: 95%;
-    max-height: 90%;
     margin: auto;
-    padding: 20px 2%;
+    padding: 1.5rem 2%;
     width: 90%;
+    min-height: 90%;
 }
 
-.close-modal {
-    float: right;
-    padding: 5px 10px;
-    border-radius: 15px;
-    cursor: pointer;
-    background-color: #c8553d;
-    color: #ffffff;
-    border: 1px solid #c8553d;
+.control-container-modal {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
 }
 
 .modal-error {
-    padding: 20px 5px;
+    padding: 1.5rem 0.5rem;
     color: #ff0f0f;
 }
 
 .modal-image-container {
-    padding: 20px 10px;
-    margin: auto;
-    width: 95%;
-    max-height: 100%;
+    padding: 1.5rem 0.75rem;
+    overflow: auto;
 }
 
-.modal-crop-button {
+.crop-image-preview-modal {
+    height: calc(100vh - (22rem + 2px));
+    /* calc(6rem 1.5rem 2rem 2px 3rem 4rem 1.5rem + bottom padding say 2rem)*/
+}
+
+.crop-button-modal {
     display: block;
-    margin: 20px 0;
-    background-color: #ffffff;
-    border: 1px solid #bababa;
-    padding: 10px;
-    border-radius: 15px;
-    cursor: pointer;
+    margin: 1rem 0;
 }

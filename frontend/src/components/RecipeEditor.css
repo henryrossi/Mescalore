@@ -1,6 +1,6 @@
 .recipe-editor-container {
   max-width: min(95%, 90rem);
-  margin: auto;
+  margin: 4rem auto;
   padding: 2rem;
   border-radius: 0.75rem;
 }
