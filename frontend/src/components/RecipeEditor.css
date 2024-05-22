@@ -1,46 +1,99 @@
 .recipe-editor-container {
-  width: 95%;
+  max-width: min(95%, 90rem);
   margin: auto;
+  padding: 2rem;
+  border-radius: 0.75rem;
 }
 
-.recipe-editor-container label, .recipe-editor-container legend {
+.recipe-editor-container label, 
+.recipe-editor-container legend {
   display: block;
-  padding: 1em 0.2em;
+  padding: 1em 0;
+}
+
+.recipe-editor-container input[type="text"], 
+.recipe-editor-container textarea {
+  display: block;
+  width: 100%;
 }
 
 .recipe-editor-container input[type="text"] {
-  display: block;
-  width: 100%;
-  border-radius: 0.25rem;
-  border: 1px solid #BABABA;
   height: 2rem;
 }
 
 .recipe-editor-container textarea {
-  display: block;
-  width: 100%;
-  border-radius: 0.25rem;
-  border: 1px solid #BABABA;
   height: 10rem;
+  resize: vertical;
 }
 
 .recipe-editor-container form {
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: auto;
-  gap: 20px;
+  gap: 1.5rem;
 }
 
 .categories-editor {
   display: flex;
   flex-wrap: wrap;
-  gap: 0 10px;
+  gap: 0 0.75rem;
   justify-content: start;
   align-content: start;
 }
 
-.categories-editor label {
-  display: inline-block;
-  padding: 1em 0.2em 0;
+.categories-editor input[type="checkbox"], 
+.categories-editor label{
+  cursor: pointer;
 }
 
+.categories-editor input[type="checkbox"] {
+  width: 0.8rem;
+  height: 0.8rem;
+}
+
+.categories-editor label {
+  display: inline-block;
+  padding: 0.5em 0.2em 0;
+}
+
+.recipe-editor-container img {
+  display: block;
+  border-radius: 0.25em;
+}
+
+.picture-button-editor {
+  margin: 0 1rem 1rem 0;
+}
+
+.no-image-editor {
+  width: 100%;
+  max-width: 600px;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.list-container-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.list-container-editor li {
+  display: flex;
+  align-items: start;
+  gap: 1rem;
+}
+
+.add-item-button-editor {
+  margin-top: 0.75rem;
+}
+
+@media only screen and (min-width: 45rem) {
+  .recipe-editor-container form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+  }
+}

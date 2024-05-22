@@ -71,7 +71,7 @@ function Navbar() {
         <div className="user-auth-navbar">
           {authenticated ?
             <button 
-            className="bg-blue white"
+            className="bg-blue white text-btn"
               onClick={() => setAuthenticated(false)}
             >
               sign out

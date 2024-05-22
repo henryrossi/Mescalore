@@ -161,10 +161,18 @@ img {
   max-width: 100%;
 }
 
+p {
+  margin-bottom: 1em;
+}
+
 body {
   font-family: "Lato", sans-serif;
   font-style: normal;
   font-weight: 500;
+}
+
+button {
+  cursor: pointer;
 }
 
 /* Text Size */
@@ -257,6 +265,10 @@ body {
   background-color: #F0E6C4;
 }
 
+.bg-grey {
+  background-color: #F7F7F7;
+}
+
 
 /* Fonts */
 .jua {
@@ -271,9 +283,38 @@ body {
   font-weight: 500;
 }
 
-/*
-  font sizes
-  colors
-  background colors
-  borders?
-*/
+/* Buttons */
+.btn {
+  padding: 0.5em 1em;
+  border-radius: 0.25em;
+}
+
+.btn-white {
+  background-color: #FFFFFF;
+  border: 1px solid #BABABA;
+}
+
+.btn-red {
+  background-color: #C8553D;
+  border: 1px solid #C8553D;
+}
+
+.btn-blue {
+  background-color: #588B8B;
+  border: 1px solid #588B8B;
+}
+.text-btn {
+  font-size: 1rem;
+  line-height: 1rem;
+}
+
+/* Borders */
+.border-grey {
+  /* #BABABA definitely needs to be darker! */
+  border: 1px solid #BABABA;
+  border-radius: 0.25rem;
+}
+
+.no-border {
+  border: none;
+}

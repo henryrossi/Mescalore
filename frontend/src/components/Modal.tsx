@@ -58,7 +58,7 @@ export default function Modal({
     return (
         <div className="modal">
             <div className="modal-content">
-                <button className="close-modal" onClick={closeModal}>Close</button>
+                <button type="button" className="close-modal" onClick={closeModal}>Close</button>
                 <input
                     className="modal-upload"
                     type="file"
@@ -86,6 +86,7 @@ export default function Modal({
                             />
                         </ReactCrop>
                         <button 
+                            type="button"
                             className="modal-crop-button"
                             onClick={() => {
                                 // quick fix, needs revisit
