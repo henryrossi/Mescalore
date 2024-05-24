@@ -1,194 +1,55 @@
-.recipe-info {
-  margin: 0 10%;
+.page-container-recipe {
+    max-width: min(95%, 90rem);
+    margin: 2rem auto 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
 }
 
-.recipe-info h1 {
-  margin: 50px 0 30px;
-  font-family: "Jua", sans-serif;
-  font-style: normal;
-  font-weight: 200;
-  font-size: 2.5em;
-  color: #212121;
-  width: 90%;
-  display: inline-block;
-}
-
-.recipe-info .edit-link {
-  display: inline-block;
-  color: #212121;
-}
-
-.recipe-info span {
-  font-family: "Lato", sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 1em;
-  line-height: 25px;
-  color: #ffffff;
-  background-color: #C8553D;
-  padding: 6px 16px;
-  border-radius: 16px;
-  margin: 0 10px 10px 0;
-  white-space: nowrap;
-  float: left;
-}
-
-.recipe-info p {
-  font-family: "Lato", sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 1.3em;
-  line-height: 25px;
-  margin: 30px 0;
-  clear: both;
-}
-
-.recipe-info img {
-  width: 90%;
-  margin: 0 5% 20px;
-  border-radius: 30px;
-  filter: drop-shadow(0px 10px 5px #3c1811);
-}
-
-.recipe-info .noPicture {
-  width: 90%;
-  margin: 0 5% 20px;
-  border-radius: 30px;
-  aspect-ratio : 1 / 1;
-  background: #e5e5e5;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.recipe-info .noPicture .message {
-  font-family: "Jua", sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 1.2em;
-  color: #588b8b;
-}
-
-.recipe-method {
-  background-color: #C8553D;
-  padding: 100px 20%;
-  position: relative;
-  overflow-x: clip;
-}
-
-.recipe-method::before {
-  content: "";
-  background-color: #C8553D;
-  display: block;
-  width: 140%;
-  height: 200px;
-  border-radius: 50%;
-  position: absolute;
-  top: -130px;
-  left: -20%;
-  z-index: -1;
-}
-
-.recipe-method .ingredients {
-  width: 100%;
-  margin-bottom: 50px;
-}
-
-.recipe-method .instructions {
-  width: 90%;
-  margin-left: 25px;
-}
-
-.recipe-method h2 {
-  font-family: "Lato", sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 1.8em;
-  line-height: 25px;
-  color: #F0E6C4;
-  margin-bottom: 35px;
-}
-
-.recipe-method li {
-  font-family: "Lato", sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 1.2em;
-  line-height: 35px;
-  color: #ffffff;
-}
-
-.recipe-method .ingredients li{
-  cursor: pointer;
-}
-
-.recipe-method .ingredients .line-through {
-  color: lightgrey;
-  text-decoration: line-through #F0E6C4;
-}
-
-.recipe-method .instructions h2 {
-  position: relative;
-  right: 25px;
-}
-
-.recipe-method .instructions li {
-  list-style-type: decimal;
-  line-height: 25px;
-  margin-bottom: 10px;
-}
-
-@media only screen and (min-width: 30em) {
-  .recipe-method::before {
-    height: 300px;
-    top: -200px;
-  }
-
-  .recipe-info img {
-    width: 70%;
-    margin: 0 15% 20px;
-  }
-}
-
-@media only screen and (min-width: 40em) {
-  .recipe-method {
-    padding: 100px 10%;
+.info-container-recipe {
     display: flex;
-  }
-
-  .recipe-method .ingredients {
-    width: 30%;
-    margin-right: 10%;
-    margin-bottom: 0;
-  }
-
-  .recipe-method .instructions {
-    width: 60%;
-    margin-left: 0;
-  }
+    flex-wrap: wrap;
+    gap: 0 1rem;
 }
 
-@media only screen and (min-width: 55em) {
-  .recipe-method::before {
-    height: 500px;
-    top: -300px;
-  }
+.info-container-recipe h1 {
+    width: 100%;
+}
 
-  .recipe-info img {
-    width: 50%;
-    margin: 0 25% 20px;
-  }
+.category-container-recipe {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: end;
+}
 
-  .recipe-info .noPicture {
-    width: 50%;
-    margin: 0 25% 20px;
-  }
+.category-container-recipe div {
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+}
 
-  .recipe-method h2 {
-    font-size: 2em;
-  }
+.page-container-recipe img {
+    border-radius: 0.5rem;
+}
 
-  .recipe-method li {
-    font-size: 1.3em;
-  }
+.bottom-background-recipe {
+    margin-top: 2rem;
+}
+
+.bottom-container-recipe {
+    max-width: min(95%, 90rem);
+    min-height: 10rem;
+    margin: auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+.bottom-container-recipe h2 {
+    margin: 2rem 0;
+}
+
+.instructions-recipe {
+    list-style-type: decimal;
+    margin-left: 1.5rem;
 }

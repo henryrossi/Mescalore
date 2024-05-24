@@ -32,7 +32,6 @@ export default function Recipe() {
   });
 
   if (error) {
-    // console.log(error.message);
     return <Unavailable />;
   }
   
@@ -42,53 +41,54 @@ export default function Recipe() {
         <Loading />
       ) : (
         <>
-          <div className="recipe-info">
-            <h1>{data.getRecipeByName.name}</h1>
-            {localStorage.getItem("token") && (
-              <Link to={"/edit/" + recipeName} className="edit-link">
-                <IconEdit />
-              </Link>
-            )}
-            <ul>
-              <li key="servings">
-                <span>{data.getRecipeByName.servings} servings</span>
-              </li>
-              <li key="time">
-                <span>{data.getRecipeByName.time} minutes</span>
-              </li>
+          <div className="page-container-recipe"> 
+            <div className="info-container-recipe">
+              <h1 className="text-5xl jua">{data.getRecipeByName.name}</h1>
+              {localStorage.getItem("token") && (
+                <Link to={"/edit/" + recipeName} className="edit-link">
+                  <IconEdit />
+                </Link>
+              )}
+              <div>{data.getRecipeByName.servings} servings</div>
+              <div>{data.getRecipeByName.time} minutes</div>
+            </div>
+            <ul className="category-container-recipe">
               {data.getRecipeByName.category.map((tag) => (
                 <li key={tag.name}>
-                  <span>{tag.name.toLowerCase()}</span>
+                  <div className="bg-red white">{tag.name.toLowerCase()}</div>
                 </li>
               ))}
             </ul>
-            <p>{data.getRecipeByName.description}</p>
             {data.getRecipeByName.imageURL ? 
-            <img src={data.getRecipeByName.imageURL} alt="" /> : 
-            <div className="noPicture">
-              <p className="message">image unavailable</p>
-            </div>}
+              <img src={data.getRecipeByName.imageURL} alt="" /> : 
+              <div>
+                <p>image unavailable</p>
+              </div>
+            }
+            <p>{data.getRecipeByName.description}</p>
           </div>
-          <div className="recipe-method">
-            <div className="ingredients">
-              <h2>Ingredients</h2>
-              <ul>
-                {data.getRecipeByName.ingredientList.map((obj, index) => (
-                  <li key={index} onClick={handleIngredientLineThrough}>
-                    {obj.measurement} {obj.ingredient.name}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className="instructions">
-              <h2>Instructions</h2>
-              <ol>
-                {data.getRecipeByName.instructions
-                  .split("\r")
-                  .map((instruction) => (
-                    <li key={instruction}>{instruction}</li>
+          <div className="bg-red bottom-background-recipe">
+            <div className="bottom-container-recipe">
+              <div>
+                <h2 className="text-3xl yellow">Ingredients</h2>
+                <ul>
+                  {data.getRecipeByName.ingredientList.map((obj, index) => (
+                    <li key={index} onClick={handleIngredientLineThrough} className="white">
+                      {obj.measurement} {obj.ingredient.name}
+                    </li>
                   ))}
-              </ol>
+                </ul>
+              </div>
+              <div>
+                <h2 className="text-3xl yellow">Instructions</h2>
+                <ol>
+                  {data.getRecipeByName.instructions
+                    .split("\r")
+                    .map((instruction) => (
+                      <li key={instruction} className="white instructions-recipe">{instruction}</li>
+                    ))}
+                </ol>
+              </div>
             </div>
           </div>
         </>
