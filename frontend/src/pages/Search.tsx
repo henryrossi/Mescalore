@@ -90,17 +90,18 @@ export default function Search() {
 
   return (
     <>
-      <input
-        className="searchInput"
-        type="text"
-        value={searchText}
-        placeholder="Search through our recipes here"
-        onChange={(event) => setSearchText(event.target.value)}
-        onKeyDown={handleKeyDown}
-      />
-      <button className="searchInputButton" onClick={handleRefetch}>
-        <IconSearch className="searchIcon" />
-      </button>
+      <section className="search-bar-search">
+        <input
+          type="text"
+          value={searchText}
+          placeholder="Search through our recipes here"
+          onChange={(event) => setSearchText(event.target.value)}
+          onKeyDown={handleKeyDown}
+        />
+        <button onClick={handleRefetch}>
+          <IconSearch size={'1rem'}/>
+        </button>
+      </section>
       {loading || loadingCount ? (
         <Loading />
       ) : (

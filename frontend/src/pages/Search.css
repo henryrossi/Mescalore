@@ -1,63 +1,19 @@
-.searchInput {
-  margin: 80px 0 80px 5%;
-  padding-left: 20px;
-  width: 80%;
-  height: 40px;
-  border: 1px solid #bababa;
-  border-right: none;
-  border-radius: 15px 0 0 15px;
-  background: #f9f9f9;
-  font-family: "Lato", sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 1em;
-  line-height: 25px;
-  float: left;
+.search-bar-search {
+  max-width: min(95%, 90rem);
+  margin: 2rem auto;
+  position: relative;
 }
 
-.searchInput:focus {
-  outline: none;
-}
-
-.searchInputButton {
-  margin: 80px 0 0;
-  height: 40px;
-  border: 1px solid #bababa;
-  border-left: none;
-  border-radius: 0 15px 15px 0;
-  background: #f9f9f9;
-}
-
-.searchIcon {
-  cursor: pointer;
-}
-
-.fetchMore {
-  margin: auto;
-  margin-bottom: 100px;
-  display: block;
-  clear: both;
-  cursor: pointer;
-  padding: 10px 20px;
-  border: 1px solid #bababa;
-  border-radius: 30px;
-  background: #f9f9f9;
-  font-family: "Lato", sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 1em;
-  line-height: 25px;
-}
-
-.searchPadding {
+.search-bar-search input {
+  height: 2rem;
   width: 100%;
-  height: 300px;
 }
 
-@media only screen and (min-width: 40em) {
-  .searchInput {
-    font-size: 1.1em;
-    margin-left: 10%;
-    width: 75%;
-  }
+.search-bar-search button {
+  height: 2rem;
+  position: absolute;
+  right: 0.2rem;
+  border: none;
+  cursor: pointer;
+  background-color: transparent;
 }
