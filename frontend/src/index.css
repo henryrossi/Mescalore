@@ -238,10 +238,10 @@ button {
 }
 
 .black {
-  color: #212121;
+  color: #000000;
 }
 .bg-black {
-  background-color: #212121;
+  background-color: #000000;
 }
 
 .red {
@@ -255,7 +255,8 @@ button {
   color: #588B8B;
 }
 .bg-blue {
-  background-color: #588B8B;
+  /* background-color: #588B8B; */
+  background-color: #79A9A9;
 }
 
 .yellow {
@@ -303,6 +304,26 @@ button {
   background-color: #588B8B;
   border: 1px solid #588B8B;
 }
+
+.btn-yellow {
+  background-color: #F7F7E3;
+  border: 1px solid #000000;
+}
+
+.blue-drop-shadow {
+  filter: drop-shadow(0.2rem 0.2rem #45acac);
+}
+
+.hover-blue-drop-shadow:hover {
+  filter: drop-shadow(0.2rem 0.2rem #45acac);
+}
+
+.btn-red {
+  background-color: #C8553D;
+  border: 1px solid #000000;
+  filter: drop-shadow(0.2rem 0.2rem #ffd12f);
+}
+
 .text-btn {
   font-size: 1rem;
   line-height: 1rem;
@@ -312,6 +333,11 @@ button {
 .border-grey {
   /* #BABABA definitely needs to be darker! */
   border: 1px solid #BABABA;
+  border-radius: 0.25rem;
+}
+
+.border-black {
+  border: 1px solid #000000;
   border-radius: 0.25rem;
 }
 

@@ -31,14 +31,17 @@ function Recipes() {
 
   return (
     <>
-      <h1 className="recipes">Explore some of our favorite recipes</h1>
-      <section className="filter">
-        <p> filter by </p>
-        <ul>
+      <section className="border-black main-container-recipes">
+        <h1 className="jua text-3xl">Explore some of our favorite recipes</h1>
+        <p className="red">filter by</p>
+        <ul className="filter-container-recipes">
           {tags.map((tag) => (
             <li key={tag}>
               <button
-                className={tag === selectedCategory ? "selectedTag" : ""}
+                className={tag === selectedCategory ? 
+                  "btn text-btn btn-yellow blue-drop-shadow" : 
+                  "btn text-btn btn-yellow hover-blue-drop-shadow"
+                }
                 onClick={handleClick}
               >
                 {tag}
