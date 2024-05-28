@@ -1,15 +1,16 @@
-.main-container-recipes {
+.main-container__recipes {
   max-width: min(95%, 90rem);
   margin: 2rem auto;
-  padding: 1rem;
 }
 
-.filter-container-recipes {
+.filter_title__recipes {
+  text-align: center;
+  border-bottom: 1px solid #000000;
+}
+
+
+.filter-container__recipes {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem 1rem;
-}
-
-.main-container-recipes p {
-  margin: 1rem 0;
 }

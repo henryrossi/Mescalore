@@ -18,14 +18,21 @@
   text-align: center;
 }
 
-@media only screen and (min-width: 35rem) {
+@media only screen and (min-width: 25rem) {
   .list-container__recipe-list  {
     grid-template-columns: 1fr 1fr;
   }
 }
 
-@media only screen and (min-width: 70rem) {
+
+@media only screen and (min-width: 45rem) {
   .list-container__recipe-list  {
     grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+@media only screen and (min-width: 70rem) {
+  .list-container__recipe-list  {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
   }
 }

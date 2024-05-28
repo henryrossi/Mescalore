@@ -31,24 +31,27 @@ function Recipes() {
 
   return (
     <>
-      <section className="border-black main-container-recipes">
-        <h1 className="jua text-3xl">Explore some of our favorite recipes</h1>
-        <p className="red">filter by</p>
-        <ul className="filter-container-recipes">
-          {tags.map((tag) => (
-            <li key={tag}>
-              <button
-                className={tag === selectedCategory ? 
-                  "btn text-btn btn-yellow blue-drop-shadow" : 
-                  "btn text-btn btn-yellow hover-blue-drop-shadow"
-                }
-                onClick={handleClick}
-              >
-                {tag}
-              </button>
-            </li>
-          ))}
-        </ul>
+      <section className="border-black main-container__recipes">
+        <div className="text-base bg-orange filter_title__recipes">FILTERING OPTIONS</div>
+        <div className="flex-col gap-1rem padding-1rem">
+          <h1 className="jua text-3xl">Explore some of our favorite recipes</h1>
+          <span className="red">filter by</span>
+          <ul className="filter-container__recipes">
+            {tags.map((tag) => (
+              <li key={tag}>
+                <button
+                  className={tag === selectedCategory ? 
+                    "btn text-btn btn-yellow blue-drop-shadow" : 
+                    "btn text-btn btn-yellow hover-blue-drop-shadow"
+                  }
+                  onClick={handleClick}
+                >
+                  {tag}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
       </section>
       {loading ? (
         <Loading />
