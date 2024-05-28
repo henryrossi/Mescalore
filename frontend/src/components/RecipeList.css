@@ -1,29 +1,31 @@
-.main-container-recipe-list {
+.main-container__recipe-list {
   max-width: min(95%, 90rem);
   margin: auto;
+}
+
+.list-container__recipe-list {
   display: grid;
   grid-template-columns: 1fr;
   gap: 1rem;
-  
 }
 
-.link-recipe-list {
+.link__recipe-list {
   text-decoration: none;
 }
 
-.link-recipe-list > p {
+.link__recipe-list > p {
   margin-top: 1rem;
   text-align: center;
 }
 
 @media only screen and (min-width: 35rem) {
-  .main-container-recipe-list {
+  .list-container__recipe-list  {
     grid-template-columns: 1fr 1fr;
   }
 }
 
 @media only screen and (min-width: 70rem) {
-  .main-container-recipe-list {
+  .list-container__recipe-list  {
     grid-template-columns: 1fr 1fr 1fr;
   }
 }

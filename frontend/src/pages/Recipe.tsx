@@ -4,20 +4,22 @@ import { ApolloError, useQuery } from "@apollo/client";
 import { GET_RECIPE_QUERY } from "../graphQL";
 import { RecipeData } from "../types";
 import { IconEdit } from "@tabler/icons-react";
+import authContext from "../authContext";
 import Loading from "../components/Loading";
 import "./Recipe.css";
 import Unavailable from "../components/Unavailable";
 
 export default function Recipe() {
   const { recipeName } = useParams();
+  const { authenticated } = React.useContext(authContext);
 
   const handleIngredientLineThrough = (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
     const li = e.target as HTMLElement;
-    if (li.classList.length === 0) {
-      li.classList.add("line-through");
+    if (li.classList.contains("ingredient-line-through__recipe")) {
+      li.classList.remove("ingredient-line-through__recipe");
       return;
     }
-    li.classList.remove("line-through");
+    li.classList.add("ingredient-line-through__recipe");
   };
 
   const { loading, error, data } : 
@@ -40,58 +42,71 @@ export default function Recipe() {
       {loading || data === undefined ? (
         <Loading />
       ) : (
-        <>
-          <div className="page-container-recipe"> 
-            <div className="info-container-recipe">
-              <h1 className="text-5xl jua">{data.getRecipeByName.name}</h1>
-              {localStorage.getItem("token") && (
-                <Link to={"/edit/" + recipeName} className="edit-link">
-                  <IconEdit />
-                </Link>
-              )}
-              <div>{data.getRecipeByName.servings} servings</div>
-              <div>{data.getRecipeByName.time} minutes</div>
-            </div>
-            <ul className="category-container-recipe">
-              {data.getRecipeByName.category.map((tag) => (
-                <li key={tag.name}>
-                  <div className="bg-red white">{tag.name.toLowerCase()}</div>
-                </li>
-              ))}
-            </ul>
-            {data.getRecipeByName.imageURL ? 
-              <img src={data.getRecipeByName.imageURL} alt="" /> : 
-              <div>
-                <p>image unavailable</p>
-              </div>
-            }
-            <p>{data.getRecipeByName.description}</p>
-          </div>
-          <div className="bg-red bottom-background-recipe">
-            <div className="bottom-container-recipe">
-              <div>
-                <h2 className="text-3xl yellow">Ingredients</h2>
-                <ul>
-                  {data.getRecipeByName.ingredientList.map((obj, index) => (
-                    <li key={index} onClick={handleIngredientLineThrough} className="white">
-                      {obj.measurement} {obj.ingredient.name}
+        <div className="main-container__recipe">
+          <section className="flex-col gap-1rem"> 
+            <div className="border-black">
+              <div className="bg-orange text-base info_title__recipe">RECIPE INFO</div>
+              <div className="flex-col gap-1rem padding-1rem">
+                <div className="flex">
+                  <h1 className="text-5xl jua flex-1">{data.getRecipeByName.name}</h1>
+                  {authenticated && (
+                    <Link to={"/edit/" + recipeName}>
+                      <IconEdit />
+                    </Link>
+                  )}
+                </div>
+                <div className="flex gap-1rem">
+                  <span className="red">{data.getRecipeByName.servings} servings</span>
+                  <span className="red">{data.getRecipeByName.time} minutes</span>
+                </div>
+                <ul className="flex gap-1rem flex-wrap">
+                  {data.getRecipeByName.category.map((tag) => (
+                    <li key={tag.name}>
+                      <div className="btn btn-yellow blue-drop-shadow">{tag.name.toLowerCase()}</div>
                     </li>
                   ))}
                 </ul>
               </div>
-              <div>
-                <h2 className="text-3xl yellow">Instructions</h2>
-                <ol>
-                  {data.getRecipeByName.instructions
-                    .split("\r")
-                    .map((instruction) => (
-                      <li key={instruction} className="white instructions-recipe">{instruction}</li>
-                    ))}
-                </ol>
-              </div>
             </div>
-          </div>
-        </>
+            {data.getRecipeByName.imageURL ? 
+              <img 
+                className="border-black"
+                src={data.getRecipeByName.imageURL} 
+                alt="" 
+              /> : 
+              <div className="no-image border-black">
+                <p className="red">image unavailable</p>
+              </div>
+            }
+            <p>{data.getRecipeByName.description}</p>
+          </section>
+          <section className="flex-col gap-1rem">
+            <div>
+              <h2 className="text-3xl header-2__recipe">Ingredients</h2>
+              <ul className="flex-col gap-1rem padding-1rem">
+                {data.getRecipeByName.ingredientList.map((obj, index) => (
+                  <li 
+                    key={index} 
+                    onClick={handleIngredientLineThrough}
+                    className="ingredient__recipe"
+                  >
+                    {obj.measurement} {obj.ingredient.name}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h2 className="text-3xl header-2__recipe">Instructions</h2>
+              <ol className="flex-col gap-1rem list-style-numbered padding-1rem ">
+                {data.getRecipeByName.instructions
+                  .split("\r")
+                  .map((instruction) => (
+                    <li key={instruction} className="">{instruction}</li>
+                  ))}
+              </ol>
+            </div>
+          </section>
+        </div>
       )}
     </>
   );

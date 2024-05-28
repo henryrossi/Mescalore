@@ -5,19 +5,19 @@ import "./RecipeList.css";
 
 export default function RecipeList({ recipes } : { recipes: RecipeData[] }) {
   return (
-    <section className="main-container-recipe-list">
-      <ul>
+    <section className="main-container__recipe-list">
+      <ul className="list-container__recipe-list">
         {recipes &&
           recipes.map((recipe) => (
             <li className="border-black hover-blue-drop-shadow" key={recipe.name}>
               <Link 
-                className="link-recipe-list"
+                className="link__recipe-list"
                 to={"/" + recipe.name}
               >
                 {recipe.imageURL ? 
                 <img src={recipe.imageURL} alt="" /> : 
-                <div className="noPicture">
-                  <p className="message">image unavailable</p>
+                <div className="no-image">
+                  <p className="red">image unavailable</p>
                 </div>}
                 <p className="jua black text-xl">{recipe.name}</p>
               </Link>

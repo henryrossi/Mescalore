@@ -141,7 +141,7 @@ export default function RecipeEditor({
               alt=""
             />
           ) : (
-            <div className="no-image-editor bg-white border-grey">
+            <div className="no-image bg-white border-grey">
               <p className="red">no image</p>
             </div>
           )}

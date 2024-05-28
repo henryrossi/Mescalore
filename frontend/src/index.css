@@ -245,10 +245,10 @@ button {
 }
 
 .red {
-  color: #C8553D;
+  color: #A8281F;
 }
 .bg-red {
-  background-color: #C8553D;
+  background-color: #A8281F;
 }
 
 .blue {
@@ -263,6 +263,10 @@ button {
 }
 .bg-yellow {
   background-color: #F0E6C4;
+}
+
+.bg-orange {
+  background-color: #F2B255;
 }
 
 .bg-grey {
@@ -295,8 +299,8 @@ button {
 }
 
 .btn-red {
-  background-color: #C8553D;
-  border: 1px solid #C8553D;
+  background-color: #A8281F;
+  border: 1px solid #A8281F;
 }
 
 .btn-blue {
@@ -315,12 +319,6 @@ button {
 
 .hover-blue-drop-shadow:hover {
   box-shadow: 0.2rem 0.2rem #45acac;
-}
-
-.btn-red {
-  background-color: #C8553D;
-  border: 1px solid #000000;
-  filter: drop-shadow(0.2rem 0.2rem #ffd12f);
 }
 
 .text-btn {
@@ -342,4 +340,55 @@ button {
 
 .no-border {
   border: none;
+}
+
+/* flex and grid */
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.grid {
+  display: grid;
+}
+
+.gap-1rem {
+  gap: 1rem;
+}
+
+/* list-styles */
+.list-style-disc {
+  list-style: disc;
+}
+
+.list-style-numbered {
+  list-style-type: decimal;
+  margin-left: 1rem;
+}
+
+/* padding */
+.padding-1rem {
+  padding: 1rem;
+}
+
+/* custom */
+.no-image {
+  width: 100%;
+  max-width: 600px;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
