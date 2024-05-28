@@ -2,7 +2,15 @@ import * as React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { USER_REGISTRATION } from "../graphQL";
 import { useMutation } from "@apollo/client";
-import "./SignInSignUp.css";
+import "./UserAuth.css";
+
+
+/* TODO:
+   Combine user auth pages (sign-in and sign-up)
+   into one file since they share css
+*/
+
+
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -44,38 +52,45 @@ export default function SignUp() {
   };
 
   return (
-    <form className="login-register-form" onSubmit={onSubmit}>
-      <h1>Create your account</h1>
+    <form className="main-container-user-auth" onSubmit={onSubmit}>
+      <h1 className="jua text-2xl">Create your account</h1>
       <label>
         Email
-        <input className="input" onChange={(e) => setEmail(e.target.value)} />
+        <input  
+          className="border-black" 
+          onChange={(e) => setEmail(e.target.value)} 
+        />
       </label>
       <label>
         Username
         <input
-          className="input"
+          className="border-black" 
           onChange={(e) => setUsername(e.target.value)}
         />
       </label>
       <label>
         Password
         <input
-          className="input"
+          className="border-black" 
           onChange={(e) => setPassword1(e.target.value)}
         />
       </label>
       <label>
         Re-enter Password
         <input
-          className="input"
+          className="border-black" 
           onChange={(e) => setPassword2(e.target.value)}
         />
       </label>
-      <button className="loginButton" type="submit">
+      <button 
+        className="btn btn-blue white text-btn" 
+        type="submit"
+      >
         Register
       </button>
       <p>
-        Already have an account? <Link to="/sign-in">Sign in</Link>
+        Already have an account? {" "}
+        <Link to="/sign-in">Sign in</Link>
       </p>
     </form>
   );

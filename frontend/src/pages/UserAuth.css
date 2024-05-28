@@ -1,0 +1,23 @@
+.main-container-user-auth {
+    max-width: min(90%, 45rem);
+    height: calc(100vh - 12rem);
+    margin: 2rem auto;
+}
+
+.main-container-user-auth h1 {
+    margin-bottom: 2rem;
+}
+
+.main-container-user-auth input {
+    width: 100%;
+    margin: 1rem 0;
+    height: 2rem;
+}
+
+.main-container-user-auth button {
+    margin: 1rem 0;
+}
+
+.main-container-user-auth a {
+    text-decoration: none;
+}

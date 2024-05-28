@@ -1,5 +1,5 @@
 import * as React from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, Link, useNavigate } from "react-router-dom";
 import authContext from "../authContext";
 import { IconSearch } from "@tabler/icons-react";
 import "./Navbar.css";
@@ -78,20 +78,18 @@ function Navbar() {
             </button> 
             :
             <>
-              <NavLink 
-                className={({ isActive, isPending }) => {
-                  return isActive ? "blue" : "black";
-                }}
+              <Link
+                className="black"
                 to="/sign-in"
               >
                 sign in
-              </NavLink>
-              <NavLink 
+              </Link>
+              <Link 
                 className="bg-blue white"
                 to="/sign-up"
               >
                 sign up
-              </NavLink>
+              </Link>
             </>
           }
         </div>

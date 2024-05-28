@@ -2,7 +2,7 @@ import * as React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import { USER_AUTHENTICATION } from "../graphQL";
-import "./SignInSignUp.css";
+import "./UserAuth.css";
 
 export default function SignIn() {
   const navigate = useNavigate();
@@ -38,19 +38,31 @@ export default function SignIn() {
   };
 
   return (
-    <form className="login-register-form" onSubmit={onSubmit}>
-      <h1>Login to Mescalore</h1>
+    <form className="main-container-user-auth" onSubmit={onSubmit}>
+      <h1 className="jua text-2xl">Login to Mescalore</h1>
       <label>
         Username or Email
-        <input onChange={(e) => setUsernameEmail(e.target.value)} />
+        <input 
+          className="border-black" 
+          onChange={(e) => setUsernameEmail(e.target.value)} 
+        />
       </label>
       <label>
         Password
-        <input onChange={(e) => setPassword(e.target.value)} />
+        <input  
+          className="border-black" 
+          onChange={(e) => setPassword(e.target.value)} 
+        />
       </label>
-      <button type="submit">Login</button>
+      <button 
+        className="btn btn-blue white text-btn" 
+        type="submit"
+      >
+        Login
+      </button>
       <p>
-        Don't have an account? <Link to="/sign-up">Sign up</Link>
+        Don't have an account? {" "}
+        <Link className="blue" to="/sign-up">Sign up</Link>
       </p>
     </form>
   );
