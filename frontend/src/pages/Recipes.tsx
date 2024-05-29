@@ -1,33 +1,56 @@
 import * as React from "react";
-import { useQuery } from "@apollo/client";
-import { FILTER_RECIPES_QUERY } from "../graphQL";
+import { useLoaderData } from "react-router-dom";
+import { gql } from "@apollo/client";
+import client from "../client";
+import { RecipePreview } from "../types";
 import RecipeList from "../components/RecipeList";
-import Loading from "../components/Loading";
 import "./Recipes.css";
 
-function Recipes() {
-  const tags = ["breakfast", "lunch", "dinner", "snack", "dessert", "beverage"];
-  const [selectedCategory, setSelectedCategory] = React.useState("");
+const FILTER_RECIPES_QUERY = gql`
+  query FilterRecipesQuery($category: String!) {
+    getRecipesByCategory(category: $category) {
+      name
+      imageURL
+      category {
+        name
+      }
+    }
+  }
+`;
 
-  const { loading, error, data, refetch } = useQuery(FILTER_RECIPES_QUERY, {
+export async function loader() {
+  const result = await client.query({
+    query: FILTER_RECIPES_QUERY,
     variables: {
-      category: selectedCategory,
+      category: "",
     },
   });
+  
+  return result.data.getRecipesByCategory;
+}
+
+export default function Recipes() {
+  const tags = ["breakfast", "lunch", "dinner", "snack", "dessert", "beverage"];
+  const [selectedCategory, setSelectedCategory] = React.useState("");
+  const recipePreviews = useLoaderData() as RecipePreview[];
+  const [filteredPreviews, setFilteredPreviews] = React.useState(recipePreviews);
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     let target = e.target as HTMLButtonElement;
     let category = target.innerText;
+    const previews = [...recipePreviews];
     if (category === selectedCategory) {
-      category = "";
+      setSelectedCategory("");
+      setFilteredPreviews(previews);
+      return;
     }
     setSelectedCategory(category);
-    refetch({
-      category: category,
-    });
+    setFilteredPreviews(previews.filter(
+      (recipe) => recipe.category.filter(
+        (obj => obj.name.toLowerCase() === category)
+      ).length > 0
+    ));
   };
-
-  if (error) console.log(error.message);
 
   return (
     <>
@@ -53,13 +76,7 @@ function Recipes() {
           </ul>
         </div>
       </section>
-      {loading ? (
-        <Loading />
-      ) : (
-        <RecipeList recipes={data.getRecipesByCategory} />
-      )}
+      <RecipeList recipes={filteredPreviews}/>
     </>
   );
 }
-
-export default Recipes;

@@ -56,4 +56,7 @@ export interface RecipeData {
   export interface RecipePreview {
     name: string,
     imageURL: string,
+    category: {
+      name: string,
+    }[],
   }

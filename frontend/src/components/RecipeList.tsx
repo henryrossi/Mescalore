@@ -1,9 +1,9 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
-import { RecipeData } from "../types";
+import { RecipePreview } from "../types";
 import "./RecipeList.css";
 
-export default function RecipeList({ recipes } : { recipes: RecipeData[] }) {
+export default function RecipeList({ recipes } : { recipes: RecipePreview[] }) {
   return (
     <section className="main-container__recipe-list">
       <ul className="list-container__recipe-list">
