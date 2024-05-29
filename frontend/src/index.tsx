@@ -5,17 +5,17 @@ import client from "./client";
 import "./index.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Mescolare from "./Mescolare";
-import AboutUs from "./pages/AboutUs";
-import Home from "./pages/Home";
-import ErrorPage from "./pages/ErrorPage";
-import Recipes, { loader as RecipesLoader } from "./pages/Recipes";
-import Recipe, {loader as RecipeLoader} from "./pages/Recipe";
-import CreateRecipe from "./pages/CreateRecipe";
-import EditRecipe from "./pages/EditRecipe";
-import Search from "./pages/Search";
-import SignIn from "./pages/SignIn";
-import SignUp from "./pages/SignUp";
-import ActivateEmail from "./pages/ActivateEmail";
+import AboutUs from "./routes/AboutUs";
+import Home from "./routes/Home";
+import ErrorPage from "./routes/ErrorPage";
+import Recipes, { loader as RecipesLoader } from "./routes/Recipes";
+import Recipe, {loader as RecipeLoader} from "./routes/Recipe";
+import CreateRecipe from "./routes/CreateRecipe";
+import EditRecipe from "./routes/EditRecipe";
+import Search from "./routes/Search";
+import SignIn from "./routes/SignIn";
+import SignUp from "./routes/SignUp";
+import ActivateEmail from "./routes/ActivateEmail";
 
 const tokenTime = localStorage.getItem("tokenTime");
 if (tokenTime != null && Date.now() - parseInt(tokenTime, 10) > 86400000) {
