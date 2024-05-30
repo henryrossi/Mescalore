@@ -90,7 +90,7 @@ export default function SignUp() {
       </button>
       <p>
         Already have an account? {" "}
-        <Link to="/sign-in">Sign in</Link>
+        <Link className="blue" to="/sign-in">Sign in</Link>
       </p>
     </form>
   );

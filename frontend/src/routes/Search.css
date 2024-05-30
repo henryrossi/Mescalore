@@ -1,19 +1,25 @@
-.search-bar-search {
+.search-bar-container__search {
   max-width: min(95%, 90rem);
   margin: 2rem auto;
   position: relative;
 }
 
-.search-bar-search input {
+.search-bar-container__search input {
   height: 2rem;
   width: 100%;
 }
 
-.search-bar-search button {
+.search-bar-container__search button {
   height: 2rem;
   position: absolute;
   right: 0.2rem;
   border: none;
   cursor: pointer;
   background-color: transparent;
+}
+
+.refetch-btn-container__search {
+  height: 8rem;
+  align-items: center;
+  justify-content: center;
 }

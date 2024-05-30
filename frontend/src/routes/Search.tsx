@@ -90,32 +90,34 @@ export default function Search() {
 
   return (
     <>
-      <section className="search-bar-search">
-        <input
-          type="text"
-          value={searchText}
-          placeholder="Search through our recipes here"
-          onChange={(event) => setSearchText(event.target.value)}
-          onKeyDown={handleKeyDown}
-        />
-        <button onClick={handleRefetch}>
-          <IconSearch size={'1rem'}/>
-        </button>
+      <section className="flex-col gap-1rem search-bar-container__search">
+        <h1 className="jua text-4xl">Search for recipes</h1>
+        <div>
+          <input
+            type="text"
+            value={searchText}
+            placeholder="Search through our recipes here"
+            onChange={(event) => setSearchText(event.target.value)}
+            onKeyDown={handleKeyDown}
+          />
+          <button onClick={handleRefetch}>
+            <IconSearch size={'1rem'}/>
+          </button>
+        </div>
       </section>
       {loading || loadingCount ? (
         <Loading />
       ) : (
         <RecipeList recipes={data.searchRecipes} />
       )}
-      {data && data.searchRecipes.length === 0 ? (
-        <div className="searchPadding" />
-      ) : (
+      {data && data.searchRecipes.length !== 0 &&
         count &&
         limit * timesFetched < count.getNumberOfRecipes && (
-          <button className="fetchMore" onClick={handleFetchMore}>
+        <div className="flex refetch-btn-container__search">
+          <button className="btn text-btn btn-yellow blue-drop-shadow" onClick={handleFetchMore}>
             Load more recipes
           </button>
-        )
+        </div>
       )}
     </>
   );

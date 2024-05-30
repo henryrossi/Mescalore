@@ -61,21 +61,21 @@ const router = createBrowserRouter([
           path: "/search",
           element: <Search />
         },
-        {
-          path: "/sign-in",
-          element: <SignIn />
-        },
-        {
-          path: "/sign-up",
-          element: <SignUp />
-        }, 
-        {
-          path: "/activate/:token",
-          element: <ActivateEmail />
-        },
       ]
     }]
-  }
+  },
+  {
+    path: "/sign-in",
+    element: <SignIn />
+  },
+  {
+    path: "/sign-up",
+    element: <SignUp />
+  }, 
+  {
+    path: "/activate/:token",
+    element: <ActivateEmail />
+  },
 ]);
 
 const entry = document.createElement('div');
