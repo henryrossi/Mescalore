@@ -60,7 +60,7 @@ export default function Recipe() {
     <div className="main-container__recipe">
       <section className="flex-col gap-1rem"> 
         <div className="border-black">
-          <div className="bg-orange text-base info_title__recipe">RECIPE INFO</div>
+          <div className="orange-banner"></div>
           <div className="flex-col gap-1rem padding-1rem">
             <div className="flex">
               <h1 className="text-5xl jua flex-1">{data.name}</h1>

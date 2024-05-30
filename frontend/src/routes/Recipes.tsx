@@ -55,7 +55,7 @@ export default function Recipes() {
   return (
     <>
       <section className="border-black main-container__recipes">
-        <div className="text-base bg-orange filter_title__recipes">FILTERING OPTIONS</div>
+        <div className="orange-banner"></div>
         <div className="flex-col gap-1rem padding-1rem">
           <h1 className="jua text-3xl">Explore some of our favorite recipes</h1>
           <span className="red">filter by</span>

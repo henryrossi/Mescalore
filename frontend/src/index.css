@@ -396,3 +396,9 @@ button {
   align-items: center;
   justify-content: center;
 }
+
+.orange-banner {
+  height: 1.5rem;
+  background-color: #F2B255;
+  border-bottom: 1px solid #000000;
+}
