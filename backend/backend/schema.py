@@ -122,19 +122,22 @@ class Query(UserQuery, MeQuery, graphene.ObjectType):
     get_number_of_recipes = graphene.Int()
     get_s3_presigned_url = graphene.String()
     
+
+    # Query needs to be rewritten now that sorting is down client-side.
+    # Should probably keep both.
     def resolve_get_recipes_by_category(root, info, category):
         if category == "":
             recipeQueryset = Recipe.objects.all()
             length = len(recipeQueryset)
-            if length < 12:
+            if length < 120:
                 return recipeQueryset[::-1]
-            return recipeQueryset[length-12:][::-1]
+            return recipeQueryset[length-120:][::-1]
         cat_id = Category.objects.filter(name=category)[:1]
         recipeQueryset = Recipe.objects.filter(category=cat_id)
         length = len(recipeQueryset)
-        if length < 12:
+        if length < 120:
                 return recipeQueryset[::-1]
-        return recipeQueryset[length-12:][::-1]
+        return recipeQueryset[length-120:][::-1]
     
     def resolve_get_recipe_by_name(root, info, name):
         return Recipe.objects.filter(name=name)[0]
