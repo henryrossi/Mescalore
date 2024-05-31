@@ -13,9 +13,8 @@ import Recipe, {loader as RecipeLoader} from "./routes/Recipe";
 import CreateRecipe from "./routes/CreateRecipe";
 import EditRecipe from "./routes/EditRecipe";
 import Search from "./routes/Search";
-import SignIn from "./routes/SignIn";
-import SignUp from "./routes/SignUp";
 import ActivateEmail from "./routes/ActivateEmail";
+import { SignUp, SignIn } from "./routes/UserAuth";
 
 const tokenTime = localStorage.getItem("tokenTime");
 if (tokenTime != null && Date.now() - parseInt(tokenTime, 10) > 86400000) {
