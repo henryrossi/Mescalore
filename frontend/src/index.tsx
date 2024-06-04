@@ -16,12 +16,6 @@ import Search from "./routes/Search";
 import ActivateEmail from "./routes/ActivateEmail";
 import { SignUp, SignIn } from "./routes/UserAuth";
 
-const tokenTime = localStorage.getItem("tokenTime");
-if (tokenTime != null && Date.now() - parseInt(tokenTime, 10) > 86400000) {
-  localStorage.removeItem("token");
-  localStorage.removeItem("tokenTime");
-}
-
 const router = createBrowserRouter([
   {
     path: "/",
