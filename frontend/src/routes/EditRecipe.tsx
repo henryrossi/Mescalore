@@ -88,7 +88,6 @@ export default function EditRecipe() {
 
   const onSubmit = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event.preventDefault();
-    console.log(recipeData);
     if (recipeData.picture && !errorURL) {
       const response = await fetch(s3URL.getS3PresignedUrl, {
         method: "PUT",
@@ -98,10 +97,6 @@ export default function EditRecipe() {
         body: recipeData.picture
       })
       if (!response.ok) return;
-      // dispatch({
-      //   type: "addImageURL",
-      //   url: s3URL.getS3PresignedUrl.split('?')[0],
-      // });
       setRecipeData({...recipeData, imageURL: s3URL.getS3PresignedUrl.split('?')[0]});
     }
     const imageURL = recipeData.picture ? s3URL.getS3PresignedUrl.split('?')[0] : null;

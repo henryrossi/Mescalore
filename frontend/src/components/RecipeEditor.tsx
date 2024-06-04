@@ -49,8 +49,6 @@ export default function RecipeEditor({
     }
   }
 
-  console.log(recipeData);
-
   return (
     <div className="recipe-editor-container bg-grey border-grey">
       <h1 className="jua red text-4xl">{handleDelete ? "Edit this recipe" : "Create a new recipe"}</h1>

@@ -6,11 +6,19 @@ import "./UserAuth.css";
 import authContext from "../authContext";
 
 function setUserAsAuthenticated(token: string, setAuthenticated: (auth: boolean) => void) {
+  const curTime = Date.now();
+  
+  const tokenTime = localStorage.getItem("tokenTime");
+  if (tokenTime != null && curTime- parseInt(tokenTime, 10) > 86400000) {
+    localStorage.removeItem("token");
+    localStorage.removeItem("tokenTime");
+  }
+
   localStorage.setItem("token", token);
   setAuthenticated(true);
 
   // stringify the date into a string
-  localStorage.setItem("tokenTime", String(Date.now()));
+  localStorage.setItem("tokenTime", String(curTime));
 
   setTimeout(() => {
     // To be secure I believe I should also remove the Token from the backend database

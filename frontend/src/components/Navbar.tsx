@@ -72,7 +72,11 @@ function Navbar() {
           {authenticated ?
             <button 
             className="bg-blue white text-btn"
-              onClick={() => setAuthenticated(false)}
+              onClick={() => {
+                setAuthenticated(false);
+                localStorage.removeItem("token");
+                localStorage.removeItem("tokenTime");
+              }}
             >
               sign out
             </button> 

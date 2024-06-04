@@ -1,6 +1,18 @@
-import { ApolloClient, InMemoryCache } from "@apollo/client";
+import { ApolloClient, InMemoryCache, HttpLink } from "@apollo/client";
+import { setContext } from '@apollo/client/link/context';
+
+const httpLink = new HttpLink({ uri: process.env.BACKEND_URI });
+
+const setAuthorizationLink = setContext((request, prevContext) => ({
+  headers: {
+    ...prevContext.headers,
+    authorization: localStorage.getItem("token") ? 
+                    `JWT ${localStorage.getItem("token")}` : "",
+  }
+}));
 
 const client = new ApolloClient({
+  link: setAuthorizationLink.concat(httpLink),
   cache: new InMemoryCache({
     typePolicies: {
       Query: {
@@ -23,12 +35,6 @@ const client = new ApolloClient({
       },
     },
   }),
-  uri: process.env.BACKEND_URI,
-  headers: {
-    authorization: localStorage.getItem("token") ? 
-                    `JWT ${localStorage.getItem("token")}` : "",
-  },
-  connectToDevTools: true,
 });
 
 export default client;
