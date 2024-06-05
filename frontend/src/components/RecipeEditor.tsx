@@ -19,9 +19,9 @@ export default function RecipeEditor({
   handleDelete: (() => void) | null
 }) {
   const [modalOpen, setModalOpen] = React.useState(false);
-  const { authenticated } = React.useContext(authContext);
+  const { userAuth } = React.useContext(authContext);
 
-  if (!authenticated) {
+  if (!userAuth.authenticated || !userAuth.editorPermissions) {
     return <Unavailable />;
   }
 

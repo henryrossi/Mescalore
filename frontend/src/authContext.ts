@@ -1,8 +1,12 @@
 import * as React from "react";
+import { UserAuth } from "./types";
 
 const authContext = React.createContext({
-    authenticated: false,
-    setAuthenticated: (auth: boolean) => {}
+    userAuth: { 
+        authenticated: false,
+        editorPermissions: false,
+    },
+    setUserAuth: (auth: UserAuth) => {},
 });
 
 export default authContext;

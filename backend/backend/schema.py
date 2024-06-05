@@ -1,12 +1,14 @@
 import graphene
 from graphene_django import DjangoObjectType
-from graphene_file_upload.scalars import Upload
 from graphql_auth.schema import MeQuery, UserQuery
 from graphql_auth import mutations
 import boto3
 from botocore.config import Config
 import secrets
 from math import log
+
+from django.contrib.auth.models import User, Permission
+from django.contrib.contenttypes.models import ContentType
 
 import os
 from dotenv import load_dotenv
@@ -121,9 +123,10 @@ class Query(UserQuery, MeQuery, graphene.ObjectType):
                                    offset=graphene.Int(), limit=graphene.Int())
     get_number_of_recipes = graphene.Int()
     get_s3_presigned_url = graphene.String()
+    get_editor_permissions = graphene.Boolean(username=graphene.String())
     
 
-    # Query needs to be rewritten now that sorting is down client-side.
+    # Query needs to be rewritten now that sorting is done client-side.
     # Should probably keep both.
     def resolve_get_recipes_by_category(root, info, category):
         if category == "":
@@ -185,28 +188,33 @@ class Query(UserQuery, MeQuery, graphene.ObjectType):
             print(e)
             return None
         return response
+
+
+
     
-def checkAdminPrivileges(user) -> bool:
-    if user.username == os.getenv("ADMIN_USERNAME_1"): return True
-    if user.username == os.getenv("ADMIN_USERNAME_2"): return True
+def checkRecipeEditingPermissions(user) -> bool:
+    if user.username == os.getenv("ADMIN_USERNAME_1") or user.username == os.getenv("ADMIN_USERNAME_2"): 
+        content_type = ContentType.objects.get_for_model(Recipe)
+        recipe_permissions = Permission.objects.filter(content_type=content_type)
+        for perm in recipe_permissions:
+            user.user_permissions.add(perm)
+        return True
     return False
     
 class CreateRecipe(graphene.Mutation):
     class Arguments:
         recipe_data = RecipeInput(required=True)
-    
+
     # The class attributes define the response of the mutation
     success = graphene.Boolean()
 
     @classmethod
     def mutate(cls, root, info, recipe_data):
         user = info.context.user
-        print(user.username)
         if not user.is_authenticated:
             raise Exception("Authentication credentials were not provided")
-        if not checkAdminPrivileges(user):
+        if not user.has_perm("recipes.add_recipe") and not checkRecipeEditingPermissions(user):
             raise Exception("You do not have the credential to perform this action")
-        print(recipe_data.imageURL)
         try:
             recipe = Recipe(
                 name = recipe_data.name,
@@ -246,9 +254,10 @@ class DeleteRecipe(graphene.Mutation):
 
     @classmethod
     def mutate(cls, root, info, RecipeID):
-        if not info.context.user.is_authenticated:
+        user = info.context.user
+        if not user.is_authenticated:
             raise Exception("Authentication credentials were not provided")
-        if not checkAdminPrivileges(info.context.user):
+        if not user.has_perm("recipes.delete_recipe") and not checkRecipeEditingPermissions(user):
             raise Exception("You do not have the credential to perform this action")
         try:
             recipe = Recipe.objects.get(pk=RecipeID)
@@ -272,7 +281,7 @@ class EditRecipe(graphene.Mutation):
         user = info.context.user
         if not user.is_authenticated:
             raise Exception("Authentication credentials were not provided")
-        if not checkAdminPrivileges(user):
+        if not user.has_perm("recipes.change_recipe") and not checkRecipeEditingPermissions(user):
             raise Exception("You do not have the credential to perform this action")
         try:
             recipe = Recipe.objects.get(pk=recipe_id)
@@ -306,15 +315,43 @@ class EditRecipe(graphene.Mutation):
         except Exception as e: 
             print(e)
             return EditRecipe(updated=False)
+        
+class RegisterUser(mutations.Register):
+    recipeEditor = graphene.Boolean()
+
+    @classmethod
+    def resolve_mutation(cls, root, info, **kwargs):
+        res = super().resolve_mutation(root, info, **kwargs)
+        # new account doesn't really have any permissions yet
+        editorPermissions = False
+        return cls(success=res.success, errors=res.errors, token=res.token, 
+                   recipeEditor=editorPermissions)
+        
+class AuthenticateUser(mutations.ObtainJSONWebToken):
+    recipeEditor = graphene.Boolean()
+
+    @classmethod
+    def resolve_mutation(cls, root, info, **kwargs):
+        res = super().resolve_mutation(root, info, **kwargs)
+
+        editorPermissions = False
+        if res.user.has_perm("recipes.add_recipe") and \
+           res.user.has_perm("recipes.change_recipe") and \
+           res.user.has_perm("recipes.delete_recipe"):
+            editorPermissions = True
+        
+        return cls(success=res.success, errors=res.errors, token=res.token, 
+                   user=res.user, recipeEditor=editorPermissions, 
+                   unarchiving=res.unarchiving)
 
 class Mutation(graphene.ObjectType):
     create_recipe = CreateRecipe.Field()
     delete_recipe = DeleteRecipe.Field()
     edit_recipe = EditRecipe.Field()
 
-    user_registration = mutations.Register.Field()
+    user_registration = RegisterUser.Field()
     user_verification = mutations.VerifyAccount.Field()
-    user_authentication = mutations.ObtainJSONWebToken.Field()
+    user_authentication = AuthenticateUser.Field()
     revoke_Token = mutations.RevokeToken.Field()
     update_account = mutations.UpdateAccount.Field()
     resend_activation_email = mutations.ResendActivationEmail.Field()

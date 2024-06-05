@@ -44,7 +44,7 @@ export async function loader({ params }: { params: Params<"recipeName">}) {
 
 export default function Recipe() {
   const { recipeName } = useParams();
-  const { authenticated } = React.useContext(authContext);
+  const { userAuth } = React.useContext(authContext);
   const data = useLoaderData() as RecipeData;
 
   const handleIngredientLineThrough = (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
@@ -64,7 +64,7 @@ export default function Recipe() {
           <div className="flex-col gap-1rem padding-1rem">
             <div className="flex">
               <h1 className="text-5xl jua flex-1">{data.name}</h1>
-              {authenticated && (
+              {userAuth.authenticated && userAuth.editorPermissions && (
                 <Link to={"/edit/" + recipeName}>
                   <IconEdit />
                 </Link>

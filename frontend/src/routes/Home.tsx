@@ -3,6 +3,7 @@ import "./Home.css";
 import "@fontsource/jua"; // ???
 import Couple from "../images/hotcouple.png";
 import Kitchen from "../images/kitchen.png";
+import authContext from "../authContext";
 
 function Home() {
 
@@ -19,17 +20,6 @@ function Home() {
           alt=""
         />
       </div>
-      {/* move this to navbar */}
-      {/* {loggedIn && (
-        <div>
-          <Link to="/create">
-            <IconPencilPlus />
-          </Link>
-          <button onClick={handleLogout}>
-            <IconLogout />
-          </button>
-        </div>
-      )} */}
       <div className="relative-positioned-home">
         <div className="bg-blue background-home">
           <div className="main-container-home">

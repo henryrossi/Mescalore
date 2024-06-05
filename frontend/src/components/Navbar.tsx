@@ -8,7 +8,7 @@ function Navbar() {
   const [searchInput, setSearchInput] = React.useState("");
   const navigate = useNavigate();
 
-  const { authenticated, setAuthenticated } = React.useContext(authContext);
+  const { userAuth, setUserAuth } = React.useContext(authContext);
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
@@ -45,7 +45,7 @@ function Navbar() {
           >
             about us
           </NavLink>
-          {authenticated && 
+          {userAuth.authenticated && userAuth.editorPermissions &&
             <NavLink 
               className={({ isActive, isPending }) => {
                 return isActive ? "blue" : "black";
@@ -69,12 +69,16 @@ function Navbar() {
         </div>
 
         <div className="user-auth-navbar">
-          {authenticated ?
+          {userAuth.authenticated ?
             <button 
             className="bg-blue white text-btn"
               onClick={() => {
-                setAuthenticated(false);
+                setUserAuth({
+                  authenticated: false,
+                  editorPermissions: false,
+                });
                 localStorage.removeItem("token");
+                localStorage.removeItem("editor");
                 localStorage.removeItem("tokenTime");
               }}
             >

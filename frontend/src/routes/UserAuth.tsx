@@ -4,18 +4,24 @@ import { USER_REGISTRATION, USER_AUTHENTICATION } from "../graphQL";
 import { useMutation } from "@apollo/client";
 import "./UserAuth.css";
 import authContext from "../authContext";
+import { UserAuth } from "../types";
 
-function setUserAsAuthenticated(token: string, setAuthenticated: (auth: boolean) => void) {
+function setUserAsAuthenticated(token: string, editorPermissions: boolean, setUserAuth: (auth: UserAuth) => void) {
   const curTime = Date.now();
   
   const tokenTime = localStorage.getItem("tokenTime");
   if (tokenTime != null && curTime- parseInt(tokenTime, 10) > 86400000) {
     localStorage.removeItem("token");
+    localStorage.removeItem("editor");
     localStorage.removeItem("tokenTime");
   }
 
   localStorage.setItem("token", token);
-  setAuthenticated(true);
+  localStorage.setItem("editor", String(editorPermissions));
+  setUserAuth({
+    authenticated: true,
+    editorPermissions: editorPermissions
+  });
 
   // stringify the date into a string
   localStorage.setItem("tokenTime", String(curTime));
@@ -23,6 +29,7 @@ function setUserAsAuthenticated(token: string, setAuthenticated: (auth: boolean)
   setTimeout(() => {
     // To be secure I believe I should also remove the Token from the backend database
     localStorage.removeItem("token");
+    localStorage.removeItem("editor");
     localStorage.removeItem("tokenTime");
   }, 86400000);
 }
@@ -34,12 +41,14 @@ export function SignUp() {
   const [password1, setPassword1] = React.useState("");
   const [password2, setPassword2] = React.useState("");
 
-  const { setAuthenticated } = React.useContext(authContext);
+  const { setUserAuth } = React.useContext(authContext);
 
   const [registerUser] = useMutation(USER_REGISTRATION, {
     onCompleted: (data) => {
       if (data.userRegistration.success) {
-        setUserAsAuthenticated(data.userRegistration.token, setAuthenticated);
+        setUserAsAuthenticated(data.userRegistration.token, 
+                               data.userRegistration.recipeEditor, 
+                               setUserAuth);
         navigate("/recipes");
         return;
       }
@@ -116,12 +125,14 @@ export function SignIn() {
   const [password, setPassword] = React.useState("");
   const [errorMessage, setErrorMessage] = React.useState("");
 
-  const { setAuthenticated } = React.useContext(authContext);
+  const { setUserAuth } = React.useContext(authContext);
 
   const [authenticateUser] = useMutation(USER_AUTHENTICATION, {
     onCompleted: (data) => {
       if (data.userAuthentication.success) {
-        setUserAsAuthenticated(data.userAuthentication.token, setAuthenticated);
+        setUserAsAuthenticated(data.userAuthentication.token, 
+                               data.userAuthentication.recipeEditor, 
+                               setUserAuth);
         navigate("/recipes");
         return;
       }

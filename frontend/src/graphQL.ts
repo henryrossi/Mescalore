@@ -147,6 +147,7 @@ export const USER_AUTHENTICATION = gql`
       errors
       token
       refreshToken
+      recipeEditor
       user {
         username
       }
