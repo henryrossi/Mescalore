@@ -20,6 +20,9 @@
 
 .header-container-navbar a {
   text-decoration: none;
+}
+
+.link__navbar {
   padding: 0.5rem 1rem;
   border-radius: 0.25rem;
 }
@@ -48,10 +51,8 @@
   display: none;
 }
 
-.user-auth-navbar button {
-  padding: 0.5rem 1rem;
-  border-radius: 0.25rem;
-  border: none;
+.profile-pic__navbar {
+  padding: 0.2rem 1rem;
 }
 
 /* Navbar currently breaks down at 25.625rems */

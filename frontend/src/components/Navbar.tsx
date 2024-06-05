@@ -1,7 +1,7 @@
 import * as React from "react";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import authContext from "../authContext";
-import { IconSearch } from "@tabler/icons-react";
+import { IconSearch, IconUserCircle } from "@tabler/icons-react";
 import "./Navbar.css";
 
 function Navbar() {
@@ -25,21 +25,21 @@ function Navbar() {
       <div className="header-container-navbar">
         <nav className="links-navbar">
           <NavLink className={({ isActive, isPending }) => {
-              return isActive ? "blue" : "black";
+              return isActive ? "blue link__navbar" : "black link__navbar";
             }} to="/"
           >
             home
           </NavLink>
           <NavLink
             className={({ isActive, isPending }) => {
-              return isActive ? "blue" : "black";
+              return isActive ? "blue link__navbar" : "black link__navbar";
             }} to="/recipes"
           >
             recipes
           </NavLink>
           <NavLink
             className={({ isActive, isPending }) => {
-              return isActive ? "blue" : "black";
+              return isActive ? "blue link__navbar" : "black link__navbar";
             }}
             to="/about"
           >
@@ -48,7 +48,7 @@ function Navbar() {
           {userAuth.authenticated && userAuth.editorPermissions &&
             <NavLink 
               className={({ isActive, isPending }) => {
-                return isActive ? "blue" : "black";
+                return isActive ? "blue link__navbar" : "black link__navbar";
               }}
               to="/create"
             >
@@ -70,30 +70,22 @@ function Navbar() {
 
         <div className="user-auth-navbar">
           {userAuth.authenticated ?
-            <button 
-            className="bg-blue white text-btn"
-              onClick={() => {
-                setUserAuth({
-                  authenticated: false,
-                  editorPermissions: false,
-                });
-                localStorage.removeItem("token");
-                localStorage.removeItem("editor");
-                localStorage.removeItem("tokenTime");
-              }}
+            <Link
+              className="bg-white black profile-pic__navbar"
+              to="/profile"
             >
-              sign out
-            </button> 
+              <IconUserCircle size={'1.6rem'}/>
+            </Link> 
             :
             <>
               <Link
-                className="black"
+                className="black link__navbar"
                 to="/sign-in"
               >
                 sign in
               </Link>
               <Link 
-                className="bg-blue white"
+                className="bg-blue white link__navbar"
                 to="/sign-up"
               >
                 sign up

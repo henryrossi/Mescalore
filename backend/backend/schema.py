@@ -7,7 +7,7 @@ from botocore.config import Config
 import secrets
 from math import log
 
-from django.contrib.auth.models import User, Permission
+from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 
 import os
@@ -49,21 +49,11 @@ class RecipeType(DjangoObjectType):
         fields = ("id", "name", "description", "time", "servings", \
                   "instructions", "category", "imageURL")
     
-    # With the current design pictures never exceed 650 x 650 pixels
-    # Size now doesn't exceed 605 pixels
-    # Keeping images small is ideal
     ingredient_list = graphene.List(IngredientListType)
-    # base64picture = base64Scalar.Base64()
 
     def resolve_ingredient_list(self, info):
         return IngredientList.objects.filter(recipe=self.id)
     
-    # def resolve_base64picture(self, info):
-    #     if self.picture and hasattr(self.picture, 'url'):
-    #         encoded_string = base64.b64encode(self.picture.read())
-    #         return encoded_string
-    #     return ""
-
 class RecipeInput(graphene.InputObjectType):
     name = graphene.String(required=True)
     imageURL = graphene.String(required=False)
@@ -123,7 +113,7 @@ class Query(UserQuery, MeQuery, graphene.ObjectType):
                                    offset=graphene.Int(), limit=graphene.Int())
     get_number_of_recipes = graphene.Int()
     get_s3_presigned_url = graphene.String()
-    get_editor_permissions = graphene.Boolean(username=graphene.String())
+    get_favorite_recipes = graphene.List(RecipeType)
     
 
     # Query needs to be rewritten now that sorting is done client-side.
@@ -188,6 +178,11 @@ class Query(UserQuery, MeQuery, graphene.ObjectType):
             print(e)
             return None
         return response
+    
+    def resolve_get_favorite_recipes(root, info):
+        if info.context.user:
+            print(info.context.user)
+        return Recipe.objects.all()
 
 
 
@@ -333,6 +328,9 @@ class AuthenticateUser(mutations.ObtainJSONWebToken):
     @classmethod
     def resolve_mutation(cls, root, info, **kwargs):
         res = super().resolve_mutation(root, info, **kwargs)
+
+        if not res.user:
+            return res
 
         editorPermissions = False
         if res.user.has_perm("recipes.add_recipe") and \

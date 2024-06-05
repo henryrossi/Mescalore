@@ -15,6 +15,7 @@ import EditRecipe from "./routes/EditRecipe";
 import Search from "./routes/Search";
 import ActivateEmail from "./routes/ActivateEmail";
 import { SignUp, SignIn } from "./routes/UserAuth";
+import Profile, { loader as ProfileLoader } from "./routes/Profile";
 
 const router = createBrowserRouter([
   {
@@ -54,6 +55,11 @@ const router = createBrowserRouter([
           path: "/search",
           element: <Search />
         },
+        {
+          path: "/profile",
+          element: <Profile />,
+          loader: ProfileLoader
+        }
       ]
     }]
   },
