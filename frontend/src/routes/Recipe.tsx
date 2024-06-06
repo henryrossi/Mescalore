@@ -1,9 +1,9 @@
 import * as React from "react";
 import { Link, useLoaderData, useParams } from "react-router-dom";
 import type { Params } from "react-router-dom";
-import { gql } from "@apollo/client";
+import { gql, useMutation } from "@apollo/client";
 import { RecipeData } from "../types";
-import { IconEdit } from "@tabler/icons-react";
+import { IconHeart, IconEdit } from "@tabler/icons-react";
 import authContext from "../authContext";
 import "./Recipe.css";
 import client from "../client";
@@ -27,6 +27,23 @@ const GET_RECIPE_QUERY = gql`
         measurement
       }
       instructions
+      favorite
+    }
+  }
+`;
+
+const FAVORITE_RECIPE = gql`
+  mutation FavoriteRecipeMutation($recipeId: ID!) {
+    favoriteRecipe(recipeId: $recipeId) {
+      updated
+    }
+  }
+`;
+
+const UNFAVORITE_RECIPE = gql`
+  mutation UnfavoriteRecipeMutation($recipeId: ID!) {
+    unfavoriteRecipe(recipeId: $recipeId) {
+      updated
     }
   }
 `;
@@ -46,6 +63,23 @@ export default function Recipe() {
   const { recipeName } = useParams();
   const { userAuth } = React.useContext(authContext);
   const data = useLoaderData() as RecipeData;
+  const [favorited, setFavorited] = React.useState(data.favorite);
+
+  const [favoriteRecipe] = useMutation(FAVORITE_RECIPE, {
+    onCompleted: (data) => {
+      if (data.favoriteRecipe.updated) {
+        setFavorited(true);
+      }
+    },
+  });
+
+  const [unfavoriteRecipe] = useMutation(UNFAVORITE_RECIPE, {
+    onCompleted: (data) => {
+      if (data.unfavoriteRecipe.updated) {
+        setFavorited(false);
+      }
+    },
+  });
 
   const handleIngredientLineThrough = (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
     const li = e.target as HTMLElement;
@@ -64,11 +98,26 @@ export default function Recipe() {
           <div className="flex-col gap-1rem padding-1rem">
             <div className="flex">
               <h1 className="text-5xl jua flex-1">{data.name}</h1>
-              {userAuth.authenticated && userAuth.editorPermissions && (
-                <Link to={"/edit/" + recipeName}>
-                  <IconEdit />
-                </Link>
-              )}
+              {userAuth.authenticated && <div className="flex gap-1rem">
+                <button 
+                  className="no-border bg-white favorite-button__recipe"
+                  onClick={favorited ? 
+                    () => unfavoriteRecipe({ variables: { recipeId: data.id } }) : 
+                    () => favoriteRecipe({ variables: { recipeId: data.id }})
+                  }
+                >
+                  <IconHeart
+                    size={'2rem'} 
+                    stroke={1} 
+                    className={favorited ? "favorited__recipe" : ""}
+                  />
+                </button>
+                {userAuth.editorPermissions &&
+                  <Link to={"/edit/" + recipeName}>
+                    <IconEdit size={'2rem'} stroke={1.5}/>
+                  </Link>
+                }
+              </div>}
             </div>
             <div className="flex gap-1rem">
               <span className="red">{data.servings} servings</span>

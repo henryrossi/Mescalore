@@ -5,6 +5,16 @@
     gap: 1rem;
 }
 
+.favorite-button__recipe {
+    padding: 0;
+    height: 2rem;
+}
+
+.favorite-button__recipe .favorited__recipe {
+    fill: #A8281F;
+}
+
+
 .header-2__recipe {
     margin-bottom: 1rem;
 }

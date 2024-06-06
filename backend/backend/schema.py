@@ -25,7 +25,7 @@ my_config = Config(
 )
 
 from recipes.models import Category, Recipe, Ingredient, IngredientList, \
-    Term, TermData, TFIDF
+    FavoriteRecipes, Term, TermData, TFIDF
 from recipes.search import Tokenizer
 
 class CategoryType(DjangoObjectType):
@@ -50,9 +50,16 @@ class RecipeType(DjangoObjectType):
                   "instructions", "category", "imageURL")
     
     ingredient_list = graphene.List(IngredientListType)
+    favorite = graphene.Boolean()
 
     def resolve_ingredient_list(self, info):
         return IngredientList.objects.filter(recipe=self.id)
+    
+    def resolve_favorite(self, info):
+        user = info.context.user
+        if user.is_authenticated:
+            return FavoriteRecipes.objects.filter(user=user, recipe=self).exists()
+        return False
     
 class RecipeInput(graphene.InputObjectType):
     name = graphene.String(required=True)
@@ -180,9 +187,12 @@ class Query(UserQuery, MeQuery, graphene.ObjectType):
         return response
     
     def resolve_get_favorite_recipes(root, info):
-        if info.context.user:
-            print(info.context.user)
-        return Recipe.objects.all()
+        user = info.context.user
+        if user.is_authenticated:
+            # Feels assuredly inefficient
+            favorites = FavoriteRecipes.objects.filter(user=user).values_list("recipe")
+            return Recipe.objects.filter(pk__in=favorites)
+        return []
 
 
 
@@ -311,6 +321,59 @@ class EditRecipe(graphene.Mutation):
             print(e)
             return EditRecipe(updated=False)
         
+class FavoriteRecipe(graphene.Mutation):
+    class Arguments:
+        recipe_id = graphene.ID()
+
+    updated = graphene.Boolean()
+
+    @classmethod
+    def mutate(cls, root, info, recipe_id):
+        user = info.context.user
+        if not user.is_authenticated:
+            return FavoriteRecipe(updated=False)
+        try:
+            recipe = Recipe.objects.get(pk=recipe_id)
+            favorite, created = FavoriteRecipes.objects.get_or_create(
+                recipe=recipe,
+                user=user
+            )
+            if not created:
+                return FavoriteRecipe(updated=False)
+            favorite.save()
+            print(FavoriteRecipes.objects.all())
+            return FavoriteRecipe(updated=True)
+        except Exception as e:
+            print(e)
+            return FavoriteRecipe(updated=False)
+
+class UnfavoriteRecipe(graphene.Mutation):
+    class Arguments:
+        recipe_id = graphene.ID()
+
+    updated = graphene.Boolean()
+
+    @classmethod
+    def mutate(cls, root, info, recipe_id):
+        user = info.context.user
+        if not user.is_authenticated:
+            return FavoriteRecipe(updated=False)
+        try:
+            recipe = Recipe.objects.get(pk=recipe_id)
+            favorite, created = FavoriteRecipes.objects.get_or_create(
+                recipe=recipe,
+                user=user
+            )
+            if created:
+                return FavoriteRecipe(updated=False)
+            favorite.delete()
+            print(FavoriteRecipes.objects.all())
+            return FavoriteRecipe(updated=True)
+        except Exception as e:
+            print(e)
+            return FavoriteRecipe(updated=False)
+
+        
 class RegisterUser(mutations.Register):
     recipeEditor = graphene.Boolean()
 
@@ -346,6 +409,9 @@ class Mutation(graphene.ObjectType):
     create_recipe = CreateRecipe.Field()
     delete_recipe = DeleteRecipe.Field()
     edit_recipe = EditRecipe.Field()
+
+    favorite_recipe = FavoriteRecipe.Field()
+    unfavorite_recipe = UnfavoriteRecipe.Field()
 
     user_registration = RegisterUser.Field()
     user_verification = mutations.VerifyAccount.Field()

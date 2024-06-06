@@ -8,6 +8,7 @@ export interface RecipeData {
   imageURL: string | null,
   ingredientList: IngredientList[],
   instructions: string,
+  favorite: boolean,
 };
   
 export interface RecipeData2 {

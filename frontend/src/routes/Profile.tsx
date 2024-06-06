@@ -20,6 +20,7 @@ const GET_FAVORITE_RECIPES_QUERY = gql`
 export async function loader() {
     const result = await client.query({
         query: GET_FAVORITE_RECIPES_QUERY,
+        fetchPolicy: "network-only",
     });
 
     if (result.errors) {
