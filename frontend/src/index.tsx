@@ -16,6 +16,7 @@ import Search from "./routes/Search";
 import ActivateEmail from "./routes/ActivateEmail";
 import { SignUp, SignIn } from "./routes/UserAuth";
 import Profile, { loader as ProfileLoader } from "./routes/Profile";
+import Unavailable from "./components/Unavailable";
 
 const router = createBrowserRouter([
   {
@@ -23,7 +24,7 @@ const router = createBrowserRouter([
     element: <Mescolare />,
     errorElement: <ErrorPage />,
     children: [{
-      errorElement: <ErrorPage />,
+      errorElement: <Unavailable />,
       children: [
         {
           index: true,

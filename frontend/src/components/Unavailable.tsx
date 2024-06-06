@@ -4,9 +4,11 @@ import "./Unavailable.css";
 
 export default function Unavailable() {
   return (
-    <div className="unavailable">
-      <p>Sorry, this page is unavailable</p>
-      <Link to="/">Click here to return to the Home page</Link>
+    <div className="flex-col container__unavailable">
+      <p className="jua text-3xl">Sorry, this page is unavailable</p>
+      <Link className="text-base blue" to="/">
+        Click here to return to the Home page
+      </Link>
     </div>
   );
 }

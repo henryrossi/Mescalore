@@ -64,6 +64,7 @@ export default function Recipe() {
   const { userAuth } = React.useContext(authContext);
   const data = useLoaderData() as RecipeData;
   const [favorited, setFavorited] = React.useState(data.favorite);
+  console.log(data.favorite)
 
   const [favoriteRecipe] = useMutation(FAVORITE_RECIPE, {
     onCompleted: (data) => {

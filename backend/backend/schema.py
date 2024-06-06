@@ -120,7 +120,7 @@ class Query(UserQuery, MeQuery, graphene.ObjectType):
                                    offset=graphene.Int(), limit=graphene.Int())
     get_number_of_recipes = graphene.Int()
     get_s3_presigned_url = graphene.String()
-    get_favorite_recipes = graphene.List(RecipeType)
+    get_favorite_recipes = graphene.List(RecipeType, searchText=graphene.String())
     
 
     # Query needs to be rewritten now that sorting is done client-side.
@@ -186,12 +186,31 @@ class Query(UserQuery, MeQuery, graphene.ObjectType):
             return None
         return response
     
-    def resolve_get_favorite_recipes(root, info):
+    def resolve_get_favorite_recipes(root, info, searchText):
         user = info.context.user
         if user.is_authenticated:
+            # if searchText == "":
             # Feels assuredly inefficient
             favorites = FavoriteRecipes.objects.filter(user=user).values_list("recipe")
-            return Recipe.objects.filter(pk__in=favorites)
+            recipes = Recipe.objects.filter(pk__in=favorites)
+            t = Tokenizer()
+            searchedTerms = t.tokenize(searchText)
+            if len(searchedTerms) == 0:
+                return recipes
+            tuples = []
+            for recipe in recipes:
+                score = 0
+                for term in searchedTerms:
+                    qsTermID = Term.objects.filter(term=term)
+                    if len(qsTermID) > 0:
+                        qsTFIDF = TFIDF.objects.filter(recipe=recipe, term=qsTermID[0])
+                        if len(qsTFIDF) > 0:
+                            score += qsTFIDF[0].score
+                tuples.append((recipe, score))
+            tuples.sort(key=lambda tup: tup[1], reverse=True)
+            #top = tuples[offset:(offset+limit)]
+            top = tuples
+            return [r for r, *_ in top]
         return []
 
 
