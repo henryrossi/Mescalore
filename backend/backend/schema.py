@@ -117,7 +117,7 @@ class Query(UserQuery, MeQuery, graphene.ObjectType):
     get_recipes_by_category = graphene.List(RecipeType, category=graphene.String())
     get_recipe_by_name = graphene.Field(RecipeType, name=graphene.String())
     search_recipes = graphene.List(RecipeType, searchText=graphene.String(), \
-                                   offset=graphene.Int(), limit=graphene.Int())
+                                   offset=graphene.Int())
     get_number_of_recipes = graphene.Int()
     get_s3_presigned_url = graphene.String()
     get_favorite_recipes = graphene.List(RecipeType, searchText=graphene.String())
@@ -142,7 +142,9 @@ class Query(UserQuery, MeQuery, graphene.ObjectType):
     def resolve_get_recipe_by_name(root, info, name):
         return Recipe.objects.filter(name=name)[0]
     
-    def resolve_search_recipes(root, info, searchText, offset, limit):
+    def resolve_search_recipes(root, info, searchText, offset):
+        print(searchText, offset)
+        limit = 12
         if searchText == "":
             return []
         t = Tokenizer()

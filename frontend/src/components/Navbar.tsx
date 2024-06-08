@@ -1,5 +1,5 @@
 import * as React from "react";
-import { NavLink, Link, useNavigate } from "react-router-dom";
+import { NavLink, Link, useNavigate, useParams, useLocation } from "react-router-dom";
 import authContext from "../authContext";
 import { IconSearch, IconUserCircle } from "@tabler/icons-react";
 import "./Navbar.css";
@@ -7,17 +7,18 @@ import "./Navbar.css";
 function Navbar() {
   const [searchInput, setSearchInput] = React.useState("");
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const { userAuth, setUserAuth } = React.useContext(authContext);
+  const { userAuth } = React.useContext(authContext);
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
-      handleNavigate();
+      handleNavSearch();
     }
   };
 
-  const handleNavigate = () => {
-    navigate("/search", { replace: true, state: { search: searchInput } });
+  const handleNavSearch = () => {
+    navigate("/search?q=" + searchInput);
   };
 
   return (
@@ -56,17 +57,17 @@ function Navbar() {
             </NavLink>
           }
         </nav>
-        <div className="search-container-navbar">
+        {location.pathname !== "/search" && <div className="search-container-navbar">
           <input
             type="text"
             placeholder="Search"
             onChange={(event) => setSearchInput(event.target.value)}
             onKeyDown={handleKeyDown}
           />
-          <button onClick={handleNavigate}>
+          <button onClick={handleNavSearch}>
             <IconSearch size={'1rem'}/>
           </button>
-        </div>
+        </div>}
 
         <div className="user-auth-navbar">
           {userAuth.authenticated ?

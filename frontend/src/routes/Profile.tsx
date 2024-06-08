@@ -20,7 +20,6 @@ const GET_FAVORITE_RECIPES_QUERY = gql`
 export async function loader({ request } : {request: Request}) {
     const url = new URL(request.url);
     const searchText = url.searchParams.get("q");
-    console.log(searchText);
 
     const result = await client.query({
         query: GET_FAVORITE_RECIPES_QUERY,

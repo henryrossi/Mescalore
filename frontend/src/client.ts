@@ -21,14 +21,17 @@ const client = new ApolloClient({
             keyArgs: ["name"],
           },
           searchRecipes: {
-            // Don't cache separate results based on
-            // any of this field's arguments.
             keyArgs: ["searchText"],
 
-            // Concatenate the incoming list items with
-            // the existing list items.
-            merge(existing = [], incoming) {
-              return [...existing, ...incoming];
+            // @ts-ignore
+            merge(existing = [], incoming, { args: { offset = 0 }}) {
+              console.log(offset);
+              const merged = existing ? existing.slice(0) : [];
+              for (let i = 0; i < incoming.length; ++i) {
+                merged[offset + i] = incoming[i];
+              }
+
+              return merged;
             },
           },
         },

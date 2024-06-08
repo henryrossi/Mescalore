@@ -9,10 +9,10 @@ import AboutUs from "./routes/AboutUs";
 import Home from "./routes/Home";
 import ErrorPage from "./routes/ErrorPage";
 import Recipes, { loader as RecipesLoader } from "./routes/Recipes";
-import Recipe, {loader as RecipeLoader} from "./routes/Recipe";
+import Recipe, { loader as RecipeLoader } from "./routes/Recipe";
 import CreateRecipe from "./routes/CreateRecipe";
 import EditRecipe from "./routes/EditRecipe";
-import Search from "./routes/Search";
+import Search, { loader as SearchLoader } from "./routes/Search";
 import ActivateEmail from "./routes/ActivateEmail";
 import { SignUp, SignIn } from "./routes/UserAuth";
 import Profile, { loader as ProfileLoader } from "./routes/Profile";
@@ -28,11 +28,11 @@ const router = createBrowserRouter([
       children: [
         {
           index: true,
-          element: <Home />
+          element: <Home />,
         },
         {
           path: "/about",
-          element: <AboutUs />
+          element: <AboutUs />,
         },
         {
           path: "/recipes",
@@ -41,7 +41,7 @@ const router = createBrowserRouter([
         },
         {
           path: "/create",
-          element: <CreateRecipe />
+          element: <CreateRecipe />,
         },
         {
           path: "/:recipeName",
@@ -54,12 +54,13 @@ const router = createBrowserRouter([
         },
         {
           path: "/search",
-          element: <Search />
+          element: <Search />,
+          loader: SearchLoader,
         },
         {
           path: "/profile",
           element: <Profile />,
-          loader: ProfileLoader
+          loader: ProfileLoader,
         }
       ]
     }]
