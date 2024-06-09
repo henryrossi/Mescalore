@@ -4,43 +4,75 @@ import RecipeList from "../components/RecipeList";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { RecipePreview } from "../types";
 import client from "../client";
-import { gql } from "@apollo/client";
+import { gql, useQuery } from "@apollo/client";
 import { IconSearch } from "@tabler/icons-react";
 import "./Profile.css";
+import Loading from "../components/Loading";
 
 const GET_FAVORITE_RECIPES_QUERY = gql`
-  query GetFavoriteRecipesQuery($searchText: String!) {
-    getFavoriteRecipes(searchText: $searchText) {
+  query GetFavoriteRecipesQuery($searchText: String!, $offset: Int) {
+    getFavoriteRecipes(searchText: $searchText, offset: $offset) {
         name
         imageURL
     }
   }
 `;
 
+const GET_NUMBER_OF_FAVORITES_QUERY = gql`
+  query GetNumberOfFavoritesQuery {
+    getNumberOfFavorites
+  }
+`;
+
 export async function loader({ request } : {request: Request}) {
     const url = new URL(request.url);
-    const searchText = url.searchParams.get("q");
+    let searchText = url.searchParams.get("q");
+    searchText = searchText ? searchText : "";
+    
 
     const result = await client.query({
         query: GET_FAVORITE_RECIPES_QUERY,
         fetchPolicy: "network-only",
         variables: {
-            searchText: searchText ? searchText : "",
+            searchText: searchText,
+            offset: 0,
         }
+    });
+
+    const count = await client.query({
+        query: GET_NUMBER_OF_FAVORITES_QUERY,
     });
 
     if (result.errors) {
         throw Error("Not logged In");
     }
 
-    return result.data.getFavoriteRecipes;
+    return {
+        urlSearch: searchText,
+        count: count.data.getNumberOfFavorites,
+    };
 }
 
 export default function Profile() {
-    const favorites = useLoaderData() as RecipePreview[];
+    const data = useLoaderData() as { urlSearch: string, count: string };
     const { userAuth, setUserAuth } = React.useContext(authContext);
-    const [seacrhText, setSearchText] = React.useState("");
+    const [seacrhText, setSearchText] = React.useState(data.urlSearch);
     const navigate = useNavigate();
+
+    const { data: recipes, fetchMore } = useQuery(GET_FAVORITE_RECIPES_QUERY, {
+        fetchPolicy: "cache-only",
+        variables: {
+          searchText: data.urlSearch,
+          offset: 0,
+        }
+    });
+
+    const handleFetchMore = () => {
+        fetchMore({variables: {
+          searchText: data.urlSearch,
+          offset: recipes.getFavoriteRecipes.length
+        }})
+    };
 
     const logoutUser = () => {
         setUserAuth({
@@ -93,13 +125,31 @@ export default function Profile() {
                     </div>
                 </div>
             </section>
-            {favorites.length === 0 ? 
-                <div className="flex-col no-favorites__profile">
-                    <p className="jua text-xl">
-                        Looks like you don't have any favorite recipes :(
-                    </p>
-                </div> :
-                <RecipeList recipes={favorites}/>
+            {!recipes ?
+                <Loading /> :
+                <>
+                    {recipes.getFavoriteRecipes.length === 0 ? 
+                        <div className="flex-col no-favorites__profile">
+                            <p className="jua text-xl">
+                                Looks like you don't have any favorite recipes :(
+                            </p>
+                        </div> :
+                        <>
+                            <RecipeList recipes={recipes.getFavoriteRecipes}/>
+                            {recipes.getFavoriteRecipes.length !== 0 && 
+                                recipes.getFavoriteRecipes.length < parseInt(data.count, 10) && (
+                                <div className="flex refetch-btn-container__search">
+                                    <button 
+                                    className="btn text-btn btn-yellow blue-drop-shadow" 
+                                    onClick={handleFetchMore}
+                                    >
+                                    Load more recipes
+                                    </button>
+                                </div>
+                            )}
+                        </>
+                    } 
+                </> 
             }
         </div>
     );

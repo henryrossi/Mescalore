@@ -120,7 +120,9 @@ class Query(UserQuery, MeQuery, graphene.ObjectType):
                                    offset=graphene.Int())
     get_number_of_recipes = graphene.Int()
     get_s3_presigned_url = graphene.String()
-    get_favorite_recipes = graphene.List(RecipeType, searchText=graphene.String())
+    get_favorite_recipes = graphene.List(RecipeType, searchText=graphene.String(), \
+                                         offset=graphene.Int())
+    get_number_of_favorites = graphene.Int()
     
 
     # Query needs to be rewritten now that sorting is done client-side.
@@ -143,7 +145,6 @@ class Query(UserQuery, MeQuery, graphene.ObjectType):
         return Recipe.objects.filter(name=name)[0]
     
     def resolve_search_recipes(root, info, searchText, offset):
-        print(searchText, offset)
         limit = 12
         if searchText == "":
             return []
@@ -188,9 +189,12 @@ class Query(UserQuery, MeQuery, graphene.ObjectType):
             return None
         return response
     
-    def resolve_get_favorite_recipes(root, info, searchText):
+    def resolve_get_favorite_recipes(root, info, searchText, offset):
+        print(searchText)
+        limit = 12
         user = info.context.user
         if user.is_authenticated:
+            print(user)
             # if searchText == "":
             # Feels assuredly inefficient
             favorites = FavoriteRecipes.objects.filter(user=user).values_list("recipe")
@@ -198,7 +202,7 @@ class Query(UserQuery, MeQuery, graphene.ObjectType):
             t = Tokenizer()
             searchedTerms = t.tokenize(searchText)
             if len(searchedTerms) == 0:
-                return recipes
+                return recipes[offset:(offset+limit)]
             tuples = []
             for recipe in recipes:
                 score = 0
@@ -210,10 +214,15 @@ class Query(UserQuery, MeQuery, graphene.ObjectType):
                             score += qsTFIDF[0].score
                 tuples.append((recipe, score))
             tuples.sort(key=lambda tup: tup[1], reverse=True)
-            #top = tuples[offset:(offset+limit)]
-            top = tuples
+            top = tuples[offset:(offset+limit)]
             return [r for r, *_ in top]
         return []
+    
+    def resolve_get_number_of_favorites(root, info):
+        user = info.context.user
+        if user.is_authenticated:
+            return FavoriteRecipes.objects.filter(user=user).count()
+        return 0
 
 
 
