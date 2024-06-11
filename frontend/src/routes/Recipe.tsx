@@ -51,6 +51,7 @@ const UNFAVORITE_RECIPE = gql`
 export async function loader({ params }: { params: Params<"recipeName">}) {
   const result = await client.query({
     query: GET_RECIPE_QUERY,
+    fetchPolicy: "no-cache",
     variables: {
       name: params.recipeName,
     },
