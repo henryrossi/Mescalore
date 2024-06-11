@@ -1,6 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CopyPlugin = require("copy-webpack-plugin");
 const webpack = require('webpack');
 require('dotenv').config();
 
@@ -17,6 +18,11 @@ module.exports = {
         'process.env.BACKEND_URI': JSON.stringify(process.env.BACKEND_URI),
     }),
     new MiniCssExtractPlugin(),
+    new CopyPlugin({
+      patterns: [
+        { from: "src/public", to: "/public" }
+      ]
+    })
   ],
   output: {
     publicPath: "/",
