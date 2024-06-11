@@ -99,16 +99,17 @@ export default function Profile() {
     return (
         <div>
             <section className="flex-col gap-1rem main-container__profile">
-                <div className="flex">
+                <div className="flex flex-wrap">
                     <h1 className="text-2xl flex-1">Welcome to your profile</h1>
                     <button 
-                        className="btn text-btn btn-yellow hover-blue-drop-shadow"
+                        className="btn text-btn btn-yellow hover-blue-drop-shadow 
+                                   sign-out-button__profile"
                         onClick={logoutUser}
                     >
                         Sign Out
                     </button>
                 </div>
-                <div className="flex">
+                <div className="grid">
                     <p className="text-base flex-1">Check out your saved recipes</p>
                     <div className="flex-1 search-controls__profile">
                         <input 

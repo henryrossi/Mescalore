@@ -3,6 +3,10 @@
     margin: 2rem auto;
 }
 
+.sign-out-button__profile {
+    height: 2.25rem;
+}
+
 .search-controls__profile {
     position: relative;
 }
@@ -27,4 +31,8 @@
     height: 30rem;
     justify-content: center;
     align-items: center;
+}
+
+@media only screen  and (min-width: 90rem) {
+    
 }
