@@ -24,8 +24,8 @@ my_config = Config(
     signature_version = 'v4',
 )
 
-from recipes.models import Category, Recipe, Ingredient, IngredientList, \
-    FavoriteRecipes, Term, TermData, TFIDF
+from recipes.models import Category, Recipe, Ingredient, IngredientSection, \
+    IngredientList, FavoriteRecipes, Term, TermData, TFIDF
 from recipes.search import Tokenizer
 
 class CategoryType(DjangoObjectType):
@@ -43,17 +43,27 @@ class IngredientListType(DjangoObjectType):
         model = IngredientList
         fields = ("id", "recipe", "ingredient", "measurement")
 
+class IngredientSectionType(DjangoObjectType):
+    class Meta:
+        model = IngredientSection
+        fields = ("id", "name")
+    
+    ingredient_list = graphene.List(IngredientListType)
+
+    def resolve_ingredient_list(self, info):
+        return IngredientList.objects.filter(section=self)
+
 class RecipeType(DjangoObjectType):
     class Meta:
         model = Recipe
         fields = ("id", "name", "description", "time", "servings", \
                   "instructions", "category", "imageURL")
     
-    ingredient_list = graphene.List(IngredientListType)
+    ingredient_sections = graphene.List(IngredientSectionType)
     favorite = graphene.Boolean()
 
-    def resolve_ingredient_list(self, info):
-        return IngredientList.objects.filter(recipe=self.id)
+    def resolve_ingredient_sections(self, info):
+        return IngredientSection.objects.filter(recipe=self)
     
     def resolve_favorite(self, info):
         user = info.context.user
@@ -61,6 +71,14 @@ class RecipeType(DjangoObjectType):
             return FavoriteRecipes.objects.filter(user=user, recipe=self).exists()
         return False
     
+class IngredientInput(graphene.InputObjectType):
+    Ingredient = graphene.String(required=True)
+    measurement = graphene.String(required=True)
+    
+class IngredientSectionInput(graphene.InputObjectType):
+    name = graphene.String(required=True)
+    ingredients = graphene.List(IngredientInput, required=True)
+
 class RecipeInput(graphene.InputObjectType):
     name = graphene.String(required=True)
     imageURL = graphene.String(required=False)
@@ -68,9 +86,9 @@ class RecipeInput(graphene.InputObjectType):
     description = graphene.String(required=True)
     time = graphene.Int(required=True)
     servings = graphene.Int(required=True)
-    measurements = graphene.List(graphene.String, required=True)
-    ingredients = graphene.List(graphene.String, required=True)
+    sections = graphene.List(IngredientSectionInput, required=True)
     instructions = graphene.String(required=True)
+
     
 def addRecipe(recipe_data, recipe):
     t = Tokenizer()
@@ -78,12 +96,13 @@ def addRecipe(recipe_data, recipe):
     addTerms(nameTerms, recipe)
     descTerms = t.tokenize(recipe_data.description)
     addTerms(descTerms, recipe)
-    for measurement in recipe_data.measurements:
-        measTerms = t.tokenize(measurement)
-        addTerms(measTerms, recipe)
-    for ingredient in recipe_data.ingredients:
-        ingrTerms = t.tokenize(ingredient)
-        addTerms(ingrTerms, recipe)
+    for section in recipe_data.sections:
+        for measurement in section.measurements:
+            measTerms = t.tokenize(measurement)
+            addTerms(measTerms, recipe)
+        for ingredient in section.ingredients:
+            ingrTerms = t.tokenize(ingredient)
+            addTerms(ingrTerms, recipe)
     instructionTerms = t.tokenize(recipe_data.instructions)
     addTerms(instructionTerms, recipe)
 
@@ -263,14 +282,16 @@ class CreateRecipe(graphene.Mutation):
             for category in recipe_data.categories:
                 cat, created = Category.objects.get_or_create(name = category)
                 recipe.category.add(cat)
-            for item in zip(recipe_data.ingredients, recipe_data.measurements):
-                ingr, created = Ingredient.objects.get_or_create(name = item[0])
-                ingList = IngredientList(
-                    recipe = recipe,
-                    ingredient = ingr,
-                    measurement = item[1]
-                )
-                ingList.save()
+            for section in recipe_data.sections:
+                sect, created = IngredientSection.objects.get_or_create(recipe=recipe, name=section.name)
+                for item in zip(section.ingredients, section.measurements):
+                    ingr, created = Ingredient.objects.get_or_create(name = item[0])
+                    ingList = IngredientList(
+                        section = sect,
+                        ingredient = ingr,
+                        measurement = item[1]
+                    )
+                    ingList.save()
             # TF-IDF
             addRecipe(recipe_data, recipe)
             calculateTFIDF()

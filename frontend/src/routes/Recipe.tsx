@@ -20,11 +20,14 @@ const GET_RECIPE_QUERY = gql`
         name
       }
       imageURL
-      ingredientList {
-        ingredient {
-          name
+      ingredientSections {
+        name
+        ingredientList {
+          measurement
+          ingredient {
+            name
+          }
         }
-        measurement
       }
       instructions
       favorite
@@ -57,6 +60,11 @@ export async function loader({ params }: { params: Params<"recipeName">}) {
     },
   });
 
+  if (result.error) {
+    console.log(result.error);
+    throw Error(result.error.message);
+  }
+
   return result.data.getRecipeByName;
 }
 
@@ -65,7 +73,6 @@ export default function Recipe() {
   const { userAuth } = React.useContext(authContext);
   const data = useLoaderData() as RecipeData;
   const [favorited, setFavorited] = React.useState(data.favorite);
-  console.log(data.favorite)
 
   const [favoriteRecipe] = useMutation(FAVORITE_RECIPE, {
     onCompleted: (data) => {
@@ -149,17 +156,22 @@ export default function Recipe() {
       <section className="flex-col gap-1rem">
         <div>
           <h2 className="text-3xl header-2__recipe">Ingredients</h2>
-          <ul className="flex-col gap-1rem padding-1rem">
-            {data.ingredientList.map((obj, index) => (
-              <li 
-                key={index} 
-                onClick={handleIngredientLineThrough}
-                className="text-base ingredient__recipe"
-              >
-                {obj.measurement} {obj.ingredient.name}
-              </li>
-            ))}
-          </ul>
+          {data.ingredientSections.map((section) => (
+            <div>
+              <h3>{section.name}</h3>
+              <ul className="flex-col gap-1rem padding-1rem">
+              {section.ingredientList.map((ingr, index) => (
+                <li 
+                  key={index} 
+                  onClick={handleIngredientLineThrough}
+                  className="text-base ingredient__recipe"
+                >
+                  {ingr.measurement} {ingr.ingredient.name}
+                </li>
+              ))}
+              </ul>
+            </div>
+          ))}
         </div>
         <div>
           <h2 className="text-3xl header-2__recipe">Instructions</h2>

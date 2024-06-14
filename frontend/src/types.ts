@@ -6,7 +6,7 @@ export interface RecipeData {
   time: string,
   category: { name: string }[],
   imageURL: string | null,
-  ingredientList: IngredientList[],
+  ingredientSections: ingredientSections[]
   instructions: string,
   favorite: boolean,
 };
@@ -19,7 +19,13 @@ export interface RecipeData2 {
   categories: string[],
   picture: Blob | null,
   imageURL: string | null,
-  ingredients: { ingredient: string, measurement: string }[],
+  ingredientSections: {
+    name: string, 
+    ingredients: { 
+      ingredient: string, 
+      measurement: string 
+    }[],
+  }[],
   instructions: string[],
 };
 
@@ -32,7 +38,10 @@ export interface RecipeReturnType {
   servings: string,
   instructions: string,
   category: CategoryReturnType[]
-  ingredientList: IngredientListReturnType[]
+  ingredientSections: {
+    name: string,
+    ingredientList: IngredientListReturnType[]
+  }[]
 }
 
 interface CategoryReturnType {
@@ -47,6 +56,11 @@ interface IngredientListReturnType {
 
 interface IngredientReturnType {
   name: string,
+}
+
+interface ingredientSections {
+  name: string,
+  ingredientList: IngredientList[]
 }
 
 export interface IngredientList {

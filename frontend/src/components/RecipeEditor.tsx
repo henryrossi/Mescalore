@@ -153,60 +153,102 @@ export default function RecipeEditor({
             the measurement, and "butter", the ingredient. The measurement section may
             be left blank.
           </p>
-          <ul className="list-container-editor">
-            {recipeData.ingredients.map((object, index) => (
-              <li key={index}>
+          <ul>
+            {recipeData.ingredientSections.map(section => (
+              <li key={section.name}>
                 <input
                   type="text"
                   className="border-grey"
-                  value={object.measurement}
-                  onChange={(e) => {
-                    let ingredients = [...recipeData.ingredients];
-                    ingredients[index] = {
-                      measurement: e.target.value,
-                      ingredient: object.ingredient,
-                    };
-                    setRecipeData({...recipeData, ingredients: ingredients});
-                  }}
+                  value={section.name} 
                 />
-                <input
-                  type="text"
-                  className="border-grey"
-                  value={object.ingredient}
-                  onChange={(e) => {
-                    let ingredients = [...recipeData.ingredients];
-                    ingredients[index] = {
-                      measurement: object.measurement,
-                      ingredient: e.target.value,
-                    };
-                    setRecipeData({...recipeData, ingredients: ingredients});
-                  }}
-                />
+                <ul className="list-container-editor">
+                  {section.ingredients.map((object, index) => (
+                    <li key={index}>
+                      <input
+                        type="text"
+                        className="border-grey"
+                        value={object.measurement}
+                        onChange={(e) => {
+                          let ingredients = [...section.ingredients];
+                          ingredients[index] = {
+                            measurement: e.target.value,
+                            ingredient: object.ingredient,
+                          };
+                          setRecipeData({
+                            ...recipeData, 
+                            ingredientSections: [
+                              ...recipeData.ingredientSections,
+                              { 
+                                name: section.name,
+                                ingredients: ingredients,
+                              },
+                            ],
+                          });
+                        }}
+                      />
+                      <input
+                        type="text"
+                        className="border-grey"
+                        value={object.ingredient}
+                        onChange={(e) => {
+                          let ingredients = [...section.ingredients];
+                          ingredients[index] = {
+                            measurement: object.measurement,
+                            ingredient: e.target.value,
+                          };
+                          setRecipeData({
+                            ...recipeData, 
+                            ingredientSections: [
+                              ...recipeData.ingredientSections,
+                              {
+                                name: section.name,
+                                ingredients: ingredients
+                              },
+                            ],
+                          });
+                        }}
+                      />
+                      <button
+                        type="button"
+                        className="bg-grey no-border"
+                        onClick={() => {
+                          const ingredients = [...section.ingredients];
+                          ingredients.splice(index, 1);
+                          setRecipeData({...recipeData, ingredientSections: [
+                            ...recipeData.ingredientSections,
+                            {
+                              name: section.name,
+                              ingredients: ingredients
+                            },
+                          ],});
+                        }}
+                      >
+                        <IconTrashX size={'1.5rem'}/>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
                 <button
                   type="button"
-                  className="bg-grey no-border"
+                  className="bg-grey no-border add-item-button-editor"
                   onClick={() => {
-                    const ingredients = [...recipeData.ingredients];
-                    ingredients.splice(index, 1);
-                    setRecipeData({...recipeData, ingredients: ingredients});
+                    setRecipeData({...recipeData,
+                      ingredientSections: [
+                        ...recipeData.ingredientSections,
+                        {
+                          name: section.name,
+                          ingredients: [
+                            ...section.ingredients, {ingredient: "", measurement: ""}
+                          ]
+                        },
+                      ],
+                    });
                   }}
                 >
-                  <IconTrashX size={'1.5rem'}/>
+                  <IconPencilPlus size={'1.5rem'}/>
                 </button>
-              </li>
-            ))}
+            </li>))}
           </ul>
-          <button
-            type="button"
-            className="bg-grey no-border add-item-button-editor"
-            onClick={() => {
-              setRecipeData({...recipeData, ingredients: [
-                ...recipeData.ingredients, {ingredient: "", measurement: ""}
-              ]});
-            }}
-          >
-            <IconPencilPlus size={'1.5rem'}/>
-          </button>
         </fieldset>
         <fieldset>
           <legend>Instructions</legend>

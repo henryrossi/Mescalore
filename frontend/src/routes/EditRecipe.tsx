@@ -23,7 +23,10 @@ export default function EditRecipe() {
     categories: [],
     picture: null,
     imageURL: null,
-    ingredients: [],
+    ingredientSections: [{
+      name: "",
+      ingredients: [{ingredient: "", measurement: ""},],
+    }],
     instructions: [],
   });
 
@@ -42,10 +45,15 @@ export default function EditRecipe() {
           categories.name.toLowerCase()
         ),
         picture: null,
-        ingredients: recipe.ingredientList.map((object) => ({
-          measurement: object.measurement,
-          ingredient: object.ingredient.name,
-        })),
+        ingredientSections: recipe.ingredientSections.map(section => (
+          {
+            name: section.name,
+            ingredients: section.ingredientList.map((object) => ({
+              measurement: object.measurement,
+              ingredient: object.ingredient.name,
+            })),
+          }
+        )),
         instructions: recipe.instructions.split("\r")
       });
     },
@@ -109,10 +117,7 @@ export default function EditRecipe() {
         description: recipeData.description,
         categories: recipeData.categories,
         imageURL: imageURL,
-        measurements: recipeData.ingredients.map(
-          (object) => object.measurement
-        ),
-        ingredients: recipeData.ingredients.map((object) => object.ingredient),
+        sections: recipeData.ingredientSections,
         instructions: recipeData.instructions.join("\r"),
       },
     });

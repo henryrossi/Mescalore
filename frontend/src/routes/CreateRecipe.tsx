@@ -15,7 +15,10 @@ function CreateRecipe() {
     categories: [],
     picture: null,
     imageURL: null,
-    ingredients: [{ingredient: "", measurement: ""},],
+    ingredientSections: [{
+      name: "",
+      ingredients: [{ingredient: "", measurement: ""},],
+    }],
     instructions: [""],
   });
 
@@ -69,10 +72,7 @@ function CreateRecipe() {
         description: recipeData.description,
         categories: recipeData.categories,
         imageURL: imageURL,
-        measurements: recipeData.ingredients.map(
-          (object) => object.measurement
-        ),
-        ingredients: recipeData.ingredients.map((object) => object.ingredient),
+        sections: recipeData.ingredientSections,
         instructions: recipeData.instructions.join("\r"),
       },
     });

@@ -42,10 +42,22 @@ class Recipe(models.Model):
 
     def __str__(self):
         return self.name
+    
+class IngredientSection(models.Model):
+    recipe = models.ForeignKey(
+        Recipe, on_delete=models.CASCADE
+    )
+    name = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.name
 
 class IngredientList(models.Model):
     recipe = models.ForeignKey(
         Recipe, on_delete=models.CASCADE
+    )
+    section = models.ForeignKey(
+        IngredientSection, on_delete=models.CASCADE
     )
     ingredient = models.ForeignKey(
         Ingredient, on_delete=models.CASCADE
@@ -54,6 +66,7 @@ class IngredientList(models.Model):
 
 
 # User's favorite recipes Table
+
 class FavoriteRecipes(models.Model):
     recipe = models.ForeignKey(
         Recipe, on_delete=models.CASCADE
