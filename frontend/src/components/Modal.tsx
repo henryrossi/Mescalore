@@ -1,7 +1,7 @@
 import * as React from "react";
 import ReactCrop, { PercentCrop, centerCrop, convertToPixelCrop, makeAspectCrop } from "react-image-crop";
 import setCanvasPreview from "../setCanvasPreview";
-import { RecipeData2 } from "../types";
+import { RecipeEditorData } from "../types";
 import "./Modal.css";
 
 const ASPECT_RATIO = 1;
@@ -11,8 +11,8 @@ export default function Modal({
     closeModal, recipeData, setRecipeData 
 } : {
     closeModal: () => void,
-    recipeData: RecipeData2,
-    setRecipeData: React.Dispatch<React.SetStateAction<RecipeData2>>,
+    recipeData: RecipeEditorData,
+    setRecipeData: React.Dispatch<React.SetStateAction<RecipeEditorData>>,
 }) {
 
     const [imageURL, setImageURL] = React.useState<string>("");

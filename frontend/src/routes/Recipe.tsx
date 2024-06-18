@@ -2,7 +2,7 @@ import * as React from "react";
 import { Link, useLoaderData, useParams } from "react-router-dom";
 import type { Params } from "react-router-dom";
 import { gql, useMutation } from "@apollo/client";
-import { RecipeData } from "../types";
+import { RecipeData, RecipeGraphQLReturn } from "../types";
 import { IconHeart, IconEdit } from "@tabler/icons-react";
 import authContext from "../authContext";
 import "./Recipe.css";
@@ -51,7 +51,32 @@ const UNFAVORITE_RECIPE = gql`
   }
 `;
 
-export async function loader({ params }: { params: Params<"recipeName">}) {
+function decomposeGraphQLData(gqlData: RecipeGraphQLReturn) : RecipeData {
+  return ({
+    id: gqlData.id,
+    name: gqlData.name,
+    description: gqlData.description,
+    servings: gqlData.servings,
+    time: gqlData.time,
+    categories: gqlData.category.map(cat => cat.name),
+    imageURL: gqlData.imageURL,
+    ingredientSections: gqlData.ingredientSections.map(section => 
+      ({
+        ...section,
+        ingredientList: section.ingredientList.map(ingr => 
+          ({
+            measurement: ingr.measurement,
+            ingredient: ingr.ingredient.name,
+          })
+        )
+      })
+    ),
+    instructions: gqlData.instructions,
+    favorite: gqlData.favorite,
+  });
+}
+
+export async function loader({ params }: { params: Params<"recipeName">}) : Promise<RecipeData> {
   const result = await client.query({
     query: GET_RECIPE_QUERY,
     fetchPolicy: "no-cache",
@@ -65,7 +90,7 @@ export async function loader({ params }: { params: Params<"recipeName">}) {
     throw Error(result.error.message);
   }
 
-  return result.data.getRecipeByName;
+  return decomposeGraphQLData(result.data.getRecipeByName);
 }
 
 export default function Recipe() {
@@ -133,9 +158,9 @@ export default function Recipe() {
               <span className="red">{data.time} minutes</span>
             </div>
             <ul className="flex gap-1rem flex-wrap">
-              {data.category.map((tag) => (
-                <li key={tag.name}>
-                  <div className="btn btn-yellow blue-drop-shadow">{tag.name.toLowerCase()}</div>
+              {data.categories.map((cat) => (
+                <li key={cat}>
+                  <div className="btn btn-yellow blue-drop-shadow">{cat.toLowerCase()}</div>
                 </li>
               ))}
             </ul>
@@ -166,7 +191,7 @@ export default function Recipe() {
                   onClick={handleIngredientLineThrough}
                   className="text-base ingredient__recipe"
                 >
-                  {ingr.measurement} {ingr.ingredient.name}
+                  {ingr.measurement} {ingr.ingredient}
                 </li>
               ))}
               </ul>

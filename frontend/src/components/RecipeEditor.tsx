@@ -1,7 +1,7 @@
 import * as React from "react";
 import Unavailable from "../components/Unavailable";
 import "./RecipeEditor.css";
-import { RecipeData2 } from "../types";
+import { RecipeEditorData } from "../types";
 import authContext from "../authContext";
 import Modal from "./Modal";
 import 'react-image-crop/dist/ReactCrop.css'
@@ -13,8 +13,8 @@ export default function RecipeEditor({
   onSubmit,
   handleDelete,
 } : { 
-  recipeData: RecipeData2, 
-  setRecipeData: React.Dispatch<React.SetStateAction<RecipeData2>>, 
+  recipeData: RecipeEditorData, 
+  setRecipeData: React.Dispatch<React.SetStateAction<RecipeEditorData>>, 
   onSubmit: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => Promise<void>
   handleDelete: (() => void) | null
 }) {
@@ -162,15 +162,15 @@ export default function RecipeEditor({
                   value={section.name} 
                 />
                 <ul className="list-container-editor">
-                  {section.ingredients.map((object, index) => (
+                  {section.ingredientList.map((object, index) => (
                     <li key={index}>
                       <input
                         type="text"
                         className="border-grey"
                         value={object.measurement}
                         onChange={(e) => {
-                          let ingredients = [...section.ingredients];
-                          ingredients[index] = {
+                          let ingredientList = [...section.ingredientList];
+                          ingredientList[index] = {
                             measurement: e.target.value,
                             ingredient: object.ingredient,
                           };
@@ -180,7 +180,7 @@ export default function RecipeEditor({
                               ...recipeData.ingredientSections,
                               { 
                                 name: section.name,
-                                ingredients: ingredients,
+                                ingredientList: ingredientList,
                               },
                             ],
                           });
@@ -191,8 +191,8 @@ export default function RecipeEditor({
                         className="border-grey"
                         value={object.ingredient}
                         onChange={(e) => {
-                          let ingredients = [...section.ingredients];
-                          ingredients[index] = {
+                          let ingredientList = [...section.ingredientList];
+                          ingredientList[index] = {
                             measurement: object.measurement,
                             ingredient: e.target.value,
                           };
@@ -202,7 +202,7 @@ export default function RecipeEditor({
                               ...recipeData.ingredientSections,
                               {
                                 name: section.name,
-                                ingredients: ingredients
+                                ingredientList: ingredientList
                               },
                             ],
                           });
@@ -212,13 +212,13 @@ export default function RecipeEditor({
                         type="button"
                         className="bg-grey no-border"
                         onClick={() => {
-                          const ingredients = [...section.ingredients];
-                          ingredients.splice(index, 1);
+                          const ingredientList = [...section.ingredientList];
+                          ingredientList.splice(index, 1);
                           setRecipeData({...recipeData, ingredientSections: [
                             ...recipeData.ingredientSections,
                             {
                               name: section.name,
-                              ingredients: ingredients
+                              ingredientList: ingredientList
                             },
                           ],});
                         }}
@@ -237,8 +237,8 @@ export default function RecipeEditor({
                         ...recipeData.ingredientSections,
                         {
                           name: section.name,
-                          ingredients: [
-                            ...section.ingredients, {ingredient: "", measurement: ""}
+                          ingredientList: [
+                            ...section.ingredientList, {ingredient: "", measurement: ""}
                           ]
                         },
                       ],

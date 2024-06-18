@@ -1,70 +1,107 @@
 import * as React from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { useQuery, useMutation } from "@apollo/client";
+import { useLoaderData, useNavigate } from "react-router-dom";
+import type { Params } from "react-router-dom"
+import { gql, useMutation } from "@apollo/client";
+import client from "../client";
 import {
-  GET_RECIPE_QUERY,
   GET_S3_PRESIGNED_URL,
   EDIT_RECIPE_MUTATION,
   DELETE_RECIPE_MUTATION
 } from "../graphQL";
-import { RecipeData2, RecipeReturnType } from "../types";
-import Loading from "../components/Loading";
+import { RecipeEditorData, RecipeGraphQLReturn } from "../types";
 import RecipeEditor from "../components/RecipeEditor";
 
-export default function EditRecipe() {
-  const { recipeName } = useParams();
-  const navigate = useNavigate();
-  const [recipeId, setRecipeId] = React.useState("");
-  const [recipeData, setRecipeData] = React.useState<RecipeData2>({
-    name: "",
-    servings: "",
-    time: "",
-    description: "",
-    categories: [],
-    picture: null,
-    imageURL: null,
-    ingredientSections: [{
-      name: "",
-      ingredients: [{ingredient: "", measurement: ""},],
-    }],
-    instructions: [],
-  });
-
-  /* Apollo Queries and Mutations */
-
-  const { loading, error } = useQuery(GET_RECIPE_QUERY, {
-    variables: {
-      name: recipeName,
-    },
-    onCompleted: (data) => {
-      const recipe: RecipeReturnType = data.getRecipeByName;
-      setRecipeId(recipe.id);
-      setRecipeData({
-        ...recipe, 
-        categories: recipe.category.map((categories) =>
-          categories.name.toLowerCase()
-        ),
-        picture: null,
-        ingredientSections: recipe.ingredientSections.map(section => (
-          {
-            name: section.name,
-            ingredients: section.ingredientList.map((object) => ({
-              measurement: object.measurement,
-              ingredient: object.ingredient.name,
-            })),
+const GET_RECIPE_QUERY = gql`
+  query recipeQuery($name: String!) {
+    getRecipeByName(name: $name) {
+      id
+      name
+      description
+      servings
+      time
+      category {
+        name
+      }
+      imageURL
+      ingredientSections {
+        name
+        ingredientList {
+          measurement
+          ingredient {
+            name
           }
-        )),
-        instructions: recipe.instructions.split("\r")
-      });
+        }
+      }
+      instructions
+      favorite
+    }
+  }
+`;
+
+function decomposeGraphQLData(gqlData: RecipeGraphQLReturn) : RecipeEditorData {
+  return ({
+    id: gqlData.id,
+    name: gqlData.name,
+    description: gqlData.description,
+    servings: gqlData.servings,
+    time: gqlData.time,
+    categories: gqlData.category.map(cat => cat.name.toLowerCase()),
+    picture: null,
+    imageURL: gqlData.imageURL,
+    ingredientSections: gqlData.ingredientSections.map(section => 
+      ({
+        ...section,
+        ingredientList: section.ingredientList.map(ingr => 
+          ({
+            measurement: ingr.measurement,
+            ingredient: ingr.ingredient.name,
+          })
+        )
+      })
+    ),
+    instructions: gqlData.instructions.split("\r"),
+  })
+}
+
+interface EditRecipeLoaderData {
+  data: RecipeEditorData,
+  s3URL: string,
+}
+
+export async function loader({ params }: { params: Params<"recipeName">}) : Promise<EditRecipeLoaderData> {
+  console.log(params)
+  const result = await client.query({
+    query: GET_RECIPE_QUERY,
+    fetchPolicy: "no-cache",
+    variables: {
+      name: params.recipeName,
     },
   });
 
-  const {
-    error: errorURL,
-    data: s3URL,
-  } = useQuery(GET_S3_PRESIGNED_URL , {
+  const presignedURL = await client.query({
+    query: GET_S3_PRESIGNED_URL,
     fetchPolicy: "no-cache" 
+  })
+
+  if (result.error) {
+    console.log(result.error);
+    throw Error(result.error.message);
+  }
+
+  if (presignedURL.error) {
+    console.log(presignedURL.error);
+    throw Error(presignedURL.error.message);
+  }
+
+  return ({
+    data: decomposeGraphQLData(result.data.getRecipeByName),
+    s3URL: presignedURL.data.getS3PresignedUrl,
   });
+}
+export default function EditRecipe() {
+  const navigate = useNavigate();
+  const loaderData = useLoaderData() as EditRecipeLoaderData
+  const [recipeData, setRecipeData] = React.useState<RecipeEditorData>(loaderData.data);
 
   const [updateRecipe] = useMutation(EDIT_RECIPE_MUTATION, {
     onCompleted: (data) => {
@@ -96,8 +133,8 @@ export default function EditRecipe() {
 
   const onSubmit = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event.preventDefault();
-    if (recipeData.picture && !errorURL) {
-      const response = await fetch(s3URL.getS3PresignedUrl, {
+    if (recipeData.picture) {
+      const response = await fetch(loaderData.s3URL, {
         method: "PUT",
         headers: {
           "Content-Type": "multipart/form-data"
@@ -105,12 +142,12 @@ export default function EditRecipe() {
         body: recipeData.picture
       })
       if (!response.ok) return;
-      setRecipeData({...recipeData, imageURL: s3URL.getS3PresignedUrl.split('?')[0]});
+      setRecipeData({...recipeData, imageURL: loaderData.s3URL.split('?')[0]});
     }
-    const imageURL = recipeData.picture ? s3URL.getS3PresignedUrl.split('?')[0] : null;
+    const imageURL = recipeData.picture ? loaderData.s3URL.split('?')[0] : null;
     updateRecipe({
       variables: {
-        recipeId: recipeId,
+        recipeId: recipeData.id,
         name: recipeData.name,
         time: parseInt(recipeData.time),
         servings: parseInt(recipeData.servings),
@@ -125,29 +162,16 @@ export default function EditRecipe() {
 
   const handleDelete = () => {
     if (window.confirm("Are you sure you want to delete this recipe?")) {
-      deleteRecipe({ variables: { recipeId: recipeId } });
+      deleteRecipe({ variables: { recipeId: recipeData.id } });
     }
   };
 
-  /* Page rendering */
-
-  if (error) {
-    console.log(error.message);
-    return "recipe not found";
-  }
-
   return (
-    <>
-      {loading ? (
-        <Loading />
-      ) : (
-        <RecipeEditor
-          recipeData={recipeData}
-          setRecipeData={setRecipeData}
-          onSubmit={onSubmit}
-          handleDelete={handleDelete}
-        />
-      )}
-    </>
+    <RecipeEditor
+      recipeData={recipeData}
+      setRecipeData={setRecipeData}
+      onSubmit={onSubmit}
+      handleDelete={handleDelete}
+    />
   );
 }

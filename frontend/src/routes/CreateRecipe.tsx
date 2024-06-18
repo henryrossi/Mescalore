@@ -2,12 +2,13 @@ import * as React from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
 import { CREATE_RECIPE_MUTATION, GET_S3_PRESIGNED_URL } from "../graphQL";
-import { RecipeData2 } from "../types";
+import { RecipeEditorData } from "../types";
 import RecipeEditor from "../components/RecipeEditor";
 
 function CreateRecipe() {
   const navigate = useNavigate();
-  const [recipeData, setRecipeData] = React.useState<RecipeData2>( {
+  const [recipeData, setRecipeData] = React.useState<RecipeEditorData>( {
+    id: "",
     name: "",
     description: "",
     time: "",
@@ -17,7 +18,7 @@ function CreateRecipe() {
     imageURL: null,
     ingredientSections: [{
       name: "",
-      ingredients: [{ingredient: "", measurement: ""},],
+      ingredientList: [{ingredient: "", measurement: ""},],
     }],
     instructions: [""],
   });

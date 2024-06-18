@@ -2,7 +2,7 @@ import * as React from "react";
 import { useLoaderData } from "react-router-dom";
 import { gql } from "@apollo/client";
 import client from "../client";
-import { RecipePreview } from "../types";
+import { RecipePreview, RecipePreviewGraphQLReturn } from "../types";
 import RecipeList from "../components/RecipeList";
 import "./Recipes.css";
 
@@ -18,6 +18,13 @@ const FILTER_RECIPES_QUERY = gql`
   }
 `;
 
+function decomposeGraphQLData(gqlData: RecipePreviewGraphQLReturn[]) : RecipePreview[] {
+  return gqlData.map(preview => ({
+    ...preview,
+    categories: preview.category.map(obj => obj.name)
+  }))
+}
+
 export async function loader() {
   const result = await client.query({
     query: FILTER_RECIPES_QUERY,
@@ -26,7 +33,7 @@ export async function loader() {
     },
   });
   
-  return result.data.getRecipesByCategory;
+  return decomposeGraphQLData(result.data.getRecipesByCategory);
 }
 
 export default function Recipes() {
@@ -46,8 +53,8 @@ export default function Recipes() {
     }
     setSelectedCategory(category);
     setFilteredPreviews(previews.filter(
-      (recipe) => recipe.category.filter(
-        (obj => obj.name.toLowerCase() === category)
+      (recipe) => recipe.categories.filter(
+        (cat => cat.toLowerCase() === category)
       ).length > 0
     ));
   };

@@ -11,7 +11,7 @@ import ErrorPage from "./routes/ErrorPage";
 import Recipes, { loader as RecipesLoader } from "./routes/Recipes";
 import Recipe, { loader as RecipeLoader } from "./routes/Recipe";
 import CreateRecipe from "./routes/CreateRecipe";
-import EditRecipe from "./routes/EditRecipe";
+import EditRecipe, { loader as EditRecipeLoader} from "./routes/EditRecipe";
 import Search, { loader as SearchLoader } from "./routes/Search";
 import ActivateEmail from "./routes/ActivateEmail";
 import { SignUp, SignIn } from "./routes/UserAuth";
@@ -50,7 +50,8 @@ const router = createBrowserRouter([
         },
         {
           path: "/edit/:recipeName",
-          element: <EditRecipe />
+          element: <EditRecipe />,
+          loader: EditRecipeLoader,
         },
         {
           path: "/search",

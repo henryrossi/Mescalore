@@ -4,7 +4,6 @@ import { useLoaderData, useNavigate, useSearchParams } from "react-router-dom";
 import RecipeList from "../components/RecipeList";
 import "./Search.css";
 import client from "../client";
-import { RecipePreview } from "../types";
 import { gql, useQuery } from "@apollo/client";
 import Loading from "../components/Loading";
 
