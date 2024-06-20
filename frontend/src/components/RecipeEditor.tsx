@@ -49,6 +49,31 @@ export default function RecipeEditor({
     }
   }
 
+  const handleAddNewSection = () => {
+    let sections = [...recipeData.ingredientSections, {
+      name: "",
+      ingredientList: [{
+        measurement: "",
+        ingredient: "",
+      }],
+    }];
+    setRecipeData({...recipeData, ingredientSections: sections});
+  }
+
+  const handleChangeSectionName = (e: React.ChangeEvent<HTMLInputElement>, 
+                                   currentSection: number) => {
+    let sections = [...recipeData.ingredientSections];
+    sections[currentSection].name = e.target.value;
+    setRecipeData({...recipeData, ingredientSections: [...sections]});
+  }
+
+  const handleDeleteSection = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, 
+                               currentSection: number) => {
+    let sections = [...recipeData.ingredientSections]
+    sections.splice(currentSection, 1);
+    setRecipeData({...recipeData, ingredientSections: sections});
+  }
+
   return (
     <div className="recipe-editor-container bg-grey border-grey">
       <h1 className="jua red text-4xl">{handleDelete ? "Edit this recipe" : "Create a new recipe"}</h1>
@@ -154,13 +179,34 @@ export default function RecipeEditor({
             be left blank.
           </p>
           <ul>
-            {recipeData.ingredientSections.map(section => (
-              <li key={section.name}>
-                <input
-                  type="text"
-                  className="border-grey"
-                  value={section.name} 
-                />
+            <div className="flex gap-1rem">
+              <span className="text-base">Add a new ingredient section</span>
+              <button
+                type="button"
+                className="bg-grey no-border"
+                onClick={handleAddNewSection}
+              >
+                <IconPencilPlus size={'1.5rem'}/>
+              </button>
+            </div>
+            {recipeData.ingredientSections.map((section, currentSection) => (
+              <li key={currentSection}>
+                <p>Ingredient Section Name</p>
+                <div className="flex gap-1rem">
+                  <input
+                    type="text"
+                    className="border-grey"
+                    value={section.name} 
+                    onChange={(e) => handleChangeSectionName(e, currentSection)}
+                  />
+                  <button
+                    type="button"
+                    className="bg-grey no-border"
+                    onClick={(e) => handleDeleteSection(e, currentSection)}
+                  >
+                    <IconTrashX size={'1.5rem'}/>
+                  </button>
+                </div>
                 <ul className="list-container-editor">
                   {section.ingredientList.map((object, index) => (
                     <li key={index}>
@@ -169,19 +215,17 @@ export default function RecipeEditor({
                         className="border-grey"
                         value={object.measurement}
                         onChange={(e) => {
+                          let sections = [...recipeData.ingredientSections]
                           let ingredientList = [...section.ingredientList];
                           ingredientList[index] = {
                             measurement: e.target.value,
                             ingredient: object.ingredient,
                           };
+                          sections[currentSection].ingredientList = ingredientList;
                           setRecipeData({
                             ...recipeData, 
                             ingredientSections: [
-                              ...recipeData.ingredientSections,
-                              { 
-                                name: section.name,
-                                ingredientList: ingredientList,
-                              },
+                              ...sections
                             ],
                           });
                         }}
@@ -191,19 +235,17 @@ export default function RecipeEditor({
                         className="border-grey"
                         value={object.ingredient}
                         onChange={(e) => {
+                          let sections = [...recipeData.ingredientSections]
                           let ingredientList = [...section.ingredientList];
                           ingredientList[index] = {
                             measurement: object.measurement,
                             ingredient: e.target.value,
                           };
+                          sections[currentSection].ingredientList = ingredientList
                           setRecipeData({
                             ...recipeData, 
                             ingredientSections: [
-                              ...recipeData.ingredientSections,
-                              {
-                                name: section.name,
-                                ingredientList: ingredientList
-                              },
+                              ...sections
                             ],
                           });
                         }}
@@ -212,14 +254,12 @@ export default function RecipeEditor({
                         type="button"
                         className="bg-grey no-border"
                         onClick={() => {
+                          let sections = [...recipeData.ingredientSections]
                           const ingredientList = [...section.ingredientList];
                           ingredientList.splice(index, 1);
+                          sections[currentSection].ingredientList = ingredientList
                           setRecipeData({...recipeData, ingredientSections: [
-                            ...recipeData.ingredientSections,
-                            {
-                              name: section.name,
-                              ingredientList: ingredientList
-                            },
+                            ...sections
                           ],});
                         }}
                       >
@@ -232,15 +272,13 @@ export default function RecipeEditor({
                   type="button"
                   className="bg-grey no-border add-item-button-editor"
                   onClick={() => {
+                    let sections = [...recipeData.ingredientSections]
+                    sections[currentSection].ingredientList  = [
+                      ...section.ingredientList, {ingredient: "", measurement: ""}
+                    ]
                     setRecipeData({...recipeData,
                       ingredientSections: [
-                        ...recipeData.ingredientSections,
-                        {
-                          name: section.name,
-                          ingredientList: [
-                            ...section.ingredientList, {ingredient: "", measurement: ""}
-                          ]
-                        },
+                        ...sections
                       ],
                     });
                   }}

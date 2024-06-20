@@ -66,6 +66,7 @@
 }
 
 .list-container-editor {
+  margin: 1rem 1rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;

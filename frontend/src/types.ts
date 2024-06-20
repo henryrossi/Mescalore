@@ -11,7 +11,7 @@ export interface RecipeData {
   favorite: boolean,
 };
 
-interface ingredientSections {
+export interface ingredientSections {
   name: string,
   ingredientList: IngredientList[]
 }
