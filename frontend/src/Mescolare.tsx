@@ -2,8 +2,6 @@ import * as React from "react";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import { Outlet } from "react-router-dom";
-import { gql, useQuery } from "@apollo/client";
-import client from "./client";
 import authContext from "./authContext";
 import { UserAuth } from "./types";
 

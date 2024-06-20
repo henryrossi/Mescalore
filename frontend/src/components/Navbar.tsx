@@ -4,7 +4,7 @@ import authContext from "../authContext";
 import { IconSearch, IconUserCircle } from "@tabler/icons-react";
 import "./Navbar.css";
 
-function Navbar() {
+export default function Navbar() {
   const [searchInput, setSearchInput] = React.useState("");
   const navigate = useNavigate();
   const location = useLocation();
@@ -98,5 +98,3 @@ function Navbar() {
     </header>
   );
 }
-
-export default Navbar;

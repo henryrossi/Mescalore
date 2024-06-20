@@ -3,9 +3,8 @@ import "./Home.css";
 import "@fontsource/jua"; // ???
 import Couple from "../images/hotcouple.png";
 import Kitchen from "../images/kitchen.png";
-import authContext from "../authContext";
 
-function Home() {
+export default function Home() {
 
   return (
     <>
@@ -48,5 +47,3 @@ function Home() {
     </>
   );
 }
-
-export default Home;

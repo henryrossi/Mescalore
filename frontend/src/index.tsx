@@ -10,7 +10,7 @@ import Home from "./routes/Home";
 import ErrorPage from "./routes/ErrorPage";
 import Recipes, { loader as RecipesLoader } from "./routes/Recipes";
 import Recipe, { loader as RecipeLoader } from "./routes/Recipe";
-import CreateRecipe from "./routes/CreateRecipe";
+import CreateRecipe, { loader as CreateRecipeLoader } from "./routes/CreateRecipe";
 import EditRecipe, { loader as EditRecipeLoader} from "./routes/EditRecipe";
 import Search, { loader as SearchLoader } from "./routes/Search";
 import ActivateEmail from "./routes/ActivateEmail";
@@ -42,6 +42,7 @@ const router = createBrowserRouter([
         {
           path: "/create",
           element: <CreateRecipe />,
+          loader: CreateRecipeLoader,
         },
         {
           path: "/:recipeName",

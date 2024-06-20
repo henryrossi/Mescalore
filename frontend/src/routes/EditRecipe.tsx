@@ -69,7 +69,6 @@ interface EditRecipeLoaderData {
 }
 
 export async function loader({ params }: { params: Params<"recipeName">}) : Promise<EditRecipeLoaderData> {
-  console.log(params)
   const result = await client.query({
     query: GET_RECIPE_QUERY,
     fetchPolicy: "no-cache",
