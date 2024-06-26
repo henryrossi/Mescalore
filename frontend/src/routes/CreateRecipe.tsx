@@ -1,10 +1,44 @@
 import * as React from "react";
-import { useMutation } from "@apollo/client";
+import { useMutation, gql } from "@apollo/client";
 import { Params, useLoaderData, useNavigate } from "react-router-dom";
-import { CREATE_RECIPE_MUTATION, GET_S3_PRESIGNED_URL } from "../graphQL";
 import { RecipeEditorData } from "../types";
 import RecipeEditor from "../components/RecipeEditor";
 import client from "../client";
+
+export const GET_S3_PRESIGNED_URL = gql`
+  query S3PresignedUrl {
+    getS3PresignedUrl
+  }
+`;
+
+export const CREATE_RECIPE_MUTATION = gql`
+  mutation createRecipe(
+    $categories: [String]!
+    $description: String!
+    $sections: [IngredientSectionInput]! 
+    $instructions: String!
+    $name: String!
+    $servings: Int!
+    $time: Int!
+    $imageURL: String
+  ) {
+    createRecipe(
+      recipeData: {
+        name: $name
+        categories: $categories
+        description: $description
+        time: $time
+        servings: $servings
+        imageURL: $imageURL
+        sections: $sections
+        instructions: $instructions
+      }
+    ) {
+      success
+    }
+  }
+`;
+
 
 export async function loader({ params }: {params: Params<"recipeName">}) : Promise<string> {
   const result = await client.query({
@@ -34,7 +68,7 @@ export default function CreateRecipe() {
     imageURL: null,
     ingredientSections: [{
       name: "",
-      ingredientList: [{ingredient: "", measurement: ""},],
+      ingredients: [{ingredient: "", measurement: ""},],
     }],
     instructions: [""],
   });

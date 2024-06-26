@@ -5,7 +5,6 @@ import { gql, useMutation } from "@apollo/client";
 import client from "../client";
 import {
   GET_S3_PRESIGNED_URL,
-  EDIT_RECIPE_MUTATION,
   DELETE_RECIPE_MUTATION
 } from "../graphQL";
 import { RecipeEditorData, RecipeGraphQLReturn } from "../types";
@@ -38,6 +37,37 @@ const GET_RECIPE_QUERY = gql`
   }
 `;
 
+export const EDIT_RECIPE_MUTATION = gql`
+  mutation editRecipe(
+    $categories: [String]!
+    $description: String!
+    $sections: [IngredientSectionInput]!
+    $instructions: String!
+    $name: String!
+    $servings: Int!
+    $time: Int!
+    $imageURL: String
+    $recipeId: ID!
+  ) {
+    editRecipe(
+      recipeId: $recipeId
+      recipeData: {
+        name: $name
+        categories: $categories
+        description: $description
+        time: $time
+        servings: $servings
+        imageURL: $imageURL
+	sections: $sections
+        instructions: $instructions
+      }
+    ) {
+      updated
+    }
+  }
+`;
+
+
 function decomposeGraphQLData(gqlData: RecipeGraphQLReturn) : RecipeEditorData {
   return ({
     id: gqlData.id,
@@ -50,8 +80,8 @@ function decomposeGraphQLData(gqlData: RecipeGraphQLReturn) : RecipeEditorData {
     imageURL: gqlData.imageURL,
     ingredientSections: gqlData.ingredientSections.map(section => 
       ({
-        ...section,
-        ingredientList: section.ingredientList.map(ingr => 
+	name: section.name,
+        ingredients: section.ingredientList.map(ingr => 
           ({
             measurement: ingr.measurement,
             ingredient: ingr.ingredient.name,
@@ -102,6 +132,7 @@ export default function EditRecipe() {
   const loaderData = useLoaderData() as EditRecipeLoaderData
   const [recipeData, setRecipeData] = React.useState<RecipeEditorData>(loaderData.data);
 
+console.log(recipeData);
   const [updateRecipe] = useMutation(EDIT_RECIPE_MUTATION, {
     onCompleted: (data) => {
       if (!data.editRecipe.updated) {

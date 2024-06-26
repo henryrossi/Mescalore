@@ -63,7 +63,7 @@ function decomposeGraphQLData(gqlData: RecipeGraphQLReturn) : RecipeData {
     ingredientSections: gqlData.ingredientSections.map(section => 
       ({
         ...section,
-        ingredientList: section.ingredientList.map(ingr => 
+        ingredients: section.ingredientList.map(ingr => 
           ({
             measurement: ingr.measurement,
             ingredient: ingr.ingredient.name,
@@ -185,7 +185,7 @@ export default function Recipe() {
             <div>
               <h3>{section.name}</h3>
               <ul className="flex-col gap-1rem padding-1rem">
-              {section.ingredientList.map((ingr, index) => (
+              {section.ingredients.map((ingr, index) => (
                 <li 
                   key={index} 
                   onClick={handleIngredientLineThrough}

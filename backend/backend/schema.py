@@ -72,7 +72,7 @@ class RecipeType(DjangoObjectType):
         return False
     
 class IngredientInput(graphene.InputObjectType):
-    Ingredient = graphene.String(required=True)
+    ingredient = graphene.String(required=True)
     measurement = graphene.String(required=True)
     
 class IngredientSectionInput(graphene.InputObjectType):
@@ -97,11 +97,12 @@ def addRecipe(recipe_data, recipe):
     descTerms = t.tokenize(recipe_data.description)
     addTerms(descTerms, recipe)
     for section in recipe_data.sections:
-        for measurement in section.measurements:
-            measTerms = t.tokenize(measurement)
+        sectTerms = t.tokenize(section.name)
+        addTerms(sectTerms, recipe)
+        for item in section.ingredients:
+            measTerms = t.tokenize(item.measurement)
             addTerms(measTerms, recipe)
-        for ingredient in section.ingredients:
-            ingrTerms = t.tokenize(ingredient)
+            ingrTerms = t.tokenize(item.ingredient)
             addTerms(ingrTerms, recipe)
     instructionTerms = t.tokenize(recipe_data.instructions)
     addTerms(instructionTerms, recipe)
@@ -284,12 +285,13 @@ class CreateRecipe(graphene.Mutation):
                 recipe.category.add(cat)
             for section in recipe_data.sections:
                 sect, created = IngredientSection.objects.get_or_create(recipe=recipe, name=section.name)
-                for item in zip(section.ingredients, section.measurements):
-                    ingr, created = Ingredient.objects.get_or_create(name = item[0])
+                for item in section.ingredients:
+                    ingr, created = Ingredient.objects.get_or_create(name = item.ingredient)
                     ingList = IngredientList(
+                        recipe = recipe,
                         section = sect,
                         ingredient = ingr,
-                        measurement = item[1]
+                        measurement = item.measurement,
                     )
                     ingList.save()
             # TF-IDF
@@ -351,16 +353,23 @@ class EditRecipe(graphene.Mutation):
                 recipe.category.add(cat)
             if recipe_data.imageURL is not None:
                 recipe.imageURL = recipe_data.imageURL
-            recipe.measurements = recipe_data.measurements
+            IngredientSection.objects.filter(recipe = recipe_id).delete()
             IngredientList.objects.filter(recipe = recipe_id).delete()
-            for item in zip(recipe_data.ingredients, recipe_data.measurements):
-                ingr, created = Ingredient.objects.get_or_create(name = item[0])
-                ingList = IngredientList(
+            for section in recipe_data.sections:
+                sect = IngredientSection(
                     recipe = recipe,
-                    ingredient = ingr,
-                    measurement = item[1]
+                    name = section.name,
                 )
-                ingList.save()
+                sect.save()
+                for item in section.ingredients:
+                    ingr, created = Ingredient.objects.get_or_create(name = item.ingredient)
+                    ingList = IngredientList(
+                        recipe = recipe,
+                        section = sect,
+                        ingredient = ingr,
+                        measurement = item.measurement,
+                    )
+                    ingList.save()
             recipe.instructions = recipe_data.instructions
             recipe.save()
             # TF-IDF

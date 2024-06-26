@@ -52,7 +52,7 @@ export default function RecipeEditor({
   const handleAddNewSection = () => {
     let sections = [...recipeData.ingredientSections, {
       name: "",
-      ingredientList: [{
+      ingredients: [{
         measurement: "",
         ingredient: "",
       }],
@@ -208,7 +208,7 @@ export default function RecipeEditor({
                   </button>
                 </div>
                 <ul className="list-container-editor">
-                  {section.ingredientList.map((object, index) => (
+                  {section.ingredients.map((object, index) => (
                     <li key={index}>
                       <input
                         type="text"
@@ -216,12 +216,12 @@ export default function RecipeEditor({
                         value={object.measurement}
                         onChange={(e) => {
                           let sections = [...recipeData.ingredientSections]
-                          let ingredientList = [...section.ingredientList];
-                          ingredientList[index] = {
+                          let ingredients = [...section.ingredients];
+                          ingredients[index] = {
                             measurement: e.target.value,
                             ingredient: object.ingredient,
                           };
-                          sections[currentSection].ingredientList = ingredientList;
+                          sections[currentSection].ingredients = ingredients;
                           setRecipeData({
                             ...recipeData, 
                             ingredientSections: [
@@ -236,12 +236,12 @@ export default function RecipeEditor({
                         value={object.ingredient}
                         onChange={(e) => {
                           let sections = [...recipeData.ingredientSections]
-                          let ingredientList = [...section.ingredientList];
-                          ingredientList[index] = {
+                          let ingredients = [...section.ingredients];
+                          ingredients[index] = {
                             measurement: object.measurement,
                             ingredient: e.target.value,
                           };
-                          sections[currentSection].ingredientList = ingredientList
+                          sections[currentSection].ingredients = ingredients
                           setRecipeData({
                             ...recipeData, 
                             ingredientSections: [
@@ -255,9 +255,9 @@ export default function RecipeEditor({
                         className="bg-grey no-border"
                         onClick={() => {
                           let sections = [...recipeData.ingredientSections]
-                          const ingredientList = [...section.ingredientList];
-                          ingredientList.splice(index, 1);
-                          sections[currentSection].ingredientList = ingredientList
+                          const ingredients = [...section.ingredients];
+                          ingredients.splice(index, 1);
+                          sections[currentSection].ingredients = ingredients
                           setRecipeData({...recipeData, ingredientSections: [
                             ...sections
                           ],});
@@ -273,8 +273,8 @@ export default function RecipeEditor({
                   className="bg-grey no-border add-item-button-editor"
                   onClick={() => {
                     let sections = [...recipeData.ingredientSections]
-                    sections[currentSection].ingredientList  = [
-                      ...section.ingredientList, {ingredient: "", measurement: ""}
+                    sections[currentSection].ingredients  = [
+                      ...section.ingredients, {ingredient: "", measurement: ""}
                     ]
                     setRecipeData({...recipeData,
                       ingredientSections: [

@@ -13,7 +13,7 @@ export interface RecipeData {
 
 export interface ingredientSections {
   name: string,
-  ingredientList: IngredientList[]
+  ingredients: IngredientList[]
 }
 
 export interface IngredientList {
