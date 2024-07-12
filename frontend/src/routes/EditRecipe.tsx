@@ -67,6 +67,19 @@ export const EDIT_RECIPE_MUTATION = gql`
   }
 `;
 
+function generateRandomNumber() {
+	return Math.random() * 1000000000;
+}
+
+const ids: number[] = [];
+function generateId() {
+	let id = generateRandomNumber();
+	while (ids.includes(id)) {
+		id = generateRandomNumber();
+	}
+	ids.push(id);
+	return id;
+}
 
 function decomposeGraphQLData(gqlData: RecipeGraphQLReturn) : RecipeEditorData {
   return ({
@@ -80,16 +93,23 @@ function decomposeGraphQLData(gqlData: RecipeGraphQLReturn) : RecipeEditorData {
     imageURL: gqlData.imageURL,
     ingredientSections: gqlData.ingredientSections.map(section => 
       ({
+	id: generateId(),
 	name: section.name,
         ingredients: section.ingredientList.map(ingr => 
           ({
+	    id: generateId(),
             measurement: ingr.measurement,
             ingredient: ingr.ingredient.name,
           })
         )
       })
     ),
-    instructions: gqlData.instructions.split("\r"),
+    instructions: gqlData.instructions.split("\r").map(inst =>
+      ({
+        id: generateId(),
+	text: inst,
+      })
+    ),
   })
 }
 
@@ -132,7 +152,6 @@ export default function EditRecipe() {
   const loaderData = useLoaderData() as EditRecipeLoaderData
   const [recipeData, setRecipeData] = React.useState<RecipeEditorData>(loaderData.data);
 
-console.log(recipeData);
   const [updateRecipe] = useMutation(EDIT_RECIPE_MUTATION, {
     onCompleted: (data) => {
       if (!data.editRecipe.updated) {
@@ -185,7 +204,7 @@ console.log(recipeData);
         categories: recipeData.categories,
         imageURL: imageURL,
         sections: recipeData.ingredientSections,
-        instructions: recipeData.instructions.join("\r"),
+        instructions: recipeData.instructions.map(i => i.text).join("\r"),
       },
     });
   };

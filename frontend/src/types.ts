@@ -30,10 +30,27 @@ export interface RecipeEditorData {
   categories: string[],
   picture: Blob | null,
   imageURL: string | null,
-  ingredientSections: ingredientSections[]
-  instructions: string[],
+  ingredientSections: IngredientSectionsEditor[]
+  instructions: InstructionsEditor[],
 };
 
+export interface IngredientSectionsEditor {
+  id: number
+  name: string,
+  ingredients: IngredientListEditor[]
+}
+
+export interface IngredientListEditor {
+  id: number,
+  ingredient: string,
+  measurement: string,
+};
+
+export interface InstructionsEditor {
+  id: number,
+  text: string,
+}
+ 
 export interface RecipeGraphQLReturn {
   id: string,
   name: string,

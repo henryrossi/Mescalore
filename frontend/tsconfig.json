@@ -6,8 +6,11 @@
       "jsx": "react",
       "allowJs": true,
       "moduleResolution": "node",
-      "noImplicitAny": true,
+      "noImplicitAny": true
     },
     "include": ["src/**/*"],
-    "exclude": ["node_modules"]
+    "exclude": ["node_modules"],
+    "lib": [
+	    "ES2023"
+	]
 }

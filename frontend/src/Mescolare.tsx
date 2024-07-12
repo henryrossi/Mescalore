@@ -2,6 +2,8 @@ import * as React from "react";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import { Outlet } from "react-router-dom";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 import authContext from "./authContext";
 import { UserAuth } from "./types";
 
@@ -14,9 +16,11 @@ export default function Mescolare() {
 
     return (
         <authContext.Provider value={{ userAuth, setUserAuth }}>
+	  <DndProvider backend={HTML5Backend}>
             <Navbar />
             <Outlet />
             <Footer />
+	  </DndProvider>
         </authContext.Provider>
 );
 }

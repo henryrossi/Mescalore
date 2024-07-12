@@ -4,8 +4,30 @@ import "./RecipeEditor.css";
 import { RecipeEditorData } from "../types";
 import authContext from "../authContext";
 import Modal from "./Modal";
-import 'react-image-crop/dist/ReactCrop.css'
+import 'react-image-crop/dist/ReactCrop.css';
+import { useDrag, useDrop, DropTargetMonitor } from "react-dnd";
+import type { XYCoord } from "dnd-core";
 import { IconTrashX, IconPencilPlus } from "@tabler/icons-react";
+
+const ItemTypes = {
+	SECTION: "section",
+	INGREDIENT: "ingredient",
+	INSTRUCTION: "instruction",
+};
+
+function generateRandomNumber() {
+	return Math.random() * 1000000000;
+}
+
+function generateId(recipeData: RecipeEditorData) {
+	let id = generateRandomNumber();
+	while (recipeData.instructions.some(i => i.id === id) ||
+	       recipeData.ingredientSections.some(i => i.id === id) ||
+	       recipeData.ingredientSections.some(s => s.ingredients.some(i => i.id === id))) {
+		id = generateRandomNumber();
+	}
+	return id;
+}
 
 export default function RecipeEditor({
   recipeData,
@@ -24,7 +46,7 @@ export default function RecipeEditor({
   if (!userAuth.authenticated || !userAuth.editorPermissions) {
     return <Unavailable />;
   }
-
+  
   const categoryChocies = [
     "breakfast",
     "lunch",
@@ -51,8 +73,10 @@ export default function RecipeEditor({
 
   const handleAddNewSection = () => {
     let sections = [...recipeData.ingredientSections, {
+      id: generateId(recipeData),
       name: "",
       ingredients: [{
+        id: generateId(recipeData),
         measurement: "",
         ingredient: "",
       }],
@@ -73,6 +97,43 @@ export default function RecipeEditor({
     sections.splice(currentSection, 1);
     setRecipeData({...recipeData, ingredientSections: sections});
   }
+
+  const moveInstructions = React.useCallback((dragIndex: number, hoverIndex: number) => {
+ 	setRecipeData(recipe => {
+		const instructions = [...recipe.instructions];
+		const draggingInstruction = instructions[dragIndex];
+		instructions.splice(dragIndex, 1);
+		instructions.splice(hoverIndex, 0, draggingInstruction);
+		return ({ ...recipe, instructions: instructions });
+	});
+  }, []);
+
+  const moveSection = React.useCallback((dragIndex: number, hoverIndex: number) => {
+	setRecipeData(recipe => { 
+		const sections = [...recipe.ingredientSections];
+		const draggingSection = sections[dragIndex];
+		sections.splice(dragIndex, 1);
+		sections.splice(hoverIndex, 0, draggingSection);
+		return ({ ...recipe, ingredientSections: sections });
+	});
+  }, []);
+
+  const moveIngredient = React.useCallback((dragIngredientIndex: number,
+    dragSectionIndex: number, hoverIngredientIndex: number, hoverSectionIndex: number) => {
+	if (dragSectionIndex !== hoverSectionIndex) {
+		return;
+	}
+
+	setRecipeData(recipe => {
+		let sections = [...recipe.ingredientSections];
+		const dragSection = sections[dragSectionIndex];
+		const draggingIngredient = dragSection.ingredients[dragIngredientIndex];
+		dragSection.ingredients.splice(dragIngredientIndex, 1);
+		dragSection.ingredients.splice(hoverIngredientIndex, 0, draggingIngredient);
+		sections[dragSectionIndex] = dragSection;
+		return ({ ...recipe, ingredientSections: sections });
+	});
+  }, []);
 
   return (
     <div className="recipe-editor-container bg-grey border-grey">
@@ -190,9 +251,14 @@ export default function RecipeEditor({
               </button>
             </div>
             {recipeData.ingredientSections.map((section, currentSection) => (
-              <li key={currentSection}>
+              <DndListItem 
+			key={section.id} 
+			type={ItemTypes.SECTION} 
+			index={currentSection} 
+			moveListItem={moveSection}
+	      >
                 <p>Ingredient Section Name</p>
-                <div className="flex gap-1rem">
+                <div className="section-name-editor flex gap-1rem">
                   <input
                     type="text"
                     className="border-grey"
@@ -209,7 +275,13 @@ export default function RecipeEditor({
                 </div>
                 <ul className="list-container-editor">
                   {section.ingredients.map((object, index) => (
-                    <li key={index}>
+                    <DndListItem 
+		    	key={object.id} 
+			type={ItemTypes.INGREDIENT} 
+			index={index} 
+			moveListItem={moveIngredient}
+		    	sectionIndex={currentSection}
+		    >
                       <input
                         type="text"
                         className="border-grey"
@@ -218,6 +290,7 @@ export default function RecipeEditor({
                           let sections = [...recipeData.ingredientSections]
                           let ingredients = [...section.ingredients];
                           ingredients[index] = {
+			    id: object.id,
                             measurement: e.target.value,
                             ingredient: object.ingredient,
                           };
@@ -238,6 +311,7 @@ export default function RecipeEditor({
                           let sections = [...recipeData.ingredientSections]
                           let ingredients = [...section.ingredients];
                           ingredients[index] = {
+			    id: object.id,
                             measurement: object.measurement,
                             ingredient: e.target.value,
                           };
@@ -265,7 +339,7 @@ export default function RecipeEditor({
                       >
                         <IconTrashX size={'1.5rem'}/>
                       </button>
-                    </li>
+                    </DndListItem>
                   ))}
                 </ul>
                 <button
@@ -274,7 +348,7 @@ export default function RecipeEditor({
                   onClick={() => {
                     let sections = [...recipeData.ingredientSections]
                     sections[currentSection].ingredients  = [
-                      ...section.ingredients, {ingredient: "", measurement: ""}
+                      ...section.ingredients, {id: generateId(recipeData), ingredient: "", measurement: ""}
                     ]
                     setRecipeData({...recipeData,
                       ingredientSections: [
@@ -285,20 +359,20 @@ export default function RecipeEditor({
                 >
                   <IconPencilPlus size={'1.5rem'}/>
                 </button>
-            </li>))}
+            </DndListItem>))}
           </ul>
         </fieldset>
         <fieldset>
           <legend>Instructions</legend>
           <ol className="list-container-editor">
-            {recipeData.instructions.map((instructions, index) => (
-              <li key={index}>
+            {recipeData.instructions.map((instruction, index) => (
+              <DndListItem key={instruction.id} type={ItemTypes.INSTRUCTION} index={index} moveListItem={moveInstructions}>
                 <textarea
                   className="border-grey"
-                  defaultValue={instructions}
+                  value={instruction.text}
                   onChange={(e) => {
                     let instructions = [...recipeData.instructions];
-                    instructions[index] = e.target.value;
+                    instructions[index].text = e.target.value;
                     setRecipeData({...recipeData, instructions: instructions});
                   }}
                 />
@@ -313,14 +387,18 @@ export default function RecipeEditor({
                 >
                   <IconTrashX size={'1.5rem'}/>
                 </button>
-              </li>
+              </DndListItem>
             ))}
           </ol>
           <button
             type="button"
             className="bg-grey no-border add-item-button-editor"
             onClick={() => {
-              setRecipeData({...recipeData, instructions: [...recipeData.instructions, ""]});
+              setRecipeData({...recipeData, 
+	      	instructions: [...recipeData.instructions, 
+	          { id: generateId(recipeData), text: "" }
+		]
+	      });
             }}
           >
             <IconPencilPlus size={'1.5rem'}/>
@@ -341,3 +419,73 @@ export default function RecipeEditor({
     </div>
   );
 }
+
+function DndListItem(
+	{ type, index, moveListItem, children, sectionIndex } : 
+	{ children: React.ReactNode, type: string, index: number, moveListItem: any, sectionIndex?: number }
+) {
+	const ref = React.useRef<HTMLLIElement>(null);
+	const [{ handlerId }, drop] = useDrop(() => ({
+		accept: type,
+		collect: (monitor: DropTargetMonitor) => {
+			return { handlerId: monitor.getHandlerId() };
+		},
+		hover: (item: { type: string, index: number, sectionIndex?: number }, monitor) => {
+			if (!ref.current) {
+				return;
+			}
+			const dragIndex = item.index;
+			const hoverIndex = index;
+
+			if (dragIndex === hoverIndex) {
+				return;
+			}
+
+			const hoverBoundingRect = ref.current?.getBoundingClientRect();
+			const hoverMiddleY =
+				(hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+			const clientOffset = monitor.getClientOffset();
+			if (!clientOffset) {
+				return;
+			}
+
+			const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top;
+
+			if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
+				return;
+			}
+			if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
+				return;
+			}
+		
+			if (type === ItemTypes.INGREDIENT) {
+				moveListItem(dragIndex, item.sectionIndex, hoverIndex, sectionIndex);	
+			} else {
+				moveListItem(dragIndex, hoverIndex);
+			}
+
+			item.index = hoverIndex;	
+		},
+	}), [type, index, sectionIndex]);
+	
+	const [{ isDragging }, drag] = useDrag(() => ({
+		type: type,
+		item: () => {
+			return { type, index, sectionIndex };
+		},
+		collect: monitor => ({
+			isDragging: !!monitor.isDragging(),
+		}),
+	}), [type, index, sectionIndex]);
+
+	drag(drop(ref));
+	return (
+		<li 
+			ref={ref} 
+			style={{opacity: isDragging ? 0 : 1}}
+			data-handler-id={handlerId}			
+		>
+			{children}
+		</li>
+	);
+};

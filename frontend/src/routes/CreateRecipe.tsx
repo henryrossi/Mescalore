@@ -54,6 +54,20 @@ export async function loader({ params }: {params: Params<"recipeName">}) : Promi
   return result.data.getS3PresignedUrl;
 }
 
+function generateRandomNumber() {
+	return Math.random() * 1000000000;
+}
+
+const ids: number[] = [];
+function generateId() {
+	let id = generateRandomNumber();
+	while (ids.includes(id)) {
+		id = generateRandomNumber();
+	}
+	ids.push(id);
+	return id;
+}
+
 export default function CreateRecipe() {
   const navigate = useNavigate();
   const S3URL = useLoaderData() as string;
@@ -67,10 +81,11 @@ export default function CreateRecipe() {
     picture: null,
     imageURL: null,
     ingredientSections: [{
+      id: generateId(),
       name: "",
-      ingredients: [{ingredient: "", measurement: ""},],
+      ingredients: [{id: generateId(), ingredient: "", measurement: ""},],
     }],
-    instructions: [""],
+    instructions: [{id: generateId(), text: ""}],
   });
 
   /* Can use session/local storage if I want to make form input state persist through refreshes */
@@ -111,7 +126,7 @@ export default function CreateRecipe() {
         categories: recipeData.categories,
         imageURL: imageURL,
         sections: recipeData.ingredientSections,
-        instructions: recipeData.instructions.join("\r"),
+        instructions: recipeData.instructions.map(i => i.text).join("\r"),
       },
     });
   };
