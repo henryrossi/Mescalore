@@ -7,7 +7,7 @@ import Modal from "./Modal";
 import 'react-image-crop/dist/ReactCrop.css';
 import { useDrag, useDrop, DropTargetMonitor } from "react-dnd";
 import type { XYCoord } from "dnd-core";
-import { IconTrashX, IconPencilPlus } from "@tabler/icons-react";
+import { IconTrashX, IconPencilPlus, IconGripVertical } from "@tabler/icons-react";
 
 const ItemTypes = {
 	SECTION: "section",
@@ -239,7 +239,7 @@ export default function RecipeEditor({
             the measurement, and "butter", the ingredient. The measurement section may
             be left blank.
           </p>
-          <ul>
+          <ul className="flex-col gap-1rem">
             <div className="flex gap-1rem">
               <span className="text-base">Add a new ingredient section</span>
               <button
@@ -259,6 +259,7 @@ export default function RecipeEditor({
 	      >
                 <p>Ingredient Section Name</p>
                 <div className="section-name-editor flex gap-1rem">
+		  <IconGripVertical className="grip-icon-editor" size={'1.5rem'}/>
                   <input
                     type="text"
                     className="border-grey"
@@ -273,7 +274,7 @@ export default function RecipeEditor({
                     <IconTrashX size={'1.5rem'}/>
                   </button>
                 </div>
-                <ul className="list-container-editor">
+                <ul className="list-container-editor ingr-container-editor">
                   {section.ingredients.map((object, index) => (
                     <DndListItem 
 		    	key={object.id} 
@@ -282,6 +283,7 @@ export default function RecipeEditor({
 			moveListItem={moveIngredient}
 		    	sectionIndex={currentSection}
 		    >
+		      <IconGripVertical className="grip-icon-editor" size={'1.5rem'}/>
                       <input
                         type="text"
                         className="border-grey"
@@ -367,6 +369,7 @@ export default function RecipeEditor({
           <ol className="list-container-editor">
             {recipeData.instructions.map((instruction, index) => (
               <DndListItem key={instruction.id} type={ItemTypes.INSTRUCTION} index={index} moveListItem={moveInstructions}>
+		<IconGripVertical className="grip-icon-editor" size={'1.5rem'}/>
                 <textarea
                   className="border-grey"
                   value={instruction.text}
