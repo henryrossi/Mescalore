@@ -6,11 +6,16 @@ import "./UserAuth.css";
 import authContext from "../authContext";
 import { UserAuth } from "../types";
 
-function setUserAsAuthenticated(token: string, editorPermissions: boolean, setUserAuth: (auth: UserAuth) => void) {
+export function setUserAsAuthenticated(
+  token: string,
+  editorPermissions: boolean,
+  setUserAuth: (auth: UserAuth) => void,
+) {
   const curTime = Date.now();
-  
+
   const tokenTime = localStorage.getItem("tokenTime");
-  if (tokenTime != null && curTime- parseInt(tokenTime, 10) > 86400000) {
+
+  if (tokenTime != null && curTime - parseInt(tokenTime, 10) > 86400000) {
     localStorage.removeItem("token");
     localStorage.removeItem("editor");
     localStorage.removeItem("tokenTime");
@@ -20,7 +25,7 @@ function setUserAsAuthenticated(token: string, editorPermissions: boolean, setUs
   localStorage.setItem("editor", String(editorPermissions));
   setUserAuth({
     authenticated: true,
-    editorPermissions: editorPermissions
+    editorPermissions: editorPermissions,
   });
 
   // stringify the date into a string
@@ -40,20 +45,37 @@ export function SignUp() {
   const [username, setUsername] = React.useState("");
   const [password1, setPassword1] = React.useState("");
   const [password2, setPassword2] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState("");
 
   const { setUserAuth } = React.useContext(authContext);
 
   const [registerUser] = useMutation(USER_REGISTRATION, {
     onCompleted: (data) => {
       if (data.userRegistration.success) {
-        setUserAsAuthenticated(data.userRegistration.token, 
-                               data.userRegistration.recipeEditor, 
-                               setUserAuth);
+        setUserAsAuthenticated(
+          data.userRegistration.token,
+          data.userRegistration.recipeEditor,
+          setUserAuth,
+        );
         navigate("/recipes");
         return;
       }
-      window.alert("Failed to register");
-      console.log(data.userRegistration.errors);
+      if (data.userRegistration.errors.username) {
+        setErrorMessage(data.userRegistration.errors.username[0].message);
+        return;
+      }
+      if (data.userRegistration.errors.nonFieldErrors) {
+        setErrorMessage(data.userRegistration.errors.nonFieldErrors[0].message);
+        return;
+      }
+      if (data.userRegistration.errors.password2) {
+        setErrorMessage(data.userRegistration.errors.password2[0].message);
+        return;
+      }
+      if (data.userRegistration.errors.email) {
+        setErrorMessage(data.userRegistration.errors.email[0].message);
+        return;
+      }
     },
   });
 
@@ -62,18 +84,18 @@ export function SignUp() {
       <h1 className="jua text-2xl">Create your account</h1>
       <label>
         Email
-        <input  
+        <input
           type="email"
-          className="border-black" 
+          className="border-black"
           value={email}
-          onChange={(e) => setEmail(e.target.value)} 
+          onChange={(e) => setEmail(e.target.value)}
         />
       </label>
       <label>
         Username
         <input
           type="text"
-          className="border-black" 
+          className="border-black"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
@@ -82,7 +104,7 @@ export function SignUp() {
         Password
         <input
           type="password"
-          className="border-black" 
+          className="border-black"
           value={password1}
           onChange={(e) => setPassword1(e.target.value)}
         />
@@ -91,13 +113,14 @@ export function SignUp() {
         Re-enter Password
         <input
           type="password"
-          className="border-black" 
+          className="border-black"
           value={password2}
           onChange={(e) => setPassword2(e.target.value)}
         />
       </label>
-      <button 
-        className="btn btn-blue white text-btn" 
+      {errorMessage && <p className="red">{errorMessage}</p>}
+      <button
+        className="btn btn-blue white text-btn"
         onClick={() => {
           registerUser({
             variables: {
@@ -112,8 +135,10 @@ export function SignUp() {
         Register
       </button>
       <p>
-        Already have an account? {" "}
-        <Link className="blue" to="/sign-in">Sign in</Link>
+        Already have an account?{" "}
+        <Link className="blue" to="/sign-in">
+          Sign in
+        </Link>
       </p>
     </div>
   );
@@ -130,9 +155,11 @@ export function SignIn() {
   const [authenticateUser] = useMutation(USER_AUTHENTICATION, {
     onCompleted: (data) => {
       if (data.userAuthentication.success) {
-        setUserAsAuthenticated(data.userAuthentication.token, 
-                               data.userAuthentication.recipeEditor, 
-                               setUserAuth);
+        setUserAsAuthenticated(
+          data.userAuthentication.token,
+          data.userAuthentication.recipeEditor,
+          setUserAuth,
+        );
         navigate("/recipes");
         return;
       }
@@ -146,25 +173,25 @@ export function SignIn() {
       <h1 className="jua text-2xl">Login to Mescalore</h1>
       <label>
         Username or Email
-        <input 
+        <input
           type="text"
           className="border-black"
           value={usernameEmail}
-          onChange={(e) => setUsernameEmail(e.target.value)} 
+          onChange={(e) => setUsernameEmail(e.target.value)}
         />
       </label>
       <label>
         Password
-        <input  
+        <input
           type="password"
-          className="border-black" 
+          className="border-black"
           value={password}
-          onChange={(e) => setPassword(e.target.value)} 
+          onChange={(e) => setPassword(e.target.value)}
         />
       </label>
       {errorMessage && <p className="red">{errorMessage}</p>}
-      <button 
-        className="btn btn-blue white text-btn" 
+      <button
+        className="btn btn-blue white text-btn"
         onClick={() => {
           authenticateUser({
             variables: {
@@ -177,8 +204,16 @@ export function SignIn() {
         Login
       </button>
       <p>
-        Don't have an account? {" "}
-        <Link className="blue" to="/sign-up">Sign up</Link>
+        Don't have an account?{" "}
+        <Link className="blue" to="/sign-up">
+          Sign up
+        </Link>
+      </p>
+      <p>
+        Forgot your password?{" "}
+        <Link className="blue" to="/forgot-password">
+          Reset password
+        </Link>
       </p>
     </div>
   );
