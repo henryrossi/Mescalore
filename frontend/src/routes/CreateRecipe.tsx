@@ -15,7 +15,7 @@ export const CREATE_RECIPE_MUTATION = gql`
   mutation createRecipe(
     $categories: [String]!
     $description: String!
-    $sections: [IngredientSectionInput]! 
+    $sections: [IngredientSectionInput]!
     $instructions: String!
     $name: String!
     $servings: Int!
@@ -39,8 +39,11 @@ export const CREATE_RECIPE_MUTATION = gql`
   }
 `;
 
-
-export async function loader({ params }: {params: Params<"recipeName">}) : Promise<string> {
+export async function loader({
+  params,
+}: {
+  params: Params<"recipeName">;
+}): Promise<string> {
   const result = await client.query({
     query: GET_S3_PRESIGNED_URL,
     fetchPolicy: "no-cache",
@@ -55,23 +58,23 @@ export async function loader({ params }: {params: Params<"recipeName">}) : Promi
 }
 
 function generateRandomNumber() {
-	return Math.random() * 1000000000;
+  return Math.random() * 1000000000;
 }
 
 const ids: number[] = [];
 function generateId() {
-	let id = generateRandomNumber();
-	while (ids.includes(id)) {
-		id = generateRandomNumber();
-	}
-	ids.push(id);
-	return id;
+  let id = generateRandomNumber();
+  while (ids.includes(id)) {
+    id = generateRandomNumber();
+  }
+  ids.push(id);
+  return id;
 }
 
 export default function CreateRecipe() {
   const navigate = useNavigate();
   const S3URL = useLoaderData() as string;
-  const [recipeData, setRecipeData] = React.useState<RecipeEditorData>( {
+  const [recipeData, setRecipeData] = React.useState<RecipeEditorData>({
     id: "",
     name: "",
     description: "",
@@ -80,12 +83,14 @@ export default function CreateRecipe() {
     categories: [],
     picture: null,
     imageURL: null,
-    ingredientSections: [{
-      id: generateId(),
-      name: "",
-      ingredients: [{id: generateId(), ingredient: "", measurement: ""},],
-    }],
-    instructions: [{id: generateId(), text: ""}],
+    ingredientSections: [
+      {
+        id: generateId(),
+        name: "",
+        ingredients: [{ id: generateId(), ingredient: "", measurement: "" }],
+      },
+    ],
+    instructions: [{ id: generateId(), text: "" }],
   });
 
   /* Can use session/local storage if I want to make form input state persist through refreshes */
@@ -103,20 +108,22 @@ export default function CreateRecipe() {
     },
   });
 
-  const onSubmit = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const onSubmit = async (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
     event.preventDefault();
     if (recipeData.picture) {
       const response = await fetch(S3URL, {
         method: "PUT",
         headers: {
-          "Content-Type": "multipart/form-data"
+          "Content-Type": "multipart/form-data",
         },
-        body: recipeData.picture
-      })
+        body: recipeData.picture,
+      });
       if (!response.ok) return;
-      setRecipeData({...recipeData, imageURL: S3URL.split('?')[0]});
+      setRecipeData({ ...recipeData, imageURL: S3URL.split("?")[0] });
     }
-    const imageURL = recipeData.picture ? S3URL.split('?')[0] : null;
+    const imageURL = recipeData.picture ? S3URL.split("?")[0] : null;
     createRecipe({
       variables: {
         name: recipeData.name,
@@ -125,18 +132,24 @@ export default function CreateRecipe() {
         description: recipeData.description,
         categories: recipeData.categories,
         imageURL: imageURL,
-        sections: recipeData.ingredientSections,
-        instructions: recipeData.instructions.map(i => i.text).join("\r"),
+        sections: recipeData.ingredientSections.map((section) => ({
+          name: section.name,
+          ingredients: section.ingredients.map((ingr) => ({
+            ingredient: ingr.ingredient,
+            measurement: ingr.measurement,
+          })),
+        })),
+        instructions: recipeData.instructions.map((i) => i.text).join("\r"),
       },
     });
   };
 
   return (
-    <RecipeEditor 
-      recipeData={recipeData} 
-      setRecipeData={setRecipeData} 
-      onSubmit={onSubmit} 
-      handleDelete={null} 
+    <RecipeEditor
+      recipeData={recipeData}
+      setRecipeData={setRecipeData}
+      onSubmit={onSubmit}
+      handleDelete={null}
     />
   );
 }

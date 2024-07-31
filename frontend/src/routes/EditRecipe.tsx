@@ -1,12 +1,9 @@
 import * as React from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
-import type { Params } from "react-router-dom"
+import type { Params } from "react-router-dom";
 import { gql, useMutation } from "@apollo/client";
 import client from "../client";
-import {
-  GET_S3_PRESIGNED_URL,
-  DELETE_RECIPE_MUTATION
-} from "../graphQL";
+import { GET_S3_PRESIGNED_URL, DELETE_RECIPE_MUTATION } from "../graphQL";
 import { RecipeEditorData, RecipeGraphQLReturn } from "../types";
 import RecipeEditor from "../components/RecipeEditor";
 
@@ -58,7 +55,7 @@ export const EDIT_RECIPE_MUTATION = gql`
         time: $time
         servings: $servings
         imageURL: $imageURL
-	sections: $sections
+        sections: $sections
         instructions: $instructions
       }
     ) {
@@ -68,57 +65,55 @@ export const EDIT_RECIPE_MUTATION = gql`
 `;
 
 function generateRandomNumber() {
-	return Math.random() * 1000000000;
+  return Math.random() * 1000000000;
 }
 
 const ids: number[] = [];
 function generateId() {
-	let id = generateRandomNumber();
-	while (ids.includes(id)) {
-		id = generateRandomNumber();
-	}
-	ids.push(id);
-	return id;
+  let id = generateRandomNumber();
+  while (ids.includes(id)) {
+    id = generateRandomNumber();
+  }
+  ids.push(id);
+  return id;
 }
 
-function decomposeGraphQLData(gqlData: RecipeGraphQLReturn) : RecipeEditorData {
-  return ({
+function decomposeGraphQLData(gqlData: RecipeGraphQLReturn): RecipeEditorData {
+  return {
     id: gqlData.id,
     name: gqlData.name,
     description: gqlData.description,
     servings: gqlData.servings,
     time: gqlData.time,
-    categories: gqlData.category.map(cat => cat.name.toLowerCase()),
+    categories: gqlData.category.map((cat) => cat.name.toLowerCase()),
     picture: null,
     imageURL: gqlData.imageURL,
-    ingredientSections: gqlData.ingredientSections.map(section => 
-      ({
-	id: generateId(),
-	name: section.name,
-        ingredients: section.ingredientList.map(ingr => 
-          ({
-	    id: generateId(),
-            measurement: ingr.measurement,
-            ingredient: ingr.ingredient.name,
-          })
-        )
-      })
-    ),
-    instructions: gqlData.instructions.split("\r").map(inst =>
-      ({
+    ingredientSections: gqlData.ingredientSections.map((section) => ({
+      id: generateId(),
+      name: section.name,
+      ingredients: section.ingredientList.map((ingr) => ({
         id: generateId(),
-	text: inst,
-      })
-    ),
-  })
+        measurement: ingr.measurement,
+        ingredient: ingr.ingredient.name,
+      })),
+    })),
+    instructions: gqlData.instructions.split("\r").map((inst) => ({
+      id: generateId(),
+      text: inst,
+    })),
+  };
 }
 
 interface EditRecipeLoaderData {
-  data: RecipeEditorData,
-  s3URL: string,
+  data: RecipeEditorData;
+  s3URL: string;
 }
 
-export async function loader({ params }: { params: Params<"recipeName">}) : Promise<EditRecipeLoaderData> {
+export async function loader({
+  params,
+}: {
+  params: Params<"recipeName">;
+}): Promise<EditRecipeLoaderData> {
   const result = await client.query({
     query: GET_RECIPE_QUERY,
     fetchPolicy: "no-cache",
@@ -129,8 +124,8 @@ export async function loader({ params }: { params: Params<"recipeName">}) : Prom
 
   const presignedURL = await client.query({
     query: GET_S3_PRESIGNED_URL,
-    fetchPolicy: "no-cache" 
-  })
+    fetchPolicy: "no-cache",
+  });
 
   if (result.error) {
     console.log(result.error);
@@ -142,15 +137,17 @@ export async function loader({ params }: { params: Params<"recipeName">}) : Prom
     throw Error(presignedURL.error.message);
   }
 
-  return ({
+  return {
     data: decomposeGraphQLData(result.data.getRecipeByName),
     s3URL: presignedURL.data.getS3PresignedUrl,
-  });
+  };
 }
 export default function EditRecipe() {
   const navigate = useNavigate();
-  const loaderData = useLoaderData() as EditRecipeLoaderData
-  const [recipeData, setRecipeData] = React.useState<RecipeEditorData>(loaderData.data);
+  const loaderData = useLoaderData() as EditRecipeLoaderData;
+  const [recipeData, setRecipeData] = React.useState<RecipeEditorData>(
+    loaderData.data,
+  );
 
   const [updateRecipe] = useMutation(EDIT_RECIPE_MUTATION, {
     onCompleted: (data) => {
@@ -180,20 +177,25 @@ export default function EditRecipe() {
 
   /* Logic handling for the form */
 
-  const onSubmit = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const onSubmit = async (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
     event.preventDefault();
     if (recipeData.picture) {
       const response = await fetch(loaderData.s3URL, {
         method: "PUT",
         headers: {
-          "Content-Type": "multipart/form-data"
+          "Content-Type": "multipart/form-data",
         },
-        body: recipeData.picture
-      })
+        body: recipeData.picture,
+      });
       if (!response.ok) return;
-      setRecipeData({...recipeData, imageURL: loaderData.s3URL.split('?')[0]});
+      setRecipeData({
+        ...recipeData,
+        imageURL: loaderData.s3URL.split("?")[0],
+      });
     }
-    const imageURL = recipeData.picture ? loaderData.s3URL.split('?')[0] : null;
+    const imageURL = recipeData.picture ? loaderData.s3URL.split("?")[0] : null;
     updateRecipe({
       variables: {
         recipeId: recipeData.id,
@@ -203,8 +205,14 @@ export default function EditRecipe() {
         description: recipeData.description,
         categories: recipeData.categories,
         imageURL: imageURL,
-        sections: recipeData.ingredientSections,
-        instructions: recipeData.instructions.map(i => i.text).join("\r"),
+        sections: recipeData.ingredientSections.map((section) => ({
+          name: section.name,
+          ingredients: section.ingredients.map((ingr) => ({
+            ingredient: ingr.ingredient,
+            measurement: ingr.measurement,
+          })),
+        })),
+        instructions: recipeData.instructions.map((i) => i.text).join("\r"),
       },
     });
   };
