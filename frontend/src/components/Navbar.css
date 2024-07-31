@@ -1,24 +1,24 @@
-.header-navbar {
+.header__navbar {
   position: sticky;
   top: 0;
   z-index: 1000;
 }
 
-.header-container-navbar {
+.header-container__navbar {
   height: 4rem;
   width: 95%;
   margin: auto;
-  border-bottom: 1px solid #BABABA;
+  border-bottom: 1px solid #bababa;
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.links-navbar {
+.links__navbar {
   flex: auto;
 }
 
-.header-container-navbar a {
+.header-container__navbar a {
   text-decoration: none;
 }
 
@@ -27,19 +27,19 @@
   border-radius: 0.25rem;
 }
 
-.search-container-navbar {
+.search-container__navbar {
   position: relative;
 }
 
-.search-container-navbar input {
+.search-container__navbar input {
   display: none;
   width: 100%;
   height: 2rem;
-  border: 1px solid #BABABA;
+  border: 1px solid #bababa;
   border-radius: 0.25rem;
 }
 
-.search-container-navbar button { 
+.search-container__navbar button {
   background-color: transparent;
   height: 2rem;
   padding: 0 0.5rem;
@@ -47,7 +47,7 @@
   cursor: pointer;
 }
 
-.user-auth-navbar {
+.user-auth__navbar {
   display: none;
 }
 
@@ -58,22 +58,23 @@
 /* Navbar currently breaks down at 25.625rems */
 
 @media only screen and (min-width: 40rem) {
-  .search-container-navbar input {
+  .search-container__navbar input {
     display: inline;
   }
 
-  .search-container-navbar {
+  .search-container__navbar {
     flex: auto;
   }
 
-  .search-container-navbar button {
+  .search-container__navbar button {
     position: absolute;
     right: 0;
   }
 }
 
 @media only screen and (min-width: 50rem) {
-  .user-auth-navbar {
+  .user-auth__navbar {
     display: flex;
   }
 }
+

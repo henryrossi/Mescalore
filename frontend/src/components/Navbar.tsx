@@ -1,7 +1,7 @@
 import * as React from "react";
-import { NavLink, Link, useNavigate, useParams, useLocation } from "react-router-dom";
-import authContext from "../authContext";
+import { NavLink, Link, useNavigate, useLocation } from "react-router-dom";
 import { IconSearch, IconUserCircle } from "@tabler/icons-react";
+import authContext from "../authContext";
 import "./Navbar.css";
 
 export default function Navbar() {
@@ -22,77 +22,73 @@ export default function Navbar() {
   };
 
   return (
-    <header className="bg-white header-navbar">
-      <div className="header-container-navbar">
-        <nav className="links-navbar">
-          <NavLink className={({ isActive, isPending }) => {
+    <header className="bg-white header__navbar">
+      <div className="header-container__navbar">
+        <nav className="links__navbar">
+          <NavLink
+            className={({ isActive }) => {
               return isActive ? "blue link__navbar" : "black link__navbar";
-            }} to="/"
+            }}
+            to="/"
           >
             home
           </NavLink>
           <NavLink
-            className={({ isActive, isPending }) => {
+            className={({ isActive }) => {
               return isActive ? "blue link__navbar" : "black link__navbar";
-            }} to="/recipes"
+            }}
+            to="/recipes"
           >
             recipes
           </NavLink>
           <NavLink
-            className={({ isActive, isPending }) => {
+            className={({ isActive }) => {
               return isActive ? "blue link__navbar" : "black link__navbar";
             }}
             to="/about"
           >
             about us
           </NavLink>
-          {userAuth.authenticated && userAuth.editorPermissions &&
-            <NavLink 
-              className={({ isActive, isPending }) => {
+          {userAuth.authenticated && userAuth.editorPermissions && (
+            <NavLink
+              className={({ isActive }) => {
                 return isActive ? "blue link__navbar" : "black link__navbar";
               }}
               to="/create"
             >
               create
             </NavLink>
-          }
+          )}
         </nav>
-        {location.pathname !== "/search" && <div className="search-container-navbar">
-          <input
-            type="text"
-            placeholder="Search"
-            onChange={(event) => setSearchInput(event.target.value)}
-            onKeyDown={handleKeyDown}
-          />
-          <button onClick={handleNavSearch}>
-            <IconSearch size={'1rem'}/>
-          </button>
-        </div>}
+        {location.pathname !== "/search" && (
+          <div className="search-container__navbar">
+            <input
+              type="text"
+              placeholder="Search"
+              onChange={(event) => setSearchInput(event.target.value)}
+              onKeyDown={handleKeyDown}
+            />
+            <button onClick={handleNavSearch}>
+              <IconSearch size={"1rem"} />
+            </button>
+          </div>
+        )}
 
-        <div className="user-auth-navbar">
-          {userAuth.authenticated ?
-            <Link
-              className="bg-white black profile-pic__navbar"
-              to="/profile"
-            >
-              <IconUserCircle size={'1.6rem'}/>
-            </Link> 
-            :
+        <div className="user-auth__navbar">
+          {userAuth.authenticated ? (
+            <Link className="bg-white black profile-pic__navbar" to="/profile">
+              <IconUserCircle size={"1.6rem"} />
+            </Link>
+          ) : (
             <>
-              <Link
-                className="black link__navbar"
-                to="/sign-in"
-              >
+              <Link className="black link__navbar" to="/sign-in">
                 sign in
               </Link>
-              <Link 
-                className="bg-blue white link__navbar"
-                to="/sign-up"
-              >
+              <Link className="bg-blue white link__navbar" to="/sign-up">
                 sign up
               </Link>
             </>
-          }
+          )}
         </div>
       </div>
     </header>
