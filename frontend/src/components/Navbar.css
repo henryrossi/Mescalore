@@ -40,7 +40,7 @@
   border-radius: 0.25rem;
 }
 
-.search-container__navbar button {
+.header-container__navbar button {
   background-color: transparent;
   height: 2rem;
   padding: 0 0.5rem;
@@ -57,7 +57,7 @@
 }
 
 .drop-down__navbar {
-  width: 200px;
+  width: 300px;
   position: absolute;
   top: 3rem;
   right: 0;
@@ -68,6 +68,15 @@
   padding: 0.5rem;
   display: flex;
   flex-direction: column;
+}
+
+.drop-down__navbar a {
+  color: #212121;
+  padding: 0.5rem;
+}
+
+.drop-down-break__navbar {
+  border-top: 1px solid #bababa;
 }
 
 /* Navbar currently breaks down at 25.625rems */

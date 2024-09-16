@@ -1,19 +1,16 @@
 import * as React from "react";
 import { NavLink, Link, useNavigate, useLocation } from "react-router-dom";
-import {
-  IconSearch,
-  IconUserCircle,
-  IconBaselineDensityMedium,
-} from "@tabler/icons-react";
+import { IconSearch, IconMenu2 } from "@tabler/icons-react";
 import authContext from "../authContext";
 import "./Navbar.css";
 
 export default function Navbar() {
   const [searchInput, setSearchInput] = React.useState("");
+  const [dropDownOpacity, setDropDownOpacity] = React.useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { userAuth } = React.useContext(authContext);
+  const { userAuth, setUserAuth } = React.useContext(authContext);
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
@@ -21,9 +18,27 @@ export default function Navbar() {
     }
   };
 
+  const resetDropDown = () => {
+    setDropDownOpacity(false);
+  };
+
   const handleNavSearch = () => {
+    resetDropDown();
     navigate("/search?q=" + searchInput);
   };
+
+  const logoutUser = () => {
+    setUserAuth({
+      authenticated: false,
+      editorPermissions: false,
+    });
+    localStorage.removeItem("token");
+    localStorage.removeItem("editor");
+    localStorage.removeItem("tokenTime");
+    console.log("logged out");
+  };
+
+  console.log(userAuth.authenticated);
 
   return (
     <header className="bg-white header__navbar">
@@ -34,6 +49,7 @@ export default function Navbar() {
               return isActive ? "blue link__navbar" : "black link__navbar";
             }}
             to="/"
+            onClick={resetDropDown}
           >
             home
           </NavLink>
@@ -42,6 +58,7 @@ export default function Navbar() {
               return isActive ? "blue link__navbar" : "black link__navbar";
             }}
             to="/recipes"
+            onClick={resetDropDown}
           >
             recipes
           </NavLink>
@@ -50,6 +67,7 @@ export default function Navbar() {
               return isActive ? "blue link__navbar" : "black link__navbar";
             }}
             to="/about"
+            onClick={resetDropDown}
           >
             about us
           </NavLink>
@@ -68,31 +86,49 @@ export default function Navbar() {
           </div>
         )}
 
-        <button>
-          <IconBaselineDensityMedium size={"1.6rem"} />
+        <button
+          onClick={() => {
+            setDropDownOpacity(!dropDownOpacity);
+          }}
+        >
+          {/* Alexa had a good idea to use an actual hamburger for the hamburger menu icon */}
+          <IconMenu2 size={"1.2rem"} />
         </button>
-        <div className="drop-down__navbar">
+        <nav
+          className="drop-down__navbar"
+          style={{ opacity: dropDownOpacity ? 1 : 0 }}
+        >
           {userAuth.authenticated ? (
-            <Link className="" to="/profile">
+            <Link onClick={resetDropDown} to="/profile">
               profile
             </Link>
           ) : (
             <>
-              <Link className="black link__navbar" to="/sign-in">
+              <Link
+                className="black link__navbar"
+                to="/sign-in"
+                onClick={resetDropDown}
+              >
                 sign in
               </Link>
-              <Link className="bg-blue white link__navbar" to="/sign-up">
+              <Link
+                className="bg-blue white link__navbar"
+                to="/sign-up"
+                onClick={resetDropDown}
+              >
                 sign up
               </Link>
             </>
           )}
           {userAuth.authenticated && userAuth.editorPermissions && (
             <>
-              <br />
-              <Link to="/create">create</Link>
+              <div className="drop-down-break__navbar"></div>
+              <Link to="/create" onClick={resetDropDown}>
+                create
+              </Link>
             </>
           )}
-        </div>
+        </nav>
       </div>
     </header>
   );
