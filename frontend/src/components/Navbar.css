@@ -12,6 +12,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  position: relative;
 }
 
 .links__navbar {
@@ -55,6 +56,20 @@
   padding: 0.2rem 1rem;
 }
 
+.drop-down__navbar {
+  width: 200px;
+  position: absolute;
+  top: 3rem;
+  right: 0;
+  background-color: #ffffff;
+  border: 1px solid #bababa;
+  border-radius: 0.5rem;
+  filter: drop-shadow(#bababa 0px 0px 1px);
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
 /* Navbar currently breaks down at 25.625rems */
 
 @media only screen and (min-width: 40rem) {
@@ -77,4 +92,3 @@
     display: flex;
   }
 }
-

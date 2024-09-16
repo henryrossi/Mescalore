@@ -1,6 +1,10 @@
 import * as React from "react";
 import { NavLink, Link, useNavigate, useLocation } from "react-router-dom";
-import { IconSearch, IconUserCircle } from "@tabler/icons-react";
+import {
+  IconSearch,
+  IconUserCircle,
+  IconBaselineDensityMedium,
+} from "@tabler/icons-react";
 import authContext from "../authContext";
 import "./Navbar.css";
 
@@ -49,16 +53,6 @@ export default function Navbar() {
           >
             about us
           </NavLink>
-          {userAuth.authenticated && userAuth.editorPermissions && (
-            <NavLink
-              className={({ isActive }) => {
-                return isActive ? "blue link__navbar" : "black link__navbar";
-              }}
-              to="/create"
-            >
-              create
-            </NavLink>
-          )}
         </nav>
         {location.pathname !== "/search" && (
           <div className="search-container__navbar">
@@ -74,10 +68,13 @@ export default function Navbar() {
           </div>
         )}
 
-        <div className="user-auth__navbar">
+        <button>
+          <IconBaselineDensityMedium size={"1.6rem"} />
+        </button>
+        <div className="drop-down__navbar">
           {userAuth.authenticated ? (
-            <Link className="bg-white black profile-pic__navbar" to="/profile">
-              <IconUserCircle size={"1.6rem"} />
+            <Link className="" to="/profile">
+              profile
             </Link>
           ) : (
             <>
@@ -87,6 +84,12 @@ export default function Navbar() {
               <Link className="bg-blue white link__navbar" to="/sign-up">
                 sign up
               </Link>
+            </>
+          )}
+          {userAuth.authenticated && userAuth.editorPermissions && (
+            <>
+              <br />
+              <Link to="/create">create</Link>
             </>
           )}
         </div>

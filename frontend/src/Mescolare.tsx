@@ -8,19 +8,25 @@ import authContext from "./authContext";
 import { UserAuth } from "./types";
 
 export default function Mescolare() {
-    const prevAuthenticated = localStorage.getItem("token") ? true : false;
-    const prevEditorPermissions = localStorage.getItem("editor") === "true" ? true : false
-    const [userAuth, setUserAuth] = React.useState<UserAuth>({ 
-      authenticated: prevAuthenticated, editorPermissions: prevEditorPermissions
-    });
+  const prevAuthenticated = localStorage.getItem("token") ? true : false;
+  const prevEditorPermissions =
+    localStorage.getItem("editor") === "true" ? true : false;
 
-    return (
-        <authContext.Provider value={{ userAuth, setUserAuth }}>
-	  <DndProvider backend={HTML5Backend}>
-            <Navbar />
-            <Outlet />
-            <Footer />
-	  </DndProvider>
-        </authContext.Provider>
-);
+  // need to make a request the first time a user hits the site to see if the
+  // credentials are valid and have an associated account
+
+  const [userAuth, setUserAuth] = React.useState<UserAuth>({
+    authenticated: prevAuthenticated,
+    editorPermissions: prevEditorPermissions,
+  });
+
+  return (
+    <authContext.Provider value={{ userAuth, setUserAuth }}>
+      <DndProvider backend={HTML5Backend}>
+        <Navbar />
+        <Outlet />
+        <Footer />
+      </DndProvider>
+    </authContext.Provider>
+  );
 }
