@@ -73,10 +73,17 @@
 .drop-down__navbar a {
   color: #212121;
   padding: 0.5rem;
+  width: 100%;
+  border-radius: 0.25rem;
+}
+
+.drop-down__navbar a:hover {
+  background-color: #bababa;
 }
 
 .drop-down-break__navbar {
   border-top: 1px solid #bababa;
+  margin: 0.25rem 0;
 }
 
 /* Navbar currently breaks down at 25.625rems */
