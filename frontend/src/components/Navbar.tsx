@@ -6,7 +6,7 @@ import "./Navbar.css";
 
 export default function Navbar() {
   const [searchInput, setSearchInput] = React.useState("");
-  const [dropDownOpacity, setDropDownOpacity] = React.useState(false);
+  const [dropDownVisible, setDropDownVisible] = React.useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -19,7 +19,7 @@ export default function Navbar() {
   };
 
   const resetDropDown = () => {
-    setDropDownOpacity(false);
+    setDropDownVisible(false);
   };
 
   const handleNavSearch = () => {
@@ -35,10 +35,7 @@ export default function Navbar() {
     localStorage.removeItem("token");
     localStorage.removeItem("editor");
     localStorage.removeItem("tokenTime");
-    console.log("logged out");
   };
-
-  console.log(userAuth.authenticated);
 
   return (
     <header className="bg-white header__navbar">
@@ -88,7 +85,7 @@ export default function Navbar() {
 
         <button
           onClick={() => {
-            setDropDownOpacity(!dropDownOpacity);
+            setDropDownVisible(!dropDownVisible);
           }}
         >
           {/* Alexa had a good idea to use an actual hamburger for the hamburger menu icon */}
@@ -96,12 +93,17 @@ export default function Navbar() {
         </button>
         <nav
           className="drop-down__navbar"
-          style={{ opacity: dropDownOpacity ? 1 : 0 }}
+          style={{ display: dropDownVisible ? "flex" : "none" }}
         >
           {userAuth.authenticated ? (
-            <Link onClick={resetDropDown} to="/profile">
-              profile
-            </Link>
+            <>
+              <Link onClick={resetDropDown} to="/profile">
+                profile
+              </Link>
+              <Link onClick={resetDropDown} to="/profile">
+                sign out
+              </Link>
+            </>
           ) : (
             <>
               <Link

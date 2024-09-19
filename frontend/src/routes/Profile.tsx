@@ -76,7 +76,6 @@ export default function Profile() {
   };
 
   const logoutUser = () => {
-    console.log("logged out");
     setUserAuth({
       authenticated: false,
       editorPermissions: false,
@@ -106,10 +105,7 @@ export default function Profile() {
           <button
             className="btn text-btn btn-yellow hover-blue-drop-shadow 
                                    sign-out-button__profile"
-            onClick={() => {
-              console.log("func called");
-              logoutUser();
-            }}
+            onClick={logoutUser}
           >
             Sign Out
           </button>
@@ -160,4 +156,3 @@ export default function Profile() {
     </div>
   );
 }
-
