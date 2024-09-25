@@ -48,14 +48,6 @@
   cursor: pointer;
 }
 
-.user-auth__navbar {
-  display: none;
-}
-
-.profile-pic__navbar {
-  padding: 0.2rem 1rem;
-}
-
 .drop-down__navbar {
   width: 300px;
   position: absolute;
@@ -71,7 +63,6 @@
 }
 
 .drop-down__navbar a {
-  color: #212121;
   padding: 0.5rem;
   width: 100%;
   border-radius: 0.25rem;
@@ -84,6 +75,14 @@
 .drop-down-break__navbar {
   border-top: 1px solid #bababa;
   margin: 0.25rem 0;
+}
+
+.user-auth__navbar {
+  text-align: center;
+}
+
+.sign-up__navbar:hover {
+  background-color: #588b8b !important;
 }
 
 /* Navbar currently breaks down at 25.625rems */
@@ -100,11 +99,5 @@
   .search-container__navbar button {
     position: absolute;
     right: 0;
-  }
-}
-
-@media only screen and (min-width: 50rem) {
-  .user-auth__navbar {
-    display: flex;
   }
 }

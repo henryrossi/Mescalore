@@ -28,6 +28,7 @@ export default function Navbar() {
   };
 
   const logoutUser = () => {
+    resetDropDown();
     setUserAuth({
       authenticated: false,
       editorPermissions: false,
@@ -97,36 +98,35 @@ export default function Navbar() {
         >
           {userAuth.authenticated ? (
             <>
-              <Link onClick={resetDropDown} to="/profile">
+              <Link onClick={resetDropDown} to="/profile" className="black">
                 profile
               </Link>
-              <Link onClick={resetDropDown} to="/profile">
+              <Link onClick={logoutUser} to="/profile" className="black">
                 sign out
               </Link>
             </>
           ) : (
-            <>
+            <div className="flex gap-1rem user-auth__navbar">
               <Link
-                className="black link__navbar"
-                to="/sign-in"
-                onClick={resetDropDown}
-              >
-                sign in
-              </Link>
-              <Link
-                className="bg-blue white link__navbar"
+                className="bg-blue white sign-up__navbar"
                 to="/sign-up"
                 onClick={resetDropDown}
               >
                 sign up
               </Link>
-            </>
+              <Link to="/sign-in" onClick={resetDropDown} className="black">
+                sign in
+              </Link>
+            </div>
           )}
+          <div className="drop-down-break__navbar"></div>
+          <Link to="/search" onClick={resetDropDown} className="black">
+            search for recipes
+          </Link>
           {userAuth.authenticated && userAuth.editorPermissions && (
             <>
-              <div className="drop-down-break__navbar"></div>
-              <Link to="/create" onClick={resetDropDown}>
-                create
+              <Link to="/create" onClick={resetDropDown} className="black">
+                create a new recipe
               </Link>
             </>
           )}
