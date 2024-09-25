@@ -51,32 +51,32 @@ const UNFAVORITE_RECIPE = gql`
   }
 `;
 
-function decomposeGraphQLData(gqlData: RecipeGraphQLReturn) : RecipeData {
-  return ({
+function decomposeGraphQLData(gqlData: RecipeGraphQLReturn): RecipeData {
+  return {
     id: gqlData.id,
     name: gqlData.name,
     description: gqlData.description,
     servings: gqlData.servings,
     time: gqlData.time,
-    categories: gqlData.category.map(cat => cat.name),
+    categories: gqlData.category.map((cat) => cat.name),
     imageURL: gqlData.imageURL,
-    ingredientSections: gqlData.ingredientSections.map(section => 
-      ({
-        ...section,
-        ingredients: section.ingredientList.map(ingr => 
-          ({
-            measurement: ingr.measurement,
-            ingredient: ingr.ingredient.name,
-          })
-        )
-      })
-    ),
+    ingredientSections: gqlData.ingredientSections.map((section) => ({
+      ...section,
+      ingredients: section.ingredientList.map((ingr) => ({
+        measurement: ingr.measurement,
+        ingredient: ingr.ingredient.name,
+      })),
+    })),
     instructions: gqlData.instructions,
     favorite: gqlData.favorite,
-  });
+  };
 }
 
-export async function loader({ params }: { params: Params<"recipeName">}) : Promise<RecipeData> {
+export async function loader({
+  params,
+}: {
+  params: Params<"recipeName">;
+}): Promise<RecipeData> {
   const result = await client.query({
     query: GET_RECIPE_QUERY,
     fetchPolicy: "no-cache",
@@ -84,6 +84,13 @@ export async function loader({ params }: { params: Params<"recipeName">}) : Prom
       name: params.recipeName,
     },
   });
+
+  const url = "";
+  const response = await fetch(url);
+  if (!response.ok) {
+    // throw new Error();
+  }
+  const body = await response.json();
 
   if (result.error) {
     console.log(result.error);
@@ -115,7 +122,9 @@ export default function Recipe() {
     },
   });
 
-  const handleIngredientLineThrough = (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
+  const handleIngredientLineThrough = (
+    e: React.MouseEvent<HTMLLIElement, MouseEvent>,
+  ) => {
     const li = e.target as HTMLElement;
     if (li.classList.contains("ingredient-line-through__recipe")) {
       li.classList.remove("ingredient-line-through__recipe");
@@ -123,35 +132,42 @@ export default function Recipe() {
     }
     li.classList.add("ingredient-line-through__recipe");
   };
-  
+
   return (
     <div className="main-container__recipe">
-      <section className="flex-col gap-1rem"> 
+      <section className="flex-col gap-1rem">
         <div className="border-black">
           <div className="orange-banner"></div>
           <div className="flex-col gap-1rem padding-1rem">
             <div className="flex">
               <h1 className="text-5xl jua flex-1">{data.name}</h1>
-              {userAuth.authenticated && <div className="flex gap-1rem">
-                <button 
-                  className="no-border bg-white favorite-button__recipe"
-                  onClick={favorited ? 
-                    () => unfavoriteRecipe({ variables: { recipeId: data.id } }) : 
-                    () => favoriteRecipe({ variables: { recipeId: data.id }})
-                  }
-                >
-                  <IconHeart
-                    size={'2rem'} 
-                    stroke={1} 
-                    className={favorited ? "favorited__recipe" : ""}
-                  />
-                </button>
-                {userAuth.editorPermissions &&
-                  <Link to={"/edit/" + recipeName}>
-                    <IconEdit size={'2rem'} stroke={1.5}/>
-                  </Link>
-                }
-              </div>}
+              {userAuth.authenticated && (
+                <div className="flex gap-1rem">
+                  <button
+                    className="no-border bg-white favorite-button__recipe"
+                    onClick={
+                      favorited
+                        ? () =>
+                            unfavoriteRecipe({
+                              variables: { recipeId: data.id },
+                            })
+                        : () =>
+                            favoriteRecipe({ variables: { recipeId: data.id } })
+                    }
+                  >
+                    <IconHeart
+                      size={"2rem"}
+                      stroke={1}
+                      className={favorited ? "favorited__recipe" : ""}
+                    />
+                  </button>
+                  {userAuth.editorPermissions && (
+                    <Link to={"/edit/" + recipeName}>
+                      <IconEdit size={"2rem"} stroke={1.5} />
+                    </Link>
+                  )}
+                </div>
+              )}
             </div>
             <div className="flex gap-1rem">
               <span className="red">{data.servings} servings</span>
@@ -160,22 +176,21 @@ export default function Recipe() {
             <ul className="flex gap-1rem flex-wrap">
               {data.categories.map((cat) => (
                 <li key={cat}>
-                  <div className="btn btn-yellow blue-drop-shadow">{cat.toLowerCase()}</div>
+                  <div className="btn btn-yellow blue-drop-shadow">
+                    {cat.toLowerCase()}
+                  </div>
                 </li>
               ))}
             </ul>
           </div>
         </div>
-        {data.imageURL ? 
-          <img 
-            className="border-black"
-            src={data.imageURL} 
-            alt="" 
-          /> : 
+        {data.imageURL ? (
+          <img className="border-black" src={data.imageURL} alt="" />
+        ) : (
           <div className="no-image border-black">
             <p className="red">image unavailable</p>
           </div>
-        }
+        )}
         <p className="text-base">{data.description}</p>
       </section>
       <section className="flex-col gap-1rem">
@@ -185,15 +200,15 @@ export default function Recipe() {
             <div>
               <h3>{section.name}</h3>
               <ul className="flex-col gap-1rem padding-1rem">
-              {section.ingredients.map((ingr, index) => (
-                <li 
-                  key={index} 
-                  onClick={handleIngredientLineThrough}
-                  className="text-base ingredient__recipe"
-                >
-                  {ingr.measurement} {ingr.ingredient}
-                </li>
-              ))}
+                {section.ingredients.map((ingr, index) => (
+                  <li
+                    key={index}
+                    onClick={handleIngredientLineThrough}
+                    className="text-base ingredient__recipe"
+                  >
+                    {ingr.measurement} {ingr.ingredient}
+                  </li>
+                ))}
               </ul>
             </div>
           ))}
@@ -201,11 +216,11 @@ export default function Recipe() {
         <div>
           <h2 className="text-3xl header-2__recipe">Instructions</h2>
           <ol className="flex-col gap-1rem list-style-numbered padding-1rem ">
-            {data.instructions
-              .split("\r")
-              .map((instruction) => (
-                <li key={instruction} className="text-base">{instruction}</li>
-              ))}
+            {data.instructions.split("\r").map((instruction) => (
+              <li key={instruction} className="text-base">
+                {instruction}
+              </li>
+            ))}
           </ol>
         </div>
       </section>
