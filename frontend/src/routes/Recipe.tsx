@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Link, useLoaderData, useParams } from "react-router-dom";
 import type { Params } from "react-router-dom";
-import { gql, useMutation } from "@apollo/client";
+import { gql, operationName, useMutation } from "@apollo/client";
 import { RecipeData, RecipeGraphQLReturn } from "../types";
 import { IconHeart, IconEdit } from "@tabler/icons-react";
 import authContext from "../authContext";
@@ -34,6 +34,31 @@ const GET_RECIPE_QUERY = gql`
     }
   }
 `;
+
+const GET_RECIPE_QUERY_STRING = `query recipeQuery($name: String!) {
+    getRecipeByName(name: $name) {
+      id
+      name
+      description
+      servings
+      time
+      category {
+        name
+      }
+      imageURL
+      ingredientSections {
+        name
+        ingredientList {
+          measurement
+          ingredient {
+            name
+          }
+        }
+      }
+      instructions
+      favorite
+    }
+  }`;
 
 const FAVORITE_RECIPE = gql`
   mutation FavoriteRecipeMutation($recipeId: ID!) {
@@ -77,27 +102,34 @@ export async function loader({
 }: {
   params: Params<"recipeName">;
 }): Promise<RecipeData> {
-  const result = await client.query({
-    query: GET_RECIPE_QUERY,
-    fetchPolicy: "no-cache",
-    variables: {
-      name: params.recipeName,
-    },
+  const url = process.env.BACKEND_URI ? process.env.BACKEND_URI : "";
+  const auth = localStorage.getItem("token")
+    ? `JWT ${localStorage.getItem("token")}`
+    : "";
+
+  const response = await fetch(url, {
+    method: "POST",
+    headers: { authorization: auth, "content-type": "application/json" },
+    body: JSON.stringify({
+      query: GET_RECIPE_QUERY_STRING,
+      variables: { name: params.recipeName },
+    }),
   });
 
-  const url = "";
-  const response = await fetch(url);
   if (!response.ok) {
-    // throw new Error();
+    throw Error("I think this error should be bad request");
   }
+
   const body = await response.json();
 
-  if (result.error) {
-    console.log(result.error);
-    throw Error(result.error.message);
-  }
+  // check body.error
 
-  return decomposeGraphQLData(result.data.getRecipeByName);
+  // if (result.error) {
+  //   console.log(result.error);
+  //   throw Error(result.error.message);
+  // }
+
+  return decomposeGraphQLData(body.data.getRecipeByName);
 }
 
 export default function Recipe() {
