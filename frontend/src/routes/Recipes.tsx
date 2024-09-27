@@ -18,11 +18,13 @@ const FILTER_RECIPES_QUERY = gql`
   }
 `;
 
-function decomposeGraphQLData(gqlData: RecipePreviewGraphQLReturn[]) : RecipePreview[] {
-  return gqlData.map(preview => ({
+function decomposeGraphQLData(
+  gqlData: RecipePreviewGraphQLReturn[],
+): RecipePreview[] {
+  return gqlData.map((preview) => ({
     ...preview,
-    categories: preview.category.map(obj => obj.name)
-  }))
+    categories: preview.category.map((obj) => obj.name),
+  }));
 }
 
 export async function loader() {
@@ -32,7 +34,7 @@ export async function loader() {
       category: "",
     },
   });
-  
+
   return decomposeGraphQLData(result.data.getRecipesByCategory);
 }
 
@@ -40,7 +42,8 @@ export default function Recipes() {
   const tags = ["breakfast", "lunch", "dinner", "snack", "dessert", "beverage"];
   const [selectedCategory, setSelectedCategory] = React.useState("");
   const recipePreviews = useLoaderData() as RecipePreview[];
-  const [filteredPreviews, setFilteredPreviews] = React.useState(recipePreviews);
+  const [filteredPreviews, setFilteredPreviews] =
+    React.useState(recipePreviews);
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     let target = e.target as HTMLButtonElement;
@@ -52,11 +55,13 @@ export default function Recipes() {
       return;
     }
     setSelectedCategory(category);
-    setFilteredPreviews(previews.filter(
-      (recipe) => recipe.categories.filter(
-        (cat => cat.toLowerCase() === category)
-      ).length > 0
-    ));
+    setFilteredPreviews(
+      previews.filter(
+        (recipe) =>
+          recipe.categories.filter((cat) => cat.toLowerCase() === category)
+            .length > 0,
+      ),
+    );
   };
 
   return (
@@ -70,9 +75,10 @@ export default function Recipes() {
             {tags.map((tag) => (
               <li key={tag}>
                 <button
-                  className={tag === selectedCategory ? 
-                    "btn text-btn btn-yellow blue-drop-shadow" : 
-                    "btn text-btn btn-yellow hover-blue-drop-shadow"
+                  className={
+                    tag === selectedCategory
+                      ? "btn black text-btn btn-yellow blue-drop-shadow"
+                      : "btn black text-btn btn-yellow hover-blue-drop-shadow"
                   }
                   onClick={handleClick}
                 >
@@ -83,7 +89,7 @@ export default function Recipes() {
           </ul>
         </div>
       </section>
-      <RecipeList recipes={filteredPreviews}/>
+      <RecipeList recipes={filteredPreviews} />
     </>
   );
 }

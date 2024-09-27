@@ -22,7 +22,7 @@ export const GET_NUMBER_OF_RECIPES = gql`
   }
 `;
 
-export async function loader({ request } : { request: Request }) {
+export async function loader({ request }: { request: Request }) {
   const url = new URL(request.url);
   let searchText = url.searchParams.get("q");
   searchText = searchText ? searchText : "";
@@ -31,33 +31,33 @@ export async function loader({ request } : { request: Request }) {
     query: SEARCH_RECIPES_QUERY,
     fetchPolicy: "network-only",
     variables: {
-        searchText: searchText,
-        offset: 0
-    }
+      searchText: searchText,
+      offset: 0,
+    },
   });
 
   const count = await client.query({
     query: GET_NUMBER_OF_RECIPES,
   });
 
-  return ({
+  return {
     count: count.data.getNumberOfRecipes,
-    searchText: searchText
-  });
+    searchText: searchText,
+  };
 }
 
 export default function Search() {
-  const navigate = useNavigate(); 
-  const data = useLoaderData() as { count: string, searchText: string};
+  const navigate = useNavigate();
+  const data = useLoaderData() as { count: string; searchText: string };
   const [searchText, setSearchText] = React.useState<string>(data.searchText);
 
   const { data: recipes, fetchMore } = useQuery(SEARCH_RECIPES_QUERY, {
     fetchPolicy: "cache-only",
     variables: {
       searchText: data.searchText,
-      offset: 0
-    }
-  })
+      offset: 0,
+    },
+  });
 
   const handleSearch = () => {
     if (searchText !== data.searchText) {
@@ -72,10 +72,12 @@ export default function Search() {
   };
 
   const handleFetchMore = () => {
-    fetchMore({variables: {
-      searchText: data.searchText,
-      offset: recipes.searchRecipes.length
-    }})
+    fetchMore({
+      variables: {
+        searchText: data.searchText,
+        offset: recipes.searchRecipes.length,
+      },
+    });
   };
 
   return (
@@ -91,27 +93,28 @@ export default function Search() {
             onKeyDown={handleKeyDown}
           />
           <button onClick={handleSearch}>
-            <IconSearch size={'1rem'}/>
+            <IconSearch size={"1rem"} className="black" />
           </button>
         </div>
       </section>
-      {!recipes ? 
-        <Loading /> :
+      {!recipes ? (
+        <Loading />
+      ) : (
         <>
           <RecipeList recipes={recipes.searchRecipes} />
-          {recipes.searchRecipes.length !== 0 && 
-          recipes.searchRecipes.length < parseInt(data.count, 10) && (
-            <div className="flex refetch-btn-container__search">
-              <button 
-                className="btn text-btn btn-yellow blue-drop-shadow" 
-                onClick={handleFetchMore}
-              >
-                Load more recipes
-              </button>
-            </div>
-          )}
+          {recipes.searchRecipes.length !== 0 &&
+            recipes.searchRecipes.length < parseInt(data.count, 10) && (
+              <div className="flex refetch-btn-container__search">
+                <button
+                  className="btn text-btn btn-yellow blue-drop-shadow"
+                  onClick={handleFetchMore}
+                >
+                  Load more recipes
+                </button>
+              </div>
+            )}
         </>
-      }
+      )}
     </>
   );
 }

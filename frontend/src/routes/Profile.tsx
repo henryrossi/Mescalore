@@ -102,7 +102,7 @@ export default function Profile() {
               onKeyDown={handleKeyDown}
             ></input>
             <button onClick={() => navigate("/profile?q=" + seacrhText)}>
-              <IconSearch size={"1rem"} />
+              <IconSearch size={"1rem"} className="black" />
             </button>
           </div>
         </div>

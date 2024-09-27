@@ -79,7 +79,7 @@ export default function Navbar() {
               onKeyDown={handleKeyDown}
             />
             <button onClick={handleNavSearch}>
-              <IconSearch size={"1rem"} />
+              <IconSearch size={"1rem"} className="black" />
             </button>
           </div>
         )}
@@ -90,7 +90,7 @@ export default function Navbar() {
           }}
         >
           {/* Alexa had a good idea to use an actual hamburger for the hamburger menu icon */}
-          <IconMenu2 size={"1.2rem"} />
+          <IconMenu2 size={"1.2rem"} className="black" />
         </button>
         <nav
           className="drop-down__navbar"
