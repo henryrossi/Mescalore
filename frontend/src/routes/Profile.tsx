@@ -75,16 +75,6 @@ export default function Profile() {
     });
   };
 
-  const logoutUser = () => {
-    setUserAuth({
-      authenticated: false,
-      editorPermissions: false,
-    });
-    localStorage.removeItem("token");
-    localStorage.removeItem("editor");
-    localStorage.removeItem("tokenTime");
-  };
-
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       navigate("/profile?q=" + seacrhText);
@@ -102,13 +92,6 @@ export default function Profile() {
       <section className="flex-col gap-1rem main-container__profile">
         <div className="flex flex-wrap">
           <h1 className="text-2xl flex-1">Welcome to your profile</h1>
-          <button
-            className="btn text-btn btn-yellow hover-blue-drop-shadow 
-                                   sign-out-button__profile"
-            onClick={logoutUser}
-          >
-            Sign Out
-          </button>
         </div>
         <div className="grid">
           <p className="text-base flex-1">Check out your saved recipes</p>

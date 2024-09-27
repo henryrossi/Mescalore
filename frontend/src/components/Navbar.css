@@ -49,7 +49,7 @@
 }
 
 .drop-down__navbar {
-  width: 300px;
+  width: min(95%, 20rem);
   position: absolute;
   top: 3rem;
   right: 0;
@@ -79,6 +79,10 @@
 
 .user-auth__navbar {
   text-align: center;
+}
+
+.user-auth__navbar a {
+  width: 5rem;
 }
 
 .sign-up__navbar:hover {
