@@ -196,7 +196,7 @@ class Query(UserQuery, MeQuery, graphene.ObjectType):
     def resolve_search_recipes(root, info, searchText, offset):
         limit = 12
         if searchText == "":
-            return []
+            return Recipe.objects.all()[offset : (offset + limit)]
         t = Tokenizer()
         searchedTerms = t.tokenize(searchText)
         if len(searchedTerms) == 0:

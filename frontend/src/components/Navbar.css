@@ -1,24 +1,25 @@
-.header-navbar {
+.header__navbar {
   position: sticky;
   top: 0;
   z-index: 1000;
 }
 
-.header-container-navbar {
+.header-container__navbar {
   height: 4rem;
   width: 95%;
   margin: auto;
-  border-bottom: 1px solid #BABABA;
+  border-bottom: 1px solid #bababa;
   display: flex;
   align-items: center;
   gap: 10px;
+  position: relative;
 }
 
-.links-navbar {
+.links__navbar {
   flex: auto;
 }
 
-.header-container-navbar a {
+.header-container__navbar a {
   text-decoration: none;
 }
 
@@ -27,19 +28,19 @@
   border-radius: 0.25rem;
 }
 
-.search-container-navbar {
+.search-container__navbar {
   position: relative;
 }
 
-.search-container-navbar input {
+.search-container__navbar input {
   display: none;
   width: 100%;
   height: 2rem;
-  border: 1px solid #BABABA;
+  border: 1px solid #bababa;
   border-radius: 0.25rem;
 }
 
-.search-container-navbar button { 
+.header-container__navbar button {
   background-color: transparent;
   height: 2rem;
   padding: 0 0.5rem;
@@ -47,33 +48,60 @@
   cursor: pointer;
 }
 
-.user-auth-navbar {
-  display: none;
+.drop-down__navbar {
+  width: min(95%, 20rem);
+  position: absolute;
+  top: 3rem;
+  right: 0;
+  background-color: #ffffff;
+  border: 1px solid #bababa;
+  border-radius: 0.5rem;
+  filter: drop-shadow(#bababa 0px 0px 1px);
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
 }
 
-.profile-pic__navbar {
-  padding: 0.2rem 1rem;
+.drop-down__navbar a {
+  padding: 0.5rem;
+  width: 100%;
+  border-radius: 0.25rem;
+}
+
+.drop-down__navbar a:hover {
+  background-color: #bababa;
+}
+
+.drop-down-break__navbar {
+  border-top: 1px solid #bababa;
+  margin: 0.25rem 0;
+}
+
+.user-auth__navbar {
+  text-align: center;
+}
+
+.user-auth__navbar a {
+  width: 5rem;
+}
+
+.sign-up__navbar:hover {
+  background-color: #588b8b !important;
 }
 
 /* Navbar currently breaks down at 25.625rems */
 
 @media only screen and (min-width: 40rem) {
-  .search-container-navbar input {
+  .search-container__navbar input {
     display: inline;
   }
 
-  .search-container-navbar {
+  .search-container__navbar {
     flex: auto;
   }
 
-  .search-container-navbar button {
+  .search-container__navbar button {
     position: absolute;
     right: 0;
-  }
-}
-
-@media only screen and (min-width: 50rem) {
-  .user-auth-navbar {
-    display: flex;
   }
 }

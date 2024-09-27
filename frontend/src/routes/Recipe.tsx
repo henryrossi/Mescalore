@@ -116,6 +116,14 @@ export async function loader({
     }),
   });
 
+  const result = await client.query({
+    query: GET_RECIPE_QUERY,
+    fetchPolicy: "no-cache",
+    variables: {
+      name: params.recipeName,
+    },
+  });
+
   if (!response.ok) {
     throw Error("I think this error should be bad request");
   }
@@ -195,7 +203,7 @@ export default function Recipe() {
                   </button>
                   {userAuth.editorPermissions && (
                     <Link to={"/edit/" + recipeName}>
-                      <IconEdit size={"2rem"} stroke={1.5} />
+                      <IconEdit size={"2rem"} stroke={1.5} className="black" />
                     </Link>
                   )}
                 </div>
