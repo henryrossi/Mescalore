@@ -116,6 +116,19 @@ export async function loader({
     }),
   });
 
+  let url_backend = process.env.BACKEND_URI ? process.env.BACKEND_URI : "";
+  url_backend = url_backend.slice(0, 21) + "/recipes/" + params.recipeName;
+  const total = await fetch(url_backend, {
+    method: "GET",
+    headers: { "content-type": "application/json" },
+  });
+  try {
+    const message = await total.json();
+    console.log(message);
+  } catch (error) {
+    console.log(error);
+  }
+
   const result = await client.query({
     query: GET_RECIPE_QUERY,
     fetchPolicy: "no-cache",

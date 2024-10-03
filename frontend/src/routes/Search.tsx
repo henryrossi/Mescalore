@@ -40,6 +40,19 @@ export async function loader({ request }: { request: Request }) {
     query: GET_NUMBER_OF_RECIPES,
   });
 
+  let url_backend = process.env.BACKEND_URI ? process.env.BACKEND_URI : "";
+  url_backend = url_backend.slice(0, 21) + "/recipes/total";
+  const total = await fetch(url_backend, {
+    method: "GET",
+    headers: { "content-type": "application/json" },
+  });
+  try {
+    const message = await total.json();
+    console.log(message);
+  } catch (error) {
+    console.log(error);
+  }
+
   return {
     count: count.data.getNumberOfRecipes,
     searchText: searchText,
