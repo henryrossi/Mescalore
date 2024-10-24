@@ -162,36 +162,14 @@ def calculateTFIDF():
 
 
 class Query(UserQuery, MeQuery, graphene.ObjectType):
-    get_recipes_by_category = graphene.List(RecipeType, category=graphene.String())
-    get_recipe_by_name = graphene.Field(RecipeType, name=graphene.String())
     search_recipes = graphene.List(
         RecipeType, searchText=graphene.String(), offset=graphene.Int()
     )
-    get_number_of_recipes = graphene.Int()
     get_s3_presigned_url = graphene.String()
     get_favorite_recipes = graphene.List(
         RecipeType, searchText=graphene.String(), offset=graphene.Int()
     )
     get_number_of_favorites = graphene.Int()
-
-    # Query needs to be rewritten now that sorting is done client-side.
-    # Should probably keep both.
-    def resolve_get_recipes_by_category(root, info, category):
-        if category == "":
-            recipeQueryset = Recipe.objects.all()
-            length = len(recipeQueryset)
-            if length < 120:
-                return recipeQueryset[::-1]
-            return recipeQueryset[length - 120 :][::-1]
-        cat_id = Category.objects.filter(name=category)[:1]
-        recipeQueryset = Recipe.objects.filter(category=cat_id)
-        length = len(recipeQueryset)
-        if length < 120:
-            return recipeQueryset[::-1]
-        return recipeQueryset[length - 120 :][::-1]
-
-    def resolve_get_recipe_by_name(root, info, name):
-        return Recipe.objects.filter(name=name)[0]
 
     def resolve_search_recipes(root, info, searchText, offset):
         limit = 12
@@ -214,9 +192,6 @@ class Query(UserQuery, MeQuery, graphene.ObjectType):
         tuples.sort(key=lambda tup: tup[1], reverse=True)
         top = tuples[offset : (offset + limit)]
         return [r for r, *_ in top]
-
-    def resolve_get_number_of_recipes(root, info):
-        return Recipe.objects.count()
 
     def resolve_get_s3_presigned_url(root, info):
         n = 30 * 3 // 4

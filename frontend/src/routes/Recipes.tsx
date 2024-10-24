@@ -1,41 +1,13 @@
 import * as React from "react";
 import { useLoaderData } from "react-router-dom";
-import { gql } from "@apollo/client";
-import client from "../client";
-import { RecipePreview, RecipePreviewGraphQLReturn } from "../types";
+import { myClient } from "../client";
+import { RecipePreview } from "../types";
 import RecipeList from "../components/RecipeList";
 import "./Recipes.css";
 
-const FILTER_RECIPES_QUERY = gql`
-  query FilterRecipesQuery($category: String!) {
-    getRecipesByCategory(category: $category) {
-      name
-      imageURL
-      category {
-        name
-      }
-    }
-  }
-`;
-
-function decomposeGraphQLData(
-  gqlData: RecipePreviewGraphQLReturn[],
-): RecipePreview[] {
-  return gqlData.map((preview) => ({
-    ...preview,
-    categories: preview.category.map((obj) => obj.name),
-  }));
-}
-
 export async function loader() {
-  const result = await client.query({
-    query: FILTER_RECIPES_QUERY,
-    variables: {
-      category: "",
-    },
-  });
-
-  return decomposeGraphQLData(result.data.getRecipesByCategory);
+  const result = await myClient.get("recipes/discover");
+  return result.data;
 }
 
 export default function Recipes() {

@@ -1,5 +1,6 @@
 import { ApolloClient, InMemoryCache, HttpLink } from "@apollo/client";
 import { setContext } from '@apollo/client/link/context';
+import { ClientManager } from "./ClientManager";
 
 const httpLink = new HttpLink({ uri: process.env.BACKEND_URI });
 
@@ -53,3 +54,6 @@ const client = new ApolloClient({
 });
 
 export default client;
+
+export const myClient = new ClientManager(process.env.BACKEND_URI ? process.env.BACKEND_URI.slice(0, 21) + "/" : "");
+

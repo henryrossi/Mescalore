@@ -1,64 +1,12 @@
 import * as React from "react";
 import { Link, useLoaderData, useParams } from "react-router-dom";
 import type { Params } from "react-router-dom";
-import { gql, operationName, useMutation } from "@apollo/client";
+import { gql, useMutation } from "@apollo/client";
 import { RecipeData, RecipeGraphQLReturn } from "../types";
 import { IconHeart, IconEdit } from "@tabler/icons-react";
 import authContext from "../authContext";
 import "./Recipe.css";
-import client from "../client";
-
-const GET_RECIPE_QUERY = gql`
-  query recipeQuery($name: String!) {
-    getRecipeByName(name: $name) {
-      id
-      name
-      description
-      servings
-      time
-      category {
-        name
-      }
-      imageURL
-      ingredientSections {
-        name
-        ingredientList {
-          measurement
-          ingredient {
-            name
-          }
-        }
-      }
-      instructions
-      favorite
-    }
-  }
-`;
-
-const GET_RECIPE_QUERY_STRING = `query recipeQuery($name: String!) {
-    getRecipeByName(name: $name) {
-      id
-      name
-      description
-      servings
-      time
-      category {
-        name
-      }
-      imageURL
-      ingredientSections {
-        name
-        ingredientList {
-          measurement
-          ingredient {
-            name
-          }
-        }
-      }
-      instructions
-      favorite
-    }
-  }`;
+import { myClient } from "../client";
 
 const FAVORITE_RECIPE = gql`
   mutation FavoriteRecipeMutation($recipeId: ID!) {
@@ -76,81 +24,17 @@ const UNFAVORITE_RECIPE = gql`
   }
 `;
 
-function decomposeGraphQLData(gqlData: RecipeGraphQLReturn): RecipeData {
-  return {
-    id: gqlData.id,
-    name: gqlData.name,
-    description: gqlData.description,
-    servings: gqlData.servings,
-    time: gqlData.time,
-    categories: gqlData.category.map((cat) => cat.name),
-    imageURL: gqlData.imageURL,
-    ingredientSections: gqlData.ingredientSections.map((section) => ({
-      ...section,
-      ingredients: section.ingredientList.map((ingr) => ({
-        measurement: ingr.measurement,
-        ingredient: ingr.ingredient.name,
-      })),
-    })),
-    instructions: gqlData.instructions,
-    favorite: gqlData.favorite,
-  };
-}
-
 export async function loader({
   params,
 }: {
   params: Params<"recipeName">;
 }): Promise<RecipeData> {
-  const url = process.env.BACKEND_URI ? process.env.BACKEND_URI : "";
-  const auth = localStorage.getItem("token")
-    ? `JWT ${localStorage.getItem("token")}`
-    : "";
+  if (!params.recipeName) throw Error("Cannot find recipe name in params");
 
-  const response = await fetch(url, {
-    method: "POST",
-    headers: { authorization: auth, "content-type": "application/json" },
-    body: JSON.stringify({
-      query: GET_RECIPE_QUERY_STRING,
-      variables: { name: params.recipeName },
-    }),
-  });
+  const url = "recipes/" + params.recipeName;
+  const result = await myClient.get(url);
 
-  let url_backend = process.env.BACKEND_URI ? process.env.BACKEND_URI : "";
-  url_backend = url_backend.slice(0, 21) + "/recipes/" + params.recipeName;
-  const total = await fetch(url_backend, {
-    method: "GET",
-    headers: { "content-type": "application/json" },
-  });
-  try {
-    const message = await total.json();
-    console.log(message);
-  } catch (error) {
-    console.log(error);
-  }
-
-  const result = await client.query({
-    query: GET_RECIPE_QUERY,
-    fetchPolicy: "no-cache",
-    variables: {
-      name: params.recipeName,
-    },
-  });
-
-  if (!response.ok) {
-    throw Error("I think this error should be bad request");
-  }
-
-  const body = await response.json();
-
-  // check body.error
-
-  // if (result.error) {
-  //   console.log(result.error);
-  //   throw Error(result.error.message);
-  // }
-
-  return decomposeGraphQLData(body.data.getRecipeByName);
+  return result.data;
 }
 
 export default function Recipe() {
