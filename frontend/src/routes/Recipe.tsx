@@ -6,7 +6,7 @@ import { RecipeData, RecipeGraphQLReturn } from "../types";
 import { IconHeart, IconEdit } from "@tabler/icons-react";
 import authContext from "../authContext";
 import "./Recipe.css";
-import { myClient } from "../client";
+import client from "../client";
 
 const FAVORITE_RECIPE = gql`
   mutation FavoriteRecipeMutation($recipeId: ID!) {
@@ -32,7 +32,7 @@ export async function loader({
   if (!params.recipeName) throw Error("Cannot find recipe name in params");
 
   const url = "recipes/" + params.recipeName;
-  const result = await myClient.get(url);
+  const result = await client.get(url);
 
   return result.data;
 }

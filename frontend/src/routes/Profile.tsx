@@ -4,75 +4,80 @@ import RecipeList from "../components/RecipeList";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { RecipePreview } from "../types";
 import client from "../client";
-import { gql, useQuery } from "@apollo/client";
 import { IconSearch } from "@tabler/icons-react";
 import "./Profile.css";
 import Loading from "../components/Loading";
 
-const GET_FAVORITE_RECIPES_QUERY = gql`
-  query GetFavoriteRecipesQuery($searchText: String!, $offset: Int) {
-    getFavoriteRecipes(searchText: $searchText, offset: $offset) {
-      name
-      imageURL
-    }
-  }
-`;
-
-const GET_NUMBER_OF_FAVORITES_QUERY = gql`
-  query GetNumberOfFavoritesQuery {
-    getNumberOfFavorites
-  }
-`;
+// const GET_FAVORITE_RECIPES_QUERY = gql`
+//   query GetFavoriteRecipesQuery($searchText: String!, $offset: Int) {
+//     getFavoriteRecipes(searchText: $searchText, offset: $offset) {
+//       name
+//       imageURL
+//     }
+//   }
+// `;
+//
+// const GET_NUMBER_OF_FAVORITES_QUERY = gql`
+//   query GetNumberOfFavoritesQuery {
+//     getNumberOfFavorites
+//   }
+// `;
 
 export async function loader({ request }: { request: Request }) {
   const url = new URL(request.url);
   let searchText = url.searchParams.get("q");
   searchText = searchText ? searchText : "";
 
-  const result = await client.query({
-    query: GET_FAVORITE_RECIPES_QUERY,
-    fetchPolicy: "network-only",
-    variables: {
-      searchText: searchText,
-      offset: 0,
-    },
-  });
+  // const result = await client.query({
+  //   query: GET_FAVORITE_RECIPES_QUERY,
+  //   fetchPolicy: "network-only",
+  //   variables: {
+  //     searchText: searchText,
+  //     offset: 0,
+  //   },
+  // });
+  //
+  // const count = await client.query({
+  //   query: GET_NUMBER_OF_FAVORITES_QUERY,
+  // });
+  //
 
-  const count = await client.query({
-    query: GET_NUMBER_OF_FAVORITES_QUERY,
-  });
-
-  if (result.errors) {
-    throw Error("Not logged In");
-  }
+  const result = await client.get("recipes/favorites");
+  console.log(result);
 
   return {
     urlSearch: searchText,
-    count: count.data.getNumberOfFavorites,
+    count: 12,
+    recipes: null,
   };
 }
 
 export default function Profile() {
-  const data = useLoaderData() as { urlSearch: string; count: string };
-  const { userAuth, setUserAuth } = React.useContext(authContext);
+  const data = useLoaderData() as {
+    urlSearch: string;
+    count: string;
+    recipes: RecipePreview[];
+  };
+  const { userAuth } = React.useContext(authContext);
   const [seacrhText, setSearchText] = React.useState(data.urlSearch);
   const navigate = useNavigate();
+  const recipes = data.recipes;
 
-  const { data: recipes, fetchMore } = useQuery(GET_FAVORITE_RECIPES_QUERY, {
-    fetchPolicy: "cache-only",
-    variables: {
-      searchText: data.urlSearch,
-      offset: 0,
-    },
-  });
+  // const { data: recipes, fetchMore } = useQuery(GET_FAVORITE_RECIPES_QUERY, {
+  //   fetchPolicy: "cache-only",
+  //   variables: {
+  //     searchText: data.urlSearch,
+  //     offset: 0,
+  //   },
+  // });
 
   const handleFetchMore = () => {
-    fetchMore({
-      variables: {
-        searchText: data.urlSearch,
-        offset: recipes.getFavoriteRecipes.length,
-      },
-    });
+    //   fetchMore({
+    //     variables: {
+    //       searchText: data.urlSearch,
+    //       offset: recipes.length,
+    //     },
+    //   });
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -111,7 +116,7 @@ export default function Profile() {
         <Loading />
       ) : (
         <>
-          {recipes.getFavoriteRecipes.length === 0 ? (
+          {recipes.length === 0 ? (
             <div className="flex-col no-favorites__profile">
               <p className="jua text-xl">
                 Looks like you don't have any favorite recipes :(
@@ -119,10 +124,9 @@ export default function Profile() {
             </div>
           ) : (
             <>
-              <RecipeList recipes={recipes.getFavoriteRecipes} />
-              {recipes.getFavoriteRecipes.length !== 0 &&
-                recipes.getFavoriteRecipes.length <
-                  parseInt(data.count, 10) && (
+              <RecipeList recipes={recipes} />
+              {recipes.length !== 0 &&
+                recipes.length < parseInt(data.count, 10) && (
                   <div className="flex refetch-btn-container__search">
                     <button
                       className="btn text-btn btn-yellow blue-drop-shadow"

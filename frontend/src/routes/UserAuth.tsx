@@ -1,10 +1,11 @@
 import * as React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { USER_REGISTRATION, USER_AUTHENTICATION } from "../graphQL";
-import { useMutation } from "@apollo/client";
+// import { useMutation } from "@apollo/client";
 import "./UserAuth.css";
 import authContext from "../authContext";
 import { UserAuth } from "../types";
+import client from "../client";
 
 export function setUserAsAuthenticated(
   token: string,
@@ -49,35 +50,35 @@ export function SignUp() {
 
   const { setUserAuth } = React.useContext(authContext);
 
-  const [registerUser] = useMutation(USER_REGISTRATION, {
-    onCompleted: (data) => {
-      if (data.userRegistration.success) {
-        setUserAsAuthenticated(
-          data.userRegistration.token,
-          data.userRegistration.recipeEditor,
-          setUserAuth,
-        );
-        navigate("/recipes");
-        return;
-      }
-      if (data.userRegistration.errors.username) {
-        setErrorMessage(data.userRegistration.errors.username[0].message);
-        return;
-      }
-      if (data.userRegistration.errors.nonFieldErrors) {
-        setErrorMessage(data.userRegistration.errors.nonFieldErrors[0].message);
-        return;
-      }
-      if (data.userRegistration.errors.password2) {
-        setErrorMessage(data.userRegistration.errors.password2[0].message);
-        return;
-      }
-      if (data.userRegistration.errors.email) {
-        setErrorMessage(data.userRegistration.errors.email[0].message);
-        return;
-      }
-    },
-  });
+  // const [registerUser] = useMutation(USER_REGISTRATION, {
+  //   onCompleted: (data) => {
+  //     if (data.userRegistration.success) {
+  //       setUserAsAuthenticated(
+  //         data.userRegistration.token,
+  //         data.userRegistration.recipeEditor,
+  //         setUserAuth,
+  //       );
+  //       navigate("/recipes");
+  //       return;
+  //     }
+  //     if (data.userRegistration.errors.username) {
+  //       setErrorMessage(data.userRegistration.errors.username[0].message);
+  //       return;
+  //     }
+  //     if (data.userRegistration.errors.nonFieldErrors) {
+  //       setErrorMessage(data.userRegistration.errors.nonFieldErrors[0].message);
+  //       return;
+  //     }
+  //     if (data.userRegistration.errors.password2) {
+  //       setErrorMessage(data.userRegistration.errors.password2[0].message);
+  //       return;
+  //     }
+  //     if (data.userRegistration.errors.email) {
+  //       setErrorMessage(data.userRegistration.errors.email[0].message);
+  //       return;
+  //     }
+  //   },
+  // });
 
   return (
     <div className="main-container-user-auth">
@@ -122,14 +123,14 @@ export function SignUp() {
       <button
         className="btn btn-blue white text-btn"
         onClick={() => {
-          registerUser({
-            variables: {
-              email: email,
-              username: username,
-              password1: password1,
-              password2: password2,
-            },
-          });
+          // registerUser({
+          //   variables: {
+          //     email: email,
+          //     username: username,
+          //     password1: password1,
+          //     password2: password2,
+          //   },
+          // });
         }}
       >
         Register
@@ -152,21 +153,21 @@ export function SignIn() {
 
   const { setUserAuth } = React.useContext(authContext);
 
-  const [authenticateUser] = useMutation(USER_AUTHENTICATION, {
-    onCompleted: (data) => {
-      if (data.userAuthentication.success) {
-        setUserAsAuthenticated(
-          data.userAuthentication.token,
-          data.userAuthentication.recipeEditor,
-          setUserAuth,
-        );
-        navigate("/recipes");
-        return;
-      }
-      setErrorMessage(data.userAuthentication.errors.nonFieldErrors[0].message);
-      setPassword("");
-    },
-  });
+  // const [authenticateUser] = useMutation(USER_AUTHENTICATION, {
+  //   onCompleted: (data) => {
+  //     if (data.userAuthentication.success) {
+  //       setUserAsAuthenticated(
+  //         data.userAuthentication.token,
+  //         data.userAuthentication.recipeEditor,
+  //         setUserAuth,
+  //       );
+  //       navigate("/recipes");
+  //       return;
+  //     }
+  //     setErrorMessage(data.userAuthentication.errors.nonFieldErrors[0].message);
+  //     setPassword("");
+  //   },
+  // });
 
   return (
     <div className="main-container-user-auth">
@@ -193,12 +194,21 @@ export function SignIn() {
       <button
         className="btn btn-blue white text-btn"
         onClick={() => {
-          authenticateUser({
-            variables: {
+          // authenticateUser({
+          //   variables: {
+          //     username: usernameEmail,
+          //     password: password,
+          //   },
+          // });
+          client
+            .post("token/", {
               username: usernameEmail,
               password: password,
-            },
-          });
+            })
+            .then((response) => {
+              setUserAsAuthenticated(response.access, false, setUserAuth);
+              navigate("/");
+            });
         }}
       >
         Login

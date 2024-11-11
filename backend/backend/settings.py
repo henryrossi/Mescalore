@@ -56,10 +56,12 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "corsheaders",
-    "graphene_django",
-    "graphql_jwt.refresh_token.apps.RefreshTokenConfig",
-    "graphql_auth",
+    # "graphene_django",
+    # "graphql_jwt.refresh_token.apps.RefreshTokenConfig",
+    # "graphql_auth",
     # "django_filters"
+    "rest_framework",
+    "rest_framework_simplejwt",
     "recipes.apps.RecipesConfig",
 ]
 
@@ -120,16 +122,16 @@ elif len(sys.argv) > 0 and sys.argv[1] != "collectstatic":
     }
 
 # Graphene
-GRAPHENE = {
-    "SCHEMA": "backend.schema.schema",
-    "MIDDLEWARE": [
-        "graphql_jwt.middleware.JSONWebTokenMiddleware",
-    ],
-}
+# GRAPHENE = {
+#     "SCHEMA": "backend.schema.schema",
+#     "MIDDLEWARE": [
+#         "graphql_jwt.middleware.JSONWebTokenMiddleware",
+#     ],
+# }
 
 # Authentication Backends
 AUTHENTICATION_BACKENDS = [
-    "graphql_auth.backends.GraphQLAuthBackend",
+    # "graphql_auth.backends.GraphQLAuthBackend",
     "django.contrib.auth.backends.ModelBackend",
 ]
 
@@ -142,26 +144,38 @@ EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 EMAIL_USE_TLS = True
 
-GRAPHQL_AUTH = {
-    "LOGIN_ALLOWED_FIELDS": ["email", "username"],
-    "EMAIL_FROM": os.getenv("EMAIL_HOST_USER"),
-    "EMAIL_TEMPLATE_VARIABLES": {
-        "frontend_domain": os.getenv("FRONTEND_DOMAIN", "localhost:3000"),
-    },
-}
+# GRAPHQL_AUTH = {
+#     "LOGIN_ALLOWED_FIELDS": ["email", "username"],
+#     "EMAIL_FROM": os.getenv("EMAIL_HOST_USER"),
+#     "EMAIL_TEMPLATE_VARIABLES": {
+#         "frontend_domain": os.getenv("FRONTEND_DOMAIN", "localhost:3000"),
+#     },
+# }
 
 # GraphQL JWT
-GRAPHQL_JWT = {
-    "JWT_ALLOW_ANY_CLASSES": [
-        "graphql_auth.mutations.Register",
-        "graphql_auth.mutations.VerifyAccount",
-        "graphql_auth.mutations.ObtainJSONWebToken",
-    ],
-    "JWT_VERIFY_EXPIRATION": True,
-    "JWT_LONG_RUNNING_REFRESH_TOKEN": True,
-    "JWT_EXPIRATION_DELTA": timedelta(minutes=15),
-    "JWT_REFRESH_EXPIRATION_DELTA": timedelta(days=30),
+# GRAPHQL_JWT = {
+#     "JWT_ALLOW_ANY_CLASSES": [
+#         "graphql_auth.mutations.Register",
+#         "graphql_auth.mutations.VerifyAccount",
+#         "graphql_auth.mutations.ObtainJSONWebToken",
+#     ],
+#     "JWT_VERIFY_EXPIRATION": True,
+#     "JWT_LONG_RUNNING_REFRESH_TOKEN": True,
+#     "JWT_EXPIRATION_DELTA": timedelta(minutes=15),
+#     "JWT_REFRESH_EXPIRATION_DELTA": timedelta(days=30),
+# }
+
+REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
 }
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
+}
+
 
 # CORS
 CORS_ALLOWED_ORIGINS = os.getenv(

@@ -1,12 +1,12 @@
 import * as React from "react";
 import { useLoaderData } from "react-router-dom";
-import { myClient } from "../client";
+import client from "../client";
 import { RecipePreview } from "../types";
 import RecipeList from "../components/RecipeList";
 import "./Recipes.css";
 
 export async function loader() {
-  const result = await myClient.get("recipes/discover");
+  const result = await client.get("recipes/discover");
   return result.data;
 }
 

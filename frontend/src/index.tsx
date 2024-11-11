@@ -1,6 +1,5 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom/client";
-import { ApolloProvider } from "@apollo/client";
 import client from "./client";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Mescolare from "./Mescolare";
@@ -113,16 +112,10 @@ if (entry == null) {
   const root = ReactDOM.createRoot(entry);
   root.render(
     <React.StrictMode>
-      <ApolloProvider client={client}>
-        <RouterProvider router={router} />
-      </ApolloProvider>
+      <RouterProvider router={router} />
     </React.StrictMode>,
   );
 } else {
   const root = ReactDOM.createRoot(entry);
-  root.render(
-    <ApolloProvider client={client}>
-      <RouterProvider router={router} />
-    </ApolloProvider>,
-  );
+  root.render(<RouterProvider router={router} />);
 }
