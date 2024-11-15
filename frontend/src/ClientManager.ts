@@ -4,6 +4,7 @@ export class ClientManager {
     public headers: HeadersInit;
 
     private cache: Record<string, any>;
+    private headersCallback: undefined | ((prev: HeadersInit) => HeadersInit);
 
     constructor(baseUrl: string | URL) {
         this.baseUrl = baseUrl;
@@ -11,6 +12,11 @@ export class ClientManager {
         this.headers = { "content-type": "application/json" };
 
         this.cache = {};
+        this.headersCallback = undefined;
+    }
+
+    public setHeaderCallback(callback: (prev: HeadersInit) => HeadersInit) {
+        this.headersCallback = callback;
     }
 
     private async request(location: string, method: string, content: any) {
@@ -18,11 +24,8 @@ export class ClientManager {
             return this.cache[location];
         }
 
-        this.headers = {
-            ...this.headers,
-            authorization: localStorage.getItem("token") ?
-                `Bearer ${localStorage.getItem("token")}` : "",
-        }
+        if (this.headersCallback)
+            this.headers = this.headersCallback(this.headers);
 
         const response = await fetch(this.baseUrl + location, {
             method: method,
@@ -30,6 +33,11 @@ export class ClientManager {
             headers: this.headers,
             body: content ? JSON.stringify(content) : null,
         });
+
+        if (response.status != 200) {
+            return response
+        }
+
         const data = await response.json();
 
         this.cache[location] = data;

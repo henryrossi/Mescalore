@@ -52,7 +52,21 @@ import { ClientManager } from "./ClientManager";
 // });
 //
 
-const client = new ClientManager(process.env.BACKEND_URI ? process.env.BACKEND_URI.slice(0, 21) + "/" : "");
+const setAuthorization = (headers: HeadersInit) => {
+    return {
+        ...headers,
+        authorization: localStorage.getItem("token") ?
+            `Bearer ${localStorage.getItem("token")}` : "",
+    }
+}
+
+
+const client = new ClientManager(process.env.BACKEND_URI ?
+    process.env.BACKEND_URI.slice(0, 21) + "/" :
+    ""
+);
+
+client.setHeaderCallback(setAuthorization);
 
 export default client;
 

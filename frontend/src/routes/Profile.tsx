@@ -40,15 +40,19 @@ export async function loader({ request }: { request: Request }) {
   // const count = await client.query({
   //   query: GET_NUMBER_OF_FAVORITES_QUERY,
   // });
-  //
 
-  const result = await client.get("recipes/favorites");
+  const result = await client.get(
+    `recipes/favorites?searchText=${searchText}&offset=${0}`,
+  );
+
+  if (result.status) throw Error("Unauthorized!");
+
   console.log(result);
 
   return {
     urlSearch: searchText,
     count: 12,
-    recipes: null,
+    recipes: result.data,
   };
 }
 
