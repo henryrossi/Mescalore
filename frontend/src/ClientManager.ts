@@ -1,9 +1,17 @@
+interface CachePolicy {
+    resource: string,
+    keySearchParams: string[],
+    merge?: (existing: any, incoming: any, args: any) => any
+    read?: (existing: any, args: any) => any
+}
+
 export class ClientManager {
     public baseUrl: string | URL;
     public credentials: RequestCredentials;
     public headers: HeadersInit;
 
     private cache: Record<string, any>;
+    private cachePolicies: Record<string, CachePolicy>;
     private headersCallback: undefined | ((prev: HeadersInit) => HeadersInit);
 
     constructor(baseUrl: string | URL) {
@@ -12,6 +20,7 @@ export class ClientManager {
         this.headers = { "content-type": "application/json" };
 
         this.cache = {};
+        this.cachePolicies = {};
         this.headersCallback = undefined;
     }
 
@@ -19,10 +28,36 @@ export class ClientManager {
         this.headersCallback = callback;
     }
 
+    public addCachePolicy(policy: CachePolicy) {
+        this.cachePolicies[policy.resource] = policy;
+    }
+
+
     private async request(location: string, method: string, content: any) {
-        if (method == "GET" && location in this.cache) {
-            return this.cache[location];
+        let cacheLocation = location;
+        if (method == "GET") {
+            const parts = location.split("?");
+            if (parts.length == 2) {
+                const resource = parts[0];
+                const searchParams = new URLSearchParams(parts[1]);
+                if (resource in this.cachePolicies) {
+                    const policy = this.cachePolicies[resource];
+                    const keySearchParams = new URLSearchParams();
+                    for (const [key, value] of searchParams.entries()) {
+                        if (policy.keySearchParams.includes(key))
+                            keySearchParams.append(key, value);
+                    }
+                    cacheLocation = resource + keySearchParams.toString()
+                }
+            }
         }
+
+
+        if (cacheLocation in this.cache)
+            // check for merge function on cache policy
+            // if present make request and merge incoming data
+            return this.cache[cacheLocation];
+
 
         if (this.headersCallback)
             this.headers = this.headersCallback(this.headers);
@@ -40,8 +75,8 @@ export class ClientManager {
 
         const data = await response.json();
 
-        this.cache[location] = data;
-        return this.cache[location]
+        this.cache[cacheLocation] = data;
+        return this.cache[cacheLocation]
     }
 
     public async get(location: string) {

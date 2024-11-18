@@ -1,6 +1,6 @@
 import * as React from "react";
 import { IconSearch } from "@tabler/icons-react";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useLoaderData, useSearchParams } from "react-router-dom";
 import RecipeList from "../components/RecipeList";
 import "./Search.css";
 import client from "../client";
@@ -11,19 +11,12 @@ export async function loader({ request }: { request: Request }) {
   const url = new URL(request.url);
   let searchText = url.searchParams.get("q");
   searchText = searchText ? searchText : "";
-  //
-  // const result = await client.query({
-  //   query: SEARCH_RECIPES_QUERY,
-  //   fetchPolicy: "network-only",
-  //   variables: {
-  //     searchText: searchText,
-  //     offset: 0,
-  //   },
-  // });
-  //
+  let offset = url.searchParams.get("offset");
+  offset = offset ? offset : "0";
+
   const count = await client.get("recipes/total");
   const res = await client.get(
-    `recipes/search?searchText=${searchText}&offset=${0}`,
+    `recipes/search?q=${searchText}&offset=${offset}`,
   );
 
   return {
@@ -34,27 +27,17 @@ export async function loader({ request }: { request: Request }) {
 }
 
 export default function Search() {
-  const navigate = useNavigate();
   const data = useLoaderData() as {
     count: string;
     searchText: string;
     recipes: RecipePreview[];
   };
+  const [_, setSearchParams] = useSearchParams();
   const recipes = data.recipes;
   const [searchText, setSearchText] = React.useState<string>(data.searchText);
 
-  // const { data: recipes, fetchMore } = useQuery(SEARCH_RECIPES_QUERY, {
-  //   fetchPolicy: "cache-only",
-  //   variables: {
-  //     searchText: data.searchText,
-  //     offset: 0,
-  //   },
-  // });
-  //
   const handleSearch = () => {
-    if (searchText !== data.searchText) {
-      navigate("/search?q=" + searchText);
-    }
+    setSearchParams({ q: searchText });
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -64,12 +47,7 @@ export default function Search() {
   };
 
   const handleFetchMore = () => {
-    // fetchMore({
-    //   variables: {
-    //     searchText: data.searchText,
-    //     offset: recipes.length,
-    //   },
-    // });
+    setSearchParams({ q: searchText, offset: String(recipes.length) });
   };
 
   return (

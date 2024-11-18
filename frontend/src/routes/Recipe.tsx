@@ -43,22 +43,22 @@ export default function Recipe() {
   const data = useLoaderData() as RecipeData;
   const [favorited, setFavorited] = React.useState(data.favorite);
 
-  const [favoriteRecipe] = useMutation(FAVORITE_RECIPE, {
-    onCompleted: (data) => {
-      if (data.favoriteRecipe.updated) {
-        setFavorited(true);
-      }
-    },
-  });
-
-  const [unfavoriteRecipe] = useMutation(UNFAVORITE_RECIPE, {
-    onCompleted: (data) => {
-      if (data.unfavoriteRecipe.updated) {
-        setFavorited(false);
-      }
-    },
-  });
-
+  // const [favoriteRecipe] = useMutation(FAVORITE_RECIPE, {
+  //   onCompleted: (data) => {
+  //     if (data.favoriteRecipe.updated) {
+  //       setFavorited(true);
+  //     }
+  //   },
+  // });
+  //
+  // const [unfavoriteRecipe] = useMutation(UNFAVORITE_RECIPE, {
+  //   onCompleted: (data) => {
+  //     if (data.unfavoriteRecipe.updated) {
+  //       setFavorited(false);
+  //     }
+  //   },
+  // });
+  //
   const handleIngredientLineThrough = (
     e: React.MouseEvent<HTMLLIElement, MouseEvent>,
   ) => {
@@ -83,13 +83,14 @@ export default function Recipe() {
                   <button
                     className="no-border bg-white favorite-button__recipe"
                     onClick={
-                      favorited
-                        ? () =>
-                            unfavoriteRecipe({
-                              variables: { recipeId: data.id },
-                            })
-                        : () =>
-                            favoriteRecipe({ variables: { recipeId: data.id } })
+                      () => {}
+                      // favorited
+                      //   ? () =>
+                      //       unfavoriteRecipe({
+                      //         variables: { recipeId: data.id },
+                      //       })
+                      //   : () =>
+                      //       favoriteRecipe({ variables: { recipeId: data.id } })
                     }
                   >
                     <IconHeart

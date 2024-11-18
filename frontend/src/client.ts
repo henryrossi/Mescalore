@@ -68,5 +68,7 @@ const client = new ClientManager(process.env.BACKEND_URI ?
 
 client.setHeaderCallback(setAuthorization);
 
+client.addCachePolicy({ resource: "recipes/search", keySearchParams: ["q"] });
+
 export default client;
 
