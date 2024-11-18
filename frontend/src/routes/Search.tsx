@@ -17,6 +17,7 @@ export async function loader({ request }: { request: Request }) {
   const count = await client.get("recipes/total");
   const res = await client.get(
     `recipes/search?q=${searchText}&offset=${offset}`,
+    "network-only",
   );
 
   return {

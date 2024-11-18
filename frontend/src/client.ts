@@ -68,7 +68,21 @@ const client = new ClientManager(process.env.BACKEND_URI ?
 
 client.setHeaderCallback(setAuthorization);
 
-client.addCachePolicy({ resource: "recipes/search", keySearchParams: ["q"] });
+client.addCachePolicy({
+    resource: "recipes/search",
+    keySearchParams: ["q"],
+    merge(existing = [], incoming, searchParams) {
+        const offsetParam = searchParams.get("offset");
+        const offset = offsetParam ? parseInt(offsetParam, 10) : 0
+
+        const merged = existing.data ? existing.data.slice(0) : [];
+        for (let i = 0; i < incoming.data.length; ++i) {
+            merged[offset + i] = incoming.data[i];
+        }
+
+        return { data: merged };
+    },
+});
 
 export default client;
 

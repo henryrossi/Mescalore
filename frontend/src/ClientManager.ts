@@ -1,9 +1,12 @@
+
 interface CachePolicy {
     resource: string,
     keySearchParams: string[],
-    merge?: (existing: any, incoming: any, args: any) => any
+    merge?: (existing: any, incoming: any, searchParams: URLSearchParams) => any
     read?: (existing: any, args: any) => any
 }
+
+type FetchPolicy = "cache-first" | "cache-only" | "network-only"
 
 export class ClientManager {
     public baseUrl: string | URL;
@@ -33,13 +36,14 @@ export class ClientManager {
     }
 
 
-    private async request(location: string, method: string, content: any) {
+    private async request(location: string, method: string, content: any, fetchPolicy: FetchPolicy) {
         let cacheLocation = location;
+        const parts = location.split("?");
+        const resource = parts[0];
+        const searchParams = new URLSearchParams(parts[1]);
+
         if (method == "GET") {
-            const parts = location.split("?");
             if (parts.length == 2) {
-                const resource = parts[0];
-                const searchParams = new URLSearchParams(parts[1]);
                 if (resource in this.cachePolicies) {
                     const policy = this.cachePolicies[resource];
                     const keySearchParams = new URLSearchParams();
@@ -53,9 +57,7 @@ export class ClientManager {
         }
 
 
-        if (cacheLocation in this.cache)
-            // check for merge function on cache policy
-            // if present make request and merge incoming data
+        if (fetchPolicy == "cache-first" && cacheLocation in this.cache)
             return this.cache[cacheLocation];
 
 
@@ -75,16 +77,24 @@ export class ClientManager {
 
         const data = await response.json();
 
-        this.cache[cacheLocation] = data;
+        let trueData = data;
+
+        if (resource in this.cachePolicies) {
+            const policy = this.cachePolicies[resource]
+            if (policy.merge)
+                trueData = policy.merge(this.cache[cacheLocation], data, searchParams);
+        }
+
+        this.cache[cacheLocation] = trueData;
         return this.cache[cacheLocation]
     }
 
-    public async get(location: string) {
-        return await this.request(location, "GET", null);
+    public async get(location: string, fetchPolicy: FetchPolicy = "cache-first") {
+        return await this.request(location, "GET", null, fetchPolicy);
     }
 
     public async post(location: string, content: any) {
-        return await this.request(location, "POST", content);
+        return await this.request(location, "POST", content, "cache-first");
     }
 }
 
