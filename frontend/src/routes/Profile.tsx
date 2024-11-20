@@ -1,58 +1,31 @@
 import * as React from "react";
 import authContext from "../authContext";
 import RecipeList from "../components/RecipeList";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useLoaderData, useNavigate, useSearchParams } from "react-router-dom";
 import { RecipePreview } from "../types";
 import client from "../client";
 import { IconSearch } from "@tabler/icons-react";
 import "./Profile.css";
 import Loading from "../components/Loading";
 
-// const GET_FAVORITE_RECIPES_QUERY = gql`
-//   query GetFavoriteRecipesQuery($searchText: String!, $offset: Int) {
-//     getFavoriteRecipes(searchText: $searchText, offset: $offset) {
-//       name
-//       imageURL
-//     }
-//   }
-// `;
-//
-// const GET_NUMBER_OF_FAVORITES_QUERY = gql`
-//   query GetNumberOfFavoritesQuery {
-//     getNumberOfFavorites
-//   }
-// `;
-
 export async function loader({ request }: { request: Request }) {
   const url = new URL(request.url);
   let searchText = url.searchParams.get("q");
   searchText = searchText ? searchText : "";
-
-  // const result = await client.query({
-  //   query: GET_FAVORITE_RECIPES_QUERY,
-  //   fetchPolicy: "network-only",
-  //   variables: {
-  //     searchText: searchText,
-  //     offset: 0,
-  //   },
-  // });
-  //
-  // const count = await client.query({
-  //   query: GET_NUMBER_OF_FAVORITES_QUERY,
-  // });
+  let offset = url.searchParams.get("offset");
+  offset = offset ? offset : "0";
 
   const result = await client.get(
-    `recipes/favorites?searchText=${searchText}&offset=${0}`,
+    `recipes/favorites?q=${searchText}&offset=${offset}`,
+    "network-only",
   );
 
   if (result.status) throw Error("Unauthorized!");
 
-  console.log(result);
-
   return {
     urlSearch: searchText,
-    count: 12,
-    recipes: result.data,
+    recipes: result.data.recipes,
+    count: result.data.count,
   };
 }
 
@@ -63,30 +36,22 @@ export default function Profile() {
     recipes: RecipePreview[];
   };
   const { userAuth } = React.useContext(authContext);
-  const [seacrhText, setSearchText] = React.useState(data.urlSearch);
+  const [_, setSearchParams] = useSearchParams();
+  const [searchText, setSearchText] = React.useState(data.urlSearch);
   const navigate = useNavigate();
   const recipes = data.recipes;
 
-  // const { data: recipes, fetchMore } = useQuery(GET_FAVORITE_RECIPES_QUERY, {
-  //   fetchPolicy: "cache-only",
-  //   variables: {
-  //     searchText: data.urlSearch,
-  //     offset: 0,
-  //   },
-  // });
+  const handleSearch = () => {
+    setSearchParams({ q: searchText });
+  };
 
   const handleFetchMore = () => {
-    //   fetchMore({
-    //     variables: {
-    //       searchText: data.urlSearch,
-    //       offset: recipes.length,
-    //     },
-    //   });
+    setSearchParams({ q: searchText, offset: String(recipes.length) });
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
-      navigate("/profile?q=" + seacrhText);
+      handleSearch();
     }
   };
 
@@ -106,11 +71,11 @@ export default function Profile() {
           <p className="text-base flex-1">Check out your saved recipes</p>
           <div className="flex-1 search-controls__profile">
             <input
-              value={seacrhText}
+              value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
               onKeyDown={handleKeyDown}
             ></input>
-            <button onClick={() => navigate("/profile?q=" + seacrhText)}>
+            <button onClick={handleSearch}>
               <IconSearch size={"1rem"} className="black" />
             </button>
           </div>

@@ -3,7 +3,7 @@ from math import log
 from django.forms import model_to_dict
 from django.http import JsonResponse
 from django.views import View
-from recipes.models import TFIDF, Recipe, Term, TermData
+from recipes.models import TFIDF, Recipe, Term
 from recipes.search import Tokenizer
 
 
@@ -21,24 +21,27 @@ class SearchRecipes(View):
         query = request.GET["q"]
         offset = int(request.GET["offset"])
         limit = 4
-        if query == "":
-            return JsonResponse(
-                {
-                    "data": [
-                        recipe_to_preview_dict(r)
-                        for r in Recipe.objects.all()[offset : (offset + limit)]
-                    ]
-                }
-            )
+        # if query == "":
+        #     return JsonResponse(
+        #         {
+        #             "data": [
+        #                 recipe_to_preview_dict(r)
+        #                 for r in Recipe.objects.all()[offset : (offset + limit)]
+        #             ]
+        #         }
+        #     )
         t = Tokenizer()
         searchedTerms = t.tokenize(query)
         if len(searchedTerms) == 0:
             return JsonResponse(
                 {
-                    "data": [
-                        recipe_to_preview_dict(r)
-                        for r in Recipe.objects.all()[offset : (offset + limit)]
-                    ]
+                    "data": {
+                        "recipes": [
+                            recipe_to_preview_dict(r)
+                            for r in Recipe.objects.all()[offset : (offset + limit)]
+                        ],
+                        "count": Recipe.objects.all().count(),
+                    }
                 }
             )
         tuples = []
@@ -53,4 +56,11 @@ class SearchRecipes(View):
             tuples.append((recipe, score))
         tuples.sort(key=lambda tup: tup[1], reverse=True)
         top = tuples[offset : (offset + limit)]
-        return JsonResponse({"data": [recipe_to_preview_dict(r) for r, *_ in top]})
+        return JsonResponse(
+            {
+                "data": {
+                    "recipes": [recipe_to_preview_dict(r) for r, *_ in top],
+                    "count": Recipe.objects.all().count(),
+                }
+            }
+        )

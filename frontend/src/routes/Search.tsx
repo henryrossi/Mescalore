@@ -14,16 +14,15 @@ export async function loader({ request }: { request: Request }) {
   let offset = url.searchParams.get("offset");
   offset = offset ? offset : "0";
 
-  const count = await client.get("recipes/total");
   const res = await client.get(
     `recipes/search?q=${searchText}&offset=${offset}`,
     "network-only",
   );
 
   return {
-    count: count.data,
+    count: res.data.count,
     searchText: searchText,
-    recipes: res.data,
+    recipes: res.data.recipes,
   };
 }
 

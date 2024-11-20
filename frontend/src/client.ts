@@ -1,57 +1,5 @@
 import { ClientManager } from "./ClientManager";
 
-// const httpLink = new HttpLink({ uri: process.env.BACKEND_URI });
-//
-// const setAuthorizationLink = setContext((request, prevContext) => ({
-//   headers: {
-//     ...prevContext.headers,
-//     authorization: localStorage.getItem("token") ?
-//       `JWT ${localStorage.getItem("token")}` : "",
-//   }
-// }));
-
-// const client = new ApolloClient({
-//   link: setAuthorizationLink.concat(httpLink),
-//   cache: new InMemoryCache({
-//     typePolicies: {
-//       Query: {
-//         fields: {
-//           getRecipeByName: {
-//             keyArgs: ["name"],
-//           },
-//           searchRecipes: {
-//             keyArgs: ["searchText"],
-//
-//             // @ts-ignore
-//             merge(existing = [], incoming, { args: { offset = 0 } }) {
-//               const merged = existing ? existing.slice(0) : [];
-//               for (let i = 0; i < incoming.length; ++i) {
-//                 merged[offset + i] = incoming[i];
-//               }
-//
-//               return merged;
-//             },
-//           },
-//           getFavoriteRecipes: {
-//             keyArgs: ["searchText"],
-//
-//             // @ts-ignore
-//             merge(existing = [], incoming, { args: { offset = 0 } }) {
-//               const merged = existing ? existing.slice(0) : [];
-//               for (let i = 0; i < incoming.length; ++i) {
-//                 merged[offset + i] = incoming[i];
-//               }
-//
-//               return merged;
-//             },
-//           }
-//         },
-//       },
-//     },
-//   }),
-// });
-//
-
 const setAuthorization = (headers: HeadersInit) => {
     return {
         ...headers,
@@ -71,18 +19,35 @@ client.setHeaderCallback(setAuthorization);
 client.addCachePolicy({
     resource: "recipes/search",
     keySearchParams: ["q"],
-    merge(existing = [], incoming, searchParams) {
+    merge(existing = { data: {} }, incoming, searchParams) {
         const offsetParam = searchParams.get("offset");
         const offset = offsetParam ? parseInt(offsetParam, 10) : 0
 
-        const merged = existing.data ? existing.data.slice(0) : [];
-        for (let i = 0; i < incoming.data.length; ++i) {
-            merged[offset + i] = incoming.data[i];
+        const merged = existing.data.recipes ? existing.data.recipes.slice(0) : [];
+        for (let i = 0; i < incoming.data.recipes.length; ++i) {
+            merged[offset + i] = incoming.data.recipes[i];
         }
 
-        return { data: merged };
+        return { data: { recipes: merged, count: incoming.data.count } };
     },
 });
+
+client.addCachePolicy({
+    resource: "recipes/favorites",
+    keySearchParams: ["q"],
+    merge(existing = { data: {} }, incoming, searchParams) {
+        const offsetParam = searchParams.get("offset");
+        const offset = offsetParam ? parseInt(offsetParam, 10) : 0
+
+        const merged = existing.data.recipes ? existing.data.recipes.slice(0) : [];
+        for (let i = 0; i < incoming.data.recipes.length; ++i) {
+            merged[offset + i] = incoming.data.recipes[i];
+        }
+
+        return { data: { recipes: merged, count: incoming.data.count } };
+    },
+});
+
 
 export default client;
 
