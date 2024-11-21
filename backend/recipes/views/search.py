@@ -21,15 +21,6 @@ class SearchRecipes(View):
         query = request.GET["q"]
         offset = int(request.GET["offset"])
         limit = 4
-        # if query == "":
-        #     return JsonResponse(
-        #         {
-        #             "data": [
-        #                 recipe_to_preview_dict(r)
-        #                 for r in Recipe.objects.all()[offset : (offset + limit)]
-        #             ]
-        #         }
-        #     )
         t = Tokenizer()
         searchedTerms = t.tokenize(query)
         if len(searchedTerms) == 0:

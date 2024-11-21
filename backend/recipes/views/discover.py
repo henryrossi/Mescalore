@@ -2,15 +2,7 @@ from django.forms import model_to_dict
 from django.http import JsonResponse
 from django.views import View
 from recipes.models import Recipe
-
-
-def recipe_to_preview_dict(recipe):
-    dict = model_to_dict(recipe)
-    return {
-        "name": dict["name"],
-        "imageURL": dict["imageURL"],
-        "categories": [cat.name for cat in dict["category"]],
-    }
+from recipes.serializers import RecipePreviewCategorySerializer
 
 
 class Discover(View):
@@ -19,6 +11,5 @@ class Discover(View):
         length = len(recipes)
         recipes = recipes[::-1] if length < 120 else recipes[length - 120 :][::-1]
 
-        return JsonResponse(
-            {"data": [recipe_to_preview_dict(recipe) for recipe in recipes]}
-        )
+        preview_serializer = RecipePreviewCategorySerializer(recipes, many=True)
+        return JsonResponse({"data": preview_serializer.data})

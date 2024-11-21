@@ -16,6 +16,7 @@ export default function Recipes() {
   const recipePreviews = useLoaderData() as RecipePreview[];
   const [filteredPreviews, setFilteredPreviews] =
     React.useState(recipePreviews);
+  console.log(recipePreviews);
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     let target = e.target as HTMLButtonElement;

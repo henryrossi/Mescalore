@@ -34,7 +34,7 @@ export default function ResetPassword() {
     onCompleted: (data) => {
       if (data.passwordReset.success) {
         if (!token) return;
-        setUserAsAuthenticated(token, false, setUserAuth);
+        setUserAsAuthenticated(token, setUserAuth);
         navigate("/recipes");
         return;
       }

@@ -6,10 +6,14 @@ import "./UserAuth.css";
 import authContext from "../authContext";
 import { UserAuth } from "../types";
 import client from "../client";
+import { JwtPayload, jwtDecode } from "jwt-decode";
+
+interface MescolareJwtPayload extends JwtPayload {
+  editorPermissions: boolean;
+}
 
 export function setUserAsAuthenticated(
   token: string,
-  editorPermissions: boolean,
   setUserAuth: (auth: UserAuth) => void,
 ) {
   const curTime = Date.now();
@@ -22,11 +26,13 @@ export function setUserAsAuthenticated(
     localStorage.removeItem("tokenTime");
   }
 
+  const decoded = jwtDecode<MescolareJwtPayload>(token);
+
   localStorage.setItem("token", token);
-  localStorage.setItem("editor", String(editorPermissions));
+  localStorage.setItem("editor", String(decoded.editorPermissions));
   setUserAuth({
     authenticated: true,
-    editorPermissions: editorPermissions,
+    editorPermissions: decoded.editorPermissions,
   });
 
   // stringify the date into a string
@@ -206,7 +212,7 @@ export function SignIn() {
               password: password,
             })
             .then((response) => {
-              setUserAsAuthenticated(response.access, false, setUserAuth);
+              setUserAsAuthenticated(response.access, setUserAuth);
               navigate("/");
             });
         }}

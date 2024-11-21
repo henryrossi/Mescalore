@@ -41,10 +41,13 @@ class Recipe(models.Model):
     time = models.IntegerField()
     servings = models.IntegerField()
     instructions = models.TextField()
-    category = models.ManyToManyField(Category)
+    categories = models.ManyToManyField(Category)
 
     def __str__(self):
         return self.name
+
+    def ingredientSections(self):
+        return IngredientSection.objects.filter(recipe=self)
 
 
 class IngredientSection(models.Model):
@@ -53,6 +56,9 @@ class IngredientSection(models.Model):
 
     def __str__(self):
         return self.name
+
+    def ingredients(self):
+        return IngredientList.objects.filter(section=self)
 
 
 class IngredientList(models.Model):
