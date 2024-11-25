@@ -43,17 +43,13 @@ export async function loader({
 }: {
   params: Params<"recipeName">;
 }): Promise<string> {
-  // const result = await client.query({
-  //   query: GET_S3_PRESIGNED_URL,
-  //   fetchPolicy: "no-cache",
-  // });
-  //
-  // if (result.error) {
-  //   console.log(result.error.message);
-  //   throw Error(result.error.message);
-  // }
+  const result = await client.get("recipes/presignedURL", "network-only");
 
-  return "";
+  if (result.status) {
+    throw Error("Can't obtained presigned URL");
+  }
+
+  return result.data;
 }
 
 function generateRandomNumber() {
@@ -120,7 +116,7 @@ export default function CreateRecipe() {
         body: recipeData.picture,
       });
       if (!response.ok) return;
-      setRecipeData({ ...recipeData, imageURL: S3URL.split("?")[0] });
+      setRecipeData((recipe) => ({ ...recipe, imageURL: S3URL.split("?")[0] }));
     }
     const imageURL = recipeData.picture ? S3URL.split("?")[0] : null;
     // createRecipe({

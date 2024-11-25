@@ -1,18 +1,8 @@
-from math import log
-
-from django.forms import model_to_dict
 from django.http import JsonResponse
 from django.views import View
 from recipes.models import TFIDF, Recipe, Term
 from recipes.search import Tokenizer
-
-
-def recipe_to_preview_dict(recipe):
-    dict = model_to_dict(recipe)
-    return {
-        "name": dict["name"],
-        "imageURL": dict["imageURL"],
-    }
+from recipes.serializers import RecipePreviewSerializer
 
 
 class SearchRecipes(View):
@@ -24,13 +14,13 @@ class SearchRecipes(View):
         t = Tokenizer()
         searchedTerms = t.tokenize(query)
         if len(searchedTerms) == 0:
+            ser = RecipePreviewSerializer(
+                Recipe.objects.all()[offset : (offset + limit)], many=True
+            )
             return JsonResponse(
                 {
                     "data": {
-                        "recipes": [
-                            recipe_to_preview_dict(r)
-                            for r in Recipe.objects.all()[offset : (offset + limit)]
-                        ],
+                        "recipes": ser.data,
                         "count": Recipe.objects.all().count(),
                     }
                 }
@@ -47,10 +37,12 @@ class SearchRecipes(View):
             tuples.append((recipe, score))
         tuples.sort(key=lambda tup: tup[1], reverse=True)
         top = tuples[offset : (offset + limit)]
+        recipes = [r for r, *_ in top]
+        ser = RecipePreviewSerializer(recipes, many=True)
         return JsonResponse(
             {
                 "data": {
-                    "recipes": [recipe_to_preview_dict(r) for r, *_ in top],
+                    "recipes": ser.data,
                     "count": Recipe.objects.all().count(),
                 }
             }

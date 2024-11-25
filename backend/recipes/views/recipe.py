@@ -1,39 +1,13 @@
-from django.forms import model_to_dict
 from django.http import JsonResponse
 from django.views import View
-from recipes.models import FavoriteRecipes, IngredientList, IngredientSection, Recipe
+from recipes.models import Recipe
 from recipes.serializers import RecipeSerializer
-
-
-def recipe_to_dict(recipe):
-    def ingredients_for_section(section):
-        ingrs = IngredientList.objects.filter(section=section)
-        ingredients = [
-            {"measurement": ingr.measurement, "ingredient": ingr.ingredient.name}
-            for ingr in ingrs
-        ]
-        return ingredients
-
-    dict = model_to_dict(recipe)
-    ingr_sections = IngredientSection.objects.filter(recipe=recipe)
-
-    dict["categories"] = [cat.name for cat in dict["categories"]]
-    # del dict["category"]
-
-    dict["ingredientSections"] = [
-        {"name": section.name, "ingredients": ingredients_for_section(section)}
-        for section in ingr_sections
-    ]
-    return dict
 
 
 class RecipeData(View):
     def get(self, request, name):
         recipe = Recipe.objects.get(name=name)
-        dict = recipe_to_dict(recipe)
 
         ser = RecipeSerializer(recipe)
-        print(ser.data)
-        # Need to come back to jwt auth
-        dict["favorite"] = False
-        return JsonResponse({"data": dict})
+        # Need to come back to jwt auth to set favorite
+        return JsonResponse({"data": ser.data})

@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 from recipes.models import TFIDF, FavoriteRecipes, Recipe, Term
 from recipes.search import Tokenizer
-from recipes.views.search import recipe_to_preview_dict
+from recipes.serializers import RecipePreviewSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -24,13 +24,11 @@ class Favorites(APIView):
         t = Tokenizer()
         searchedTerms = t.tokenize(searchText)
         if len(searchedTerms) == 0:
+            ser = RecipePreviewSerializer(recipes[offset : (offset + limit)], many=True)
             return JsonResponse(
                 {
                     "data": {
-                        "recipes": [
-                            recipe_to_preview_dict(r)
-                            for r in recipes[offset : (offset + limit)]
-                        ],
+                        "recipes": ser.data,
                         "count": count,
                     }
                 }
@@ -47,10 +45,11 @@ class Favorites(APIView):
             tuples.append((recipe, score))
         tuples.sort(key=lambda tup: tup[1], reverse=True)
         top = tuples[offset : (offset + limit)]
+        ser = RecipePreviewSerializer([r for r, *_, in top], many=True)
         return JsonResponse(
             {
                 "data": {
-                    "recipes": [recipe_to_preview_dict(r) for r, *_ in top],
+                    "recipes": ser.data,
                     "count": count,
                 }
             }
