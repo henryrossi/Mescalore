@@ -2,65 +2,8 @@ import * as React from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import type { Params } from "react-router-dom";
 import client from "../client";
-import { RecipeEditorData, RecipeGraphQLReturn } from "../types";
+import { RecipeEditorData } from "../types";
 import RecipeEditor from "../components/RecipeEditor";
-
-// const GET_RECIPE_QUERY = gql`
-//   query recipeQuery($name: String!) {
-//     getRecipeByName(name: $name) {
-//       id
-//       name
-//       description
-//       servings
-//       time
-//       category {
-//         name
-//       }
-//       imageURL
-//       ingredientSections {
-//         name
-//         ingredientList {
-//           measurement
-//           ingredient {
-//             name
-//           }
-//         }
-//       }
-//       instructions
-//       favorite
-//     }
-//   }
-// `;
-//
-// export const EDIT_RECIPE_MUTATION = gql`
-//   mutation editRecipe(
-//     $categories: [String]!
-//     $description: String!
-//     $sections: [IngredientSectionInput]!
-//     $instructions: String!
-//     $name: String!
-//     $servings: Int!
-//     $time: Int!
-//     $imageURL: String
-//     $recipeId: ID!
-//   ) {
-//     editRecipe(
-//       recipeId: $recipeId
-//       recipeData: {
-//         name: $name
-//         categories: $categories
-//         description: $description
-//         time: $time
-//         servings: $servings
-//         imageURL: $imageURL
-//         sections: $sections
-//         instructions: $instructions
-//       }
-//     ) {
-//       updated
-//     }
-//   }
-// `;
 
 function generateRandomNumber() {
   return Math.random() * 1000000000;
@@ -76,26 +19,26 @@ function generateId() {
   return id;
 }
 
-function decomposeGraphQLData(gqlData: RecipeGraphQLReturn): RecipeEditorData {
+function prepRecipeData(incoming: any): RecipeEditorData {
   return {
-    id: gqlData.id,
-    name: gqlData.name,
-    description: gqlData.description,
-    servings: gqlData.servings,
-    time: gqlData.time,
-    categories: gqlData.category.map((cat) => cat.name.toLowerCase()),
+    id: incoming.id,
+    name: incoming.name,
+    description: incoming.description,
+    servings: incoming.servings,
+    time: incoming.time,
+    categories: incoming.categories,
     picture: null,
-    imageURL: gqlData.imageURL,
-    ingredientSections: gqlData.ingredientSections.map((section) => ({
+    imageURL: incoming.imageURL,
+    ingredientSections: incoming.ingredientSections.map((section: any) => ({
       id: generateId(),
       name: section.name,
-      ingredients: section.ingredientList.map((ingr) => ({
+      ingredients: section.ingredients.map((ingr: any) => ({
         id: generateId(),
         measurement: ingr.measurement,
-        ingredient: ingr.ingredient.name,
+        ingredient: ingr.ingredient,
       })),
     })),
-    instructions: gqlData.instructions.split("\r").map((inst) => ({
+    instructions: incoming.instructions.split("\r").map((inst: string) => ({
       id: generateId(),
       text: inst,
     })),
@@ -103,7 +46,7 @@ function decomposeGraphQLData(gqlData: RecipeGraphQLReturn): RecipeEditorData {
 }
 
 interface EditRecipeLoaderData {
-  data: RecipeEditorData | null;
+  data: RecipeEditorData;
   s3URL: string;
 }
 
@@ -112,42 +55,26 @@ export async function loader({
 }: {
   params: Params<"recipeName">;
 }): Promise<EditRecipeLoaderData> {
-  // const result = await client.query({
-  //   query: GET_RECIPE_QUERY,
-  //   fetchPolicy: "no-cache",
-  //   variables: {
-  //     name: params.recipeName,
-  //   },
-  // });
-  //
-  // const presignedURL = await client.query({
-  //   query: GET_S3_PRESIGNED_URL,
-  //   fetchPolicy: "no-cache",
-  // });
-  //
-  // if (result.error) {
-  //   console.log(result.error);
-  //   throw Error(result.error.message);
-  // }
-  //
-  // if (presignedURL.error) {
-  //   console.log(presignedURL.error);
-  //   throw Error(presignedURL.error.message);
-  // }
+  const url = "recipes/" + params.recipeName;
+  const result = await client.get(url);
+
+  const s3url = await client.get("recipes/presignedURL");
+
+  if (s3url.status) {
+    throw Error("Can't obtained presigned URL");
+  }
 
   return {
-    data: null,
-    s3URL: "",
+    data: prepRecipeData(result.data),
+    s3URL: s3url.data,
   };
 }
+
 export default function EditRecipe() {
   const navigate = useNavigate();
   const loaderData = useLoaderData() as EditRecipeLoaderData;
-  if (loaderData.data === null) return "hello world";
 
   const [recipeData, setRecipeData] = React.useState(loaderData.data);
-
-  if (recipeData === null) return "hello world";
 
   // const [updateRecipe] = useMutation(EDIT_RECIPE_MUTATION, {
   //   onCompleted: (data) => {
@@ -196,30 +123,35 @@ export default function EditRecipe() {
       });
     }
     const imageURL = recipeData.picture ? loaderData.s3URL.split("?")[0] : null;
-    // updateRecipe({
-    //   variables: {
-    //     recipeId: recipeData.id,
-    //     name: recipeData.name,
-    //     time: parseInt(recipeData.time),
-    //     servings: parseInt(recipeData.servings),
-    //     description: recipeData.description,
-    //     categories: recipeData.categories,
-    //     imageURL: imageURL,
-    //     sections: recipeData.ingredientSections.map((section) => ({
-    //       name: section.name,
-    //       ingredients: section.ingredients.map((ingr) => ({
-    //         ingredient: ingr.ingredient,
-    //         measurement: ingr.measurement,
-    //       })),
-    //     })),
-    //     instructions: recipeData.instructions.map((i) => i.text).join("\r"),
-    //   },
-    // });
+    const res = await client.put("recipes/id/" + recipeData.id, {
+      id: recipeData.id,
+      name: recipeData.name,
+      time: parseInt(recipeData.time),
+      servings: parseInt(recipeData.servings),
+      description: recipeData.description,
+      categories: recipeData.categories,
+      imageURL: imageURL,
+      ingredientSections: recipeData.ingredientSections.map((section) => ({
+        name: section.name,
+        ingredients: section.ingredients.map((ingr) => ({
+          ingredient: ingr.ingredient,
+          measurement: ingr.measurement,
+        })),
+      })),
+      instructions: recipeData.instructions.map((i) => i.text).join("\r"),
+    });
+    console.log(res);
+    if (!res.status) {
+      navigate("/");
+    }
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (window.confirm("Are you sure you want to delete this recipe?")) {
-      // deleteRecipe({ variables: { recipeId: recipeData.id } });
+      const res = await client.delete("recipes/" + recipeData.name);
+      if (!res.status) {
+        navigate("/");
+      }
     }
   };
 

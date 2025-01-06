@@ -16,7 +16,6 @@ export default function Recipes() {
   const recipePreviews = useLoaderData() as RecipePreview[];
   const [filteredPreviews, setFilteredPreviews] =
     React.useState(recipePreviews);
-  console.log(recipePreviews);
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     let target = e.target as HTMLButtonElement;
@@ -31,7 +30,7 @@ export default function Recipes() {
     setFilteredPreviews(
       previews.filter(
         (recipe) =>
-          recipe.categories.filter((cat) => cat.toLowerCase() === category)
+          recipe.categories.filter((cat) => cat.name.toLowerCase() === category)
             .length > 0,
       ),
     );

@@ -1,28 +1,11 @@
 import * as React from "react";
 import { Link, useLoaderData, useParams } from "react-router-dom";
 import type { Params } from "react-router-dom";
-import { gql, useMutation } from "@apollo/client";
-import { RecipeData, RecipeGraphQLReturn } from "../types";
+import { RecipeData } from "../types";
 import { IconHeart, IconEdit } from "@tabler/icons-react";
 import authContext from "../authContext";
 import "./Recipe.css";
 import client from "../client";
-
-const FAVORITE_RECIPE = gql`
-  mutation FavoriteRecipeMutation($recipeId: ID!) {
-    favoriteRecipe(recipeId: $recipeId) {
-      updated
-    }
-  }
-`;
-
-const UNFAVORITE_RECIPE = gql`
-  mutation UnfavoriteRecipeMutation($recipeId: ID!) {
-    unfavoriteRecipe(recipeId: $recipeId) {
-      updated
-    }
-  }
-`;
 
 export async function loader({
   params,
@@ -113,9 +96,9 @@ export default function Recipe() {
             </div>
             <ul className="flex gap-1rem flex-wrap">
               {data.categories.map((cat) => (
-                <li key={cat}>
+                <li key={cat.name}>
                   <div className="btn btn-yellow blue-drop-shadow">
-                    {cat.toLowerCase()}
+                    {cat.name.toLowerCase()}
                   </div>
                 </li>
               ))}
@@ -144,7 +127,7 @@ export default function Recipe() {
                     onClick={handleIngredientLineThrough}
                     className="text-base ingredient__recipe"
                   >
-                    {ingr.measurement} {ingr.ingredient}
+                    {ingr.measurement} {ingr.ingredient.name}
                   </li>
                 ))}
               </ul>

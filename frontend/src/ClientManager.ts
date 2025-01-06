@@ -96,5 +96,14 @@ export class ClientManager {
     public async post(location: string, content: any) {
         return await this.request(location, "POST", content, "cache-first");
     }
+
+    public async put(location: string, content: any) {
+        return await this.request(location, "PUT", content, "cache-first");
+    }
+
+    public async delete(location: string) {
+        return await this.request(location, "DELETE", null, "network-only");
+    }
+
 }
 

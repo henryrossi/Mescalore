@@ -1,48 +1,10 @@
 import * as React from "react";
-import { Params, useLoaderData, useNavigate } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import { RecipeEditorData } from "../types";
 import RecipeEditor from "../components/RecipeEditor";
 import client from "../client";
 
-// export const GET_S3_PRESIGNED_URL = gql`
-//   query S3PresignedUrl {
-//     getS3PresignedUrl
-//   }
-// `;
-//
-// export const CREATE_RECIPE_MUTATION = gql`
-//   mutation createRecipe(
-//     $categories: [String]!
-//     $description: String!
-//     $sections: [IngredientSectionInput]!
-//     $instructions: String!
-//     $name: String!
-//     $servings: Int!
-//     $time: Int!
-//     $imageURL: String
-//   ) {
-//     createRecipe(
-//       recipeData: {
-//         name: $name
-//         categories: $categories
-//         description: $description
-//         time: $time
-//         servings: $servings
-//         imageURL: $imageURL
-//         sections: $sections
-//         instructions: $instructions
-//       }
-//     ) {
-//       success
-//     }
-//   }
-// `;
-
-export async function loader({
-  params,
-}: {
-  params: Params<"recipeName">;
-}): Promise<string> {
+export async function loader(): Promise<string> {
   const result = await client.get("recipes/presignedURL", "network-only");
 
   if (result.status) {
@@ -82,7 +44,9 @@ export default function CreateRecipe() {
       {
         id: generateId(),
         name: "",
-        ingredients: [{ id: generateId(), ingredient: "", measurement: "" }],
+        ingredients: [
+          { id: generateId(), ingredient: { name: "" }, measurement: "" },
+        ],
       },
     ],
     instructions: [{ id: generateId(), text: "" }],
@@ -119,24 +83,26 @@ export default function CreateRecipe() {
       setRecipeData((recipe) => ({ ...recipe, imageURL: S3URL.split("?")[0] }));
     }
     const imageURL = recipeData.picture ? S3URL.split("?")[0] : null;
-    // createRecipe({
-    //   variables: {
-    //     name: recipeData.name,
-    //     time: parseInt(recipeData.time),
-    //     servings: parseInt(recipeData.servings),
-    //     description: recipeData.description,
-    //     categories: recipeData.categories,
-    //     imageURL: imageURL,
-    //     sections: recipeData.ingredientSections.map((section) => ({
-    //       name: section.name,
-    //       ingredients: section.ingredients.map((ingr) => ({
-    //         ingredient: ingr.ingredient,
-    //         measurement: ingr.measurement,
-    //       })),
-    //     })),
-    //     instructions: recipeData.instructions.map((i) => i.text).join("\r"),
-    //   },
-    // });
+    const res = await client.post("recipes/" + recipeData.name, {
+      name: recipeData.name,
+      time: parseInt(recipeData.time),
+      servings: parseInt(recipeData.servings),
+      description: recipeData.description,
+      categories: recipeData.categories,
+      imageURL: imageURL,
+      ingredientSections: recipeData.ingredientSections.map((section) => ({
+        name: section.name,
+        ingredients: section.ingredients.map((ingr) => ({
+          ingredient: ingr.ingredient,
+          measurement: ingr.measurement,
+        })),
+      })),
+      instructions: recipeData.instructions.map((i) => i.text).join("\r"),
+    });
+    console.log(res);
+    if (!res.status) {
+      navigate("/");
+    }
   };
 
   return (

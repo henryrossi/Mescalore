@@ -4,12 +4,22 @@ export interface RecipeData {
   description: string,
   servings: string,
   time: string,
-  categories: string[],
+  categories: Category[],
   imageURL: string | null,
   ingredientSections: ingredientSections[]
   instructions: string,
   favorite: boolean,
 };
+
+export interface RecipePreview {
+  name: string,
+  imageURL: string | null,
+  categories: Category[],
+}
+
+export interface Category {
+  name: string,
+}
 
 export interface ingredientSections {
   name: string,
@@ -17,17 +27,21 @@ export interface ingredientSections {
 }
 
 export interface IngredientList {
-  ingredient: string,
+  ingredient: Ingredient,
   measurement: string,
 };
-  
+
+export interface Ingredient {
+  name: string,
+}
+
 export interface RecipeEditorData {
   id: string,
   name: string,
   description: string,
   servings: string,
   time: string,
-  categories: string[],
+  categories: Category[],
   picture: Blob | null,
   imageURL: string | null,
   ingredientSections: IngredientSectionsEditor[]
@@ -42,58 +56,13 @@ export interface IngredientSectionsEditor {
 
 export interface IngredientListEditor {
   id: number,
-  ingredient: string,
+  ingredient: Ingredient,
   measurement: string,
 };
 
 export interface InstructionsEditor {
   id: number,
   text: string,
-}
- 
-export interface RecipeGraphQLReturn {
-  id: string,
-  name: string,
-  imageURL: string | null,
-  description: string,
-  time: string,
-  servings: string,
-  instructions: string,
-  category: CategoryGraphQLReturn[]
-  ingredientSections: ingredientSectionsGraphQLReturn[]
-  favorite: boolean
-}
-
-interface CategoryGraphQLReturn {
-  name: string,
-}
-
-interface ingredientSectionsGraphQLReturn {
-  name: string,
-  ingredientList: IngredientListGraphQLReturn[]
-}
-
-interface IngredientListGraphQLReturn {
-  id: string,
-  ingredient: IngredientGraphQLReturn
-  measurement: string,
-}
-
-interface IngredientGraphQLReturn {
-  name: string,
-}
-
-
-export interface RecipePreview {
-  name: string,
-  imageURL: string | null,
-  categories: string[],
-}
-
-export interface RecipePreviewGraphQLReturn {
-  name: string,
-  imageURL: string | null,
-  category: { name: string}[],
 }
 
 export interface UserAuth {

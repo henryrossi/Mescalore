@@ -70,11 +70,11 @@ export default function RecipeEditor({
     let categories = [...recipeData.categories];
     const category = e.target.value;
     if (e.target.checked) {
-      categories.push(category);
+      categories.push({ name: category });
       setRecipeData({ ...recipeData, categories: categories });
       return;
     }
-    const index = categories.indexOf(category);
+    const index = categories.indexOf({ name: category });
     if (index !== -1) {
       categories.splice(index, 1);
       setRecipeData({ ...recipeData, categories: categories });
@@ -91,7 +91,7 @@ export default function RecipeEditor({
           {
             id: generateId(recipeData),
             measurement: "",
-            ingredient: "",
+            ingredient: { name: "" },
           },
         ],
       },
@@ -355,14 +355,14 @@ export default function RecipeEditor({
                       <input
                         type="text"
                         className="border-grey"
-                        value={object.ingredient}
+                        value={object.ingredient.name}
                         onChange={(e) => {
                           let sections = [...recipeData.ingredientSections];
                           let ingredients = [...section.ingredients];
                           ingredients[index] = {
                             id: object.id,
                             measurement: object.measurement,
-                            ingredient: e.target.value,
+                            ingredient: { name: e.target.value },
                           };
                           sections[currentSection].ingredients = ingredients;
                           setRecipeData({
@@ -399,7 +399,7 @@ export default function RecipeEditor({
                       ...section.ingredients,
                       {
                         id: generateId(recipeData),
-                        ingredient: "",
+                        ingredient: { name: "" },
                         measurement: "",
                       },
                     ];
