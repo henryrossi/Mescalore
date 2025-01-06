@@ -2,20 +2,31 @@ import io
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse
-from django.views import View
-from recipes.models import Recipe
+from recipes.models import FavoriteRecipes, Recipe
 from recipes.serializers import RecipeSerializer, calculateTFIDF
 from rest_framework.parsers import JSONParser
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.views import APIView
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 # Might want to add authors to recipe model
 
 
-class RecipeData(View):
-    def get(self, _, name):
+class RecipeData(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    authentication_classes = [JWTAuthentication]
+
+    def get(self, request, name):
         recipe = Recipe.objects.get(name=name)
 
         ser = RecipeSerializer(recipe)
-        # Need to come back to jwt auth to set favorite
+
+        favorited = FavoriteRecipes.objects.filter(
+            recipe=recipe, user=request.user
+        ).exists()
+        ser.data["favorited"] = favorited
+        print(ser.data)
+
         return JsonResponse({"data": ser.data})
 
     def post(self, request, name):
@@ -42,7 +53,10 @@ class RecipeData(View):
             return JsonResponse({}, status=400)
 
 
-class UpdateRecipeData(View):
+class UpdateRecipeData(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
+
     def put(self, request, id):
         try:
             recipe = Recipe.objects.get(id=id)
