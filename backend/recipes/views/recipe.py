@@ -21,13 +21,16 @@ class RecipeData(APIView):
 
         ser = RecipeSerializer(recipe)
 
-        favorited = FavoriteRecipes.objects.filter(
-            recipe=recipe, user=request.user
-        ).exists()
-        ser.data["favorited"] = favorited
-        print(ser.data)
+        favorite = False
+        if request.user.is_authenticated:
+            favorite = FavoriteRecipes.objects.filter(
+                recipe=recipe, user=request.user
+            ).exists()
+        data = dict(ser.data)
+        data["favorite"] = favorite
+        print(type(data))
 
-        return JsonResponse({"data": ser.data})
+        return JsonResponse({"data": data})
 
     def post(self, request, name):
         if Recipe.objects.filter(name=name).exists():
