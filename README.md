@@ -2,6 +2,14 @@
 
 ## Developer setup
 
+Things I did
+
+- download nvm / node
+
+Things to think about
+
+- clone repo
+- download python / node
 - Database setup
 - DB migrations
 - Node setup
