@@ -4,6 +4,7 @@
 
 Things I did
 
+- clone repo
 - download nvm / node
 
 Things to think about
