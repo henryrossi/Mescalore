@@ -28,7 +28,6 @@ class RecipeData(APIView):
             ).exists()
         data = dict(ser.data)
         data["favorite"] = favorite
-        print(type(data))
 
         return JsonResponse({"data": data})
 
