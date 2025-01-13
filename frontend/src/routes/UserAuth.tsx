@@ -1,7 +1,5 @@
 import * as React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { USER_REGISTRATION, USER_AUTHENTICATION } from "../graphQL";
-// import { useMutation } from "@apollo/client";
 import "./UserAuth.css";
 import authContext from "../authContext";
 import { UserAuth } from "../types";

@@ -35,10 +35,10 @@ class RecipeData(APIView):
         if Recipe.objects.filter(name=name).exists():
             return JsonResponse({}, status=400)
 
-        stream = io.BytesIO(request.body)
-        data = JSONParser().parse(stream)
-
-        ser = RecipeSerializer(data=data)
+        # stream = io.BytesIO(request.body)
+        # data = JSONParser().parse(stream)
+        #
+        ser = RecipeSerializer(data=request.data)
         if ser.is_valid():
             ser.save()
             return JsonResponse({})

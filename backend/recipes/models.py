@@ -1,8 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
 
-# Create your models here.
-
 
 class Category(models.Model):
     breakfast = "breakfast"
@@ -93,3 +91,12 @@ class TFIDF(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     term = models.ForeignKey(Term, on_delete=models.CASCADE)
     score = models.FloatField()
+
+
+# Reseting User's passwords
+
+
+class PasswordReset(models.Model):
+    email = models.EmailField()
+    token = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
